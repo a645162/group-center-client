@@ -1,4 +1,5 @@
 import json
+import queue
 import threading
 import time
 from queue import Queue
@@ -66,8 +67,7 @@ class GroupCenterWorkThread(threading.Thread):
                     task_queue.put((data, target))
                     # 多休息一会儿再重试
                     time.sleep(20)
-            except Queue.queue.Empty:
-                # 队列为空时继续循环
+            except queue.Empty:
                 pass
             except Exception as e:
                 logger.error(f"[GroupCenter] Thread exception: {e}")

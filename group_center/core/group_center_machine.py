@@ -1,9 +1,11 @@
 import json
+from typing import Tuple
 
 import loguru
 import requests
 
 from group_center.core import group_center_encrypt
+from group_center.core.config_core import get_env_machine_config
 from group_center.utils.logger import get_logger
 
 GROUP_CENTER_URL = ""
@@ -18,7 +20,7 @@ group_center_public_part: dict = {
     "serverNameEng": MACHINE_NAME_SHORT,
 }
 
-logger: loguru.logger
+logger: loguru.logger = None
 
 
 def init_logger():
@@ -45,6 +47,11 @@ def set_server_name(server_name: str):
 def set_server_name_short(server_name_short: str):
     global MACHINE_NAME_SHORT
     MACHINE_NAME_SHORT = server_name_short
+
+
+def set_machine_password(password: str):
+    global MACHINE_PASSWORD
+    MACHINE_PASSWORD = password
 
 
 def group_center_get_url(target_api: str):
@@ -115,6 +122,13 @@ def __group_center_login(username: str, password: str) -> bool:
 
 
 def group_center_login() -> bool:
+    if GROUP_CENTER_URL == "":
+        env_machine_config: Tuple[str, str, str,str] = get_env_machine_config()
+        set_group_center_host(env_machine_config[0])
+        set_server_name(env_machine_config[1])
+        set_server_name_short(env_machine_config[2])
+        set_machine_password(env_machine_config[3])
+
     return __group_center_login(
         username=MACHINE_NAME_SHORT, password=MACHINE_PASSWORD
     )
