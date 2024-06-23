@@ -1,4 +1,4 @@
 loguru
 
+urllib3<2
 requests
-pyside6

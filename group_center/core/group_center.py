@@ -68,11 +68,15 @@ def get_public_part() -> dict:
 
 
 def __group_center_login(username: str, password: str) -> bool:
+    # Init logger if not set
+    init_logger()
+
     logger.info("[Group Center] Login Start")
     url = group_center_get_url(target_api="/auth/client/auth")
     try:
         logger.info(f"[Group Center] Auth To: {url}")
-        password_display = "*" * len(password)
+        password_display = \
+            group_center_encrypt.encrypt_password_to_display(password)
         password_encoded = \
             group_center_encrypt.get_password_hash(password)
         logger.info(
