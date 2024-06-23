@@ -26,7 +26,12 @@ setup(
     author="Haomin Kong",
     author_email="a645162@gmail.com",
     license="GPLv3",
-    packages=find_packages(),
+    packages=find_packages(
+        exclude=[
+            "config",
+            "test",
+        ]
+    ),
     python_requires=">=3.5",
     install_requires=[
         "urllib3<2", "requests",

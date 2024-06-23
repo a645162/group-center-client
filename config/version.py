@@ -14,4 +14,5 @@ def get_version() -> str:
 
 
 if __name__ == "__main__":
+    print(global_config.path_dir_base)
     print(get_version())

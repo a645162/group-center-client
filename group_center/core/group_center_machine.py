@@ -60,10 +60,13 @@ def group_center_get_url(target_api: str):
 
 def get_public_part() -> dict:
     global group_center_public_part
+
     group_center_public_part.update({
         "serverName": MACHINE_NAME_FULL,
         "serverNameEng": MACHINE_NAME_SHORT,
+        "accessKey": get_access_key(),
     })
+
     return group_center_public_part
 
 
