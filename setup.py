@@ -28,7 +28,6 @@ setup(
     license="GPLv3",
     packages=find_packages(
         exclude=[
-            "config",
             "test",
         ]
     ),
