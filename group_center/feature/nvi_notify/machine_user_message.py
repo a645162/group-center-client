@@ -1,7 +1,7 @@
 from group_center.feature.nvi_notify import notify_api
 
 
-def machine_user_message(
+def machine_user_message_via_local_nvi_notify(
         user_name: str,
         content: str,
 ):
