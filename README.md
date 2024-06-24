@@ -5,7 +5,11 @@ Group Center(https://github.com/a645162/group-center) Client
 ## Install
 
 ```bash
-pip install li-group-center==1.1.0 -i https://pypi.python.org/simple
+pip install li-group-center -i https://pypi.python.org/simple
+```
+
+```bash
+pip install li-group-center==1.1.2 -i https://pypi.python.org/simple
 ```
 
 ## Upgrade

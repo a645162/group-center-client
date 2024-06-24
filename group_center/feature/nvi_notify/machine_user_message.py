@@ -10,4 +10,7 @@ def machine_user_message(
         "content": content,
     }
 
-    notify_api.send_to_nvi_notify(data_dict)
+    notify_api.send_to_nvi_notify(
+        dict_data=data_dict,
+        target="/machine_user_message"
+    )
