@@ -34,17 +34,17 @@ def set_logger(exist_logger: loguru.logger):
     logger = exist_logger
 
 
-def set_group_center_host(host_url: str):
+def set_group_center_host_url(host_url: str):
     global GROUP_CENTER_URL
     GROUP_CENTER_URL = host_url
 
 
-def set_server_name(server_name: str):
+def set_machine_name_full(server_name: str):
     global MACHINE_NAME_FULL
     MACHINE_NAME_FULL = server_name
 
 
-def set_server_name_short(server_name_short: str):
+def set_machine_name_short(server_name_short: str):
     global MACHINE_NAME_SHORT
     MACHINE_NAME_SHORT = server_name_short
 
@@ -60,9 +60,9 @@ def __init_from_env(skip_if_exist: bool = True):
 
     env_machine_config: Tuple[str, str, str, str] = get_env_machine_config()
 
-    set_group_center_host(env_machine_config[0])
-    set_server_name(env_machine_config[1])
-    set_server_name_short(env_machine_config[2])
+    set_group_center_host_url(env_machine_config[0])
+    set_machine_name_full(env_machine_config[1])
+    set_machine_name_short(env_machine_config[2])
     set_machine_password(env_machine_config[3])
 
 

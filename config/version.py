@@ -2,7 +2,8 @@ import os
 
 from config import global_config
 
-__version__ = "1.0.7"
+__version__ = "1.1.0"
+
 
 def get_version_path() -> str:
     return os.path.join(global_config.path_dir_config, "version.txt")
@@ -28,5 +29,4 @@ def get_version(version_path) -> str:
 
 
 if __name__ == "__main__":
-    print(global_config.path_dir_base)
-    print(get_version(get_version_path()))
+    print(__version__)
