@@ -4,17 +4,11 @@ from pathlib import Path
 
 from setuptools import setup, find_packages
 
-from config.version import get_version
+from config.version import __version__
 
 this_directory = Path(__file__).parent
 with open(this_directory / "README.md", encoding="utf-8") as f:
     long_description = f.read()
-
-__version__ = get_version()
-
-if __version__.strip() == "":
-    print("version.txt is empty")
-    exit(1)
 
 setup(
     name="li_group_center",
