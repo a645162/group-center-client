@@ -25,5 +25,9 @@ pip install --upgrade li-group-center -i https://pypi.python.org/simple
 ```python
 from group_center.user_tools import *
 
+# Auto Get Current User Name 
+push_message("Test Message~")
+
+# Or
 push_message("Test Message~", "konghaomin")
 ```
