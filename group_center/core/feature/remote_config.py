@@ -38,6 +38,10 @@ def get_user_config_json_str() -> str:
     return get_json_str(target_api="/api/client/config/user_list")
 
 
+def get_env_json_str() -> str:
+    return get_json_str(target_api="/api/client/config/env_list")
+
+
 if __name__ == "__main__":
     json_text = get_user_config_json_str()
     print(json_text)
