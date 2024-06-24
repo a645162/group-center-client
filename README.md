@@ -23,8 +23,7 @@ pip install --upgrade li-group-center -i https://pypi.python.org/simple
 ### Machine User Message
 
 ```python
-from group_center.feature.nvi_notify.machine_user_message \
-    import machine_user_message_via_local_nvi_notify as push_message
+from group_center.user_tools import *
 
-push_message("konghaomin", "Test Message~")
+push_message("Test Message~", "konghaomin")
 ```
