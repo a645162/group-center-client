@@ -10,7 +10,11 @@ def machine_user_message_via_local_nvi_notify(
         "content": content,
     }
 
-    notify_api.send_to_nvi_notify(
-        dict_data=data_dict,
-        target="/machine_user_message"
-    )
+    try:
+        notify_api.send_to_nvi_notify(
+            dict_data=data_dict,
+            target="/machine_user_message"
+        )
+    except Exception:
+        # Ignore all errors to avoid program crash.
+        pass
