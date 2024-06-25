@@ -1,6 +1,17 @@
 import os
 import sys
 import re
+from typing import List
+
+
+def PythonVersion() -> str:
+    version_str: str = str(sys.version)
+
+    spilt_list: List[str] = version_str.split("|")
+
+    version_str = spilt_list[0].strip()
+
+    return version_str
 
 
 def ENV_SCREEN_NAME_FULL() -> str:
@@ -8,11 +19,23 @@ def ENV_SCREEN_NAME_FULL() -> str:
 
 
 def ENV_SCREEN_SESSION_ID() -> str:
-    return ENV_SCREEN_NAME_FULL().split(".")[0].strip()
+    spilt_list: List[str] = ENV_SCREEN_NAME_FULL().split(".")
+
+    if len(spilt_list) < 2:
+        return ""
+
+    return spilt_list[0].strip()
 
 
 def ENV_SCREEN_SESSION_NAME() -> str:
-    return ENV_SCREEN_NAME_FULL().split(".")[1].strip()
+    spilt_list: List[str] = ENV_SCREEN_NAME_FULL().split(".")
+
+    if len(spilt_list) < 2:
+        return ""
+
+    spilt_list = spilt_list[1:]
+
+    return ".".join(spilt_list).strip()
 
 
 def ENV_CUDA_ROOT():
@@ -91,6 +114,8 @@ def CONDA_ENV_NAME() -> str:
 
 
 if __name__ == "__main__":
+    print(PythonVersion())
+
     print(ENV_SCREEN_NAME_FULL())
     print(ENV_SCREEN_SESSION_ID())
     print(ENV_SCREEN_SESSION_NAME())
