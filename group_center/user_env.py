@@ -38,6 +38,10 @@ def ENV_SCREEN_SESSION_NAME() -> str:
     return ".".join(spilt_list).strip()
 
 
+def is_in_screen_session() -> bool:
+    return ENV_SCREEN_SESSION_NAME() != ""
+
+
 def ENV_CUDA_ROOT():
     cuda_home: str = os.getenv("CUDA_HOME", "").strip()
     nvcc_path: str = os.path.join(cuda_home, "bin", "nvcc")
