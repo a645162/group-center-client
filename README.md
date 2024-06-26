@@ -33,6 +33,8 @@ pip install --upgrade li-group-center -i https://pypi.python.org/simple
 
 ### Machine User Message
 
+#### Usage
+
 User use their own account to push message to Group Center.
 
 ```python
@@ -60,6 +62,28 @@ push_message("Test Message~")
 
 # Or Specify Username on Push Message(Not Recommend)
 push_message("Test Message~", "konghaomin")
+```
+
+#### Use `argparser` to set `group-center` is enable or not
+
+```python
+import argparse
+
+from group_center.user_tools import *
+
+parser = argparse.ArgumentParser(description="Example of Group Center")
+
+parser.add_argument(
+  "-g",
+  "--group-center",
+  help="Enable Group Center",
+  action="store_true",
+)
+
+opt = parser.parse_args()
+
+if opt.groupcenter:
+  group_center_set_is_valid()
 ```
 
 ## Feature(Machine)
