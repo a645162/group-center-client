@@ -9,7 +9,7 @@ pip install li-group-center -i https://pypi.python.org/simple
 ```
 
 ```bash
-pip install li-group-center==1.3.0 -i https://pypi.python.org/simple
+pip install li-group-center==1.3.2 -i https://pypi.python.org/simple
 ```
 
 ## Upgrade
