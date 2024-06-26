@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="message_test" type="PythonConfigurationType" factoryName="Python" folderName="Test" nameIsGenerated="true">
+  <configuration default="false" name="test_machine_msg_via_nvinotify" type="PythonConfigurationType" factoryName="Python" folderName="Test" nameIsGenerated="true">
     <module name="group-center-client" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
@@ -13,7 +13,7 @@
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/message_test.py" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/test_machine_msg_via_nvinotify.py" />
     <option name="PARAMETERS" value="" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
