@@ -1,4 +1,5 @@
 from group_center.feature.nvi_notify.machine_user_message import *
+from group_center.user_env import *
 
 global_user_name: str = ""
 global_enable: bool = False
@@ -14,7 +15,14 @@ def group_center_set_user_name(new_user_name: str):
     global_user_name = new_user_name.strip()
 
 
-def push_message(content: str, user_name: str = "") -> bool:
+def push_message(
+        content: str,
+        user_name: str = "",
+        only_first_card_process: bool = True,
+) -> bool:
+    if only_first_card_process and not is_first_card_process():
+        return False
+
     global global_enable, global_user_name
 
     if not global_enable:

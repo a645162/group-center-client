@@ -1,6 +1,6 @@
 import os
-import sys
 import re
+import sys
 from typing import List
 
 
@@ -86,12 +86,39 @@ def CUDA_VERSION(nvcc_path: str = "") -> str:
     return cuda_version
 
 
-def ENV_LOCAL_RANK() -> str:
+def ENV_CUDA_LOCAL_RANK() -> str:
     return os.getenv("LOCAL_RANK", "").strip()
 
 
-def ENV_LOCAL_WORLD_SIZE() -> str:
+def ENV_CUDA_WORLD_SIZE() -> str:
     return os.getenv("LOCAL_WORLD_SIZE", "").strip()
+
+
+def cuda_local_rank() -> int:
+    local_rank = ENV_CUDA_LOCAL_RANK()
+    if local_rank == "":
+        return -1
+    try:
+        return int(local_rank)
+    except Exception:
+        return -1
+
+
+def cuda_world_size() -> int:
+    world_size = ENV_CUDA_WORLD_SIZE()
+    if world_size == "":
+        return -1
+    try:
+        return int(world_size)
+    except Exception:
+        return -1
+
+
+def is_first_card_process() -> bool:
+    if cuda_world_size() < 2:
+        return True
+
+    return cuda_local_rank() == 0
 
 
 def RUN_COMMAND() -> str:
@@ -127,8 +154,8 @@ if __name__ == "__main__":
     print(ENV_CUDA_ROOT())
     print(CUDA_VERSION())
 
-    print(ENV_LOCAL_RANK())
-    print(ENV_LOCAL_WORLD_SIZE())
+    print(ENV_CUDA_LOCAL_RANK())
+    print(ENV_CUDA_WORLD_SIZE())
 
     print(RUN_COMMAND())
     print(CONDA_ENV_NAME())
