@@ -30,9 +30,9 @@ setup(
         "urllib3<2", "requests",
         "loguru"
     ],
-    # entry_points={
-    #     "console_scripts": [
-    #         "shmtu-auth = shmtu_auth.main_start:main",
-    #     ],
-    # },
+    entry_points={
+        "console_scripts": [
+            "group_center_machine_user = group_center.client.machine.user_manager:main",
+        ],
+    },
 )
