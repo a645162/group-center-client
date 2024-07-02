@@ -47,7 +47,7 @@ group_center_set_is_valid()
 push_message("Test Message~")
 ```
 
-User use a public account to push message to Group Center.
+User uses a public account to push a message to Group Center.
 
 ```python
 from group_center.user_tools import *
@@ -89,3 +89,10 @@ if opt.groupcenter:
 ## Feature(Machine)
 
 ### Generate User Account
+
+## Group Center
+
+- GROUP_CENTER_URL
+- GROUP_CENTER_MACHINE_NAME
+- GROUP_CENTER_MACHINE_NAME_SHORT
+- GROUP_CENTER_MACHINE_PASSWORD

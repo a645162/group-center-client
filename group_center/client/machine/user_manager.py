@@ -73,7 +73,7 @@ def main():
     if opt.create_user:
         create_user()
 
-    if opt.add_user:
+    if opt.add_user_txt:
         save_add_user_text(opt)
 
 

@@ -4,7 +4,7 @@ import os
 
 import loguru
 
-log_dir = "./log"
+log_dir = "log"
 
 # Check Log Directory
 if not os.path.exists(log_dir):
@@ -28,5 +28,5 @@ logger = loguru.logger
 logger.add(log_path, retention="30 days")
 
 
-def get_logger() -> loguru.logger:
+def get_loguru_backend() -> loguru.logger:
     return logger

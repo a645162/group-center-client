@@ -3,7 +3,7 @@ import time
 import requests
 
 from group_center.core import group_center_machine
-from group_center.utils.logger import get_logger
+from group_center.utils.log.logger import get_logger
 
 logger = get_logger()
 

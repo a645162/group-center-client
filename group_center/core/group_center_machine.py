@@ -1,12 +1,11 @@
 import json
-from typing import Tuple, Optional
+from typing import Tuple
 
-import loguru
 import requests
 
 from group_center.core import group_center_encrypt
 from group_center.core.config_core import get_env_machine_config
-from group_center.utils.logger import get_logger
+from group_center.utils.log.logger import get_logger
 
 GROUP_CENTER_URL = ""
 MACHINE_NAME_FULL = ""
@@ -20,7 +19,7 @@ group_center_public_part: dict = {
     "serverNameEng": MACHINE_NAME_SHORT,
 }
 
-logger: Optional[loguru.logger] = None
+logger = None
 
 
 def init_logger():
@@ -29,7 +28,7 @@ def init_logger():
         logger = get_logger()
 
 
-def set_logger(exist_logger: loguru.logger):
+def set_logger(exist_logger):
     global logger
     logger = exist_logger
 
