@@ -19,6 +19,8 @@ def get_options():
     parser.add_argument("--add-user-txt", type=str, default="")
     parser.add_argument("--user-password", type=str, default="")
 
+    parser.add_argument("--year", type=int, default=0)
+
     parser.add_argument(
         "-c",
         "--create-user",
@@ -72,6 +74,13 @@ def main():
     user_config_json = get_user_config_json_str()
     user_dict_list = json.loads(user_config_json)
     user_info_list: List[UserInfo] = get_user_info_list(user_dict_list)
+
+    if opt.year > 0:
+        user_info_list = [
+            user_info
+            for user_info in user_info_list
+            if user_info.year == opt.year
+        ]
 
     if opt.create_user:
         create_user(opt, user_info_list)

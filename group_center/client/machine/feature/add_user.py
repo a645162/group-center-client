@@ -40,19 +40,18 @@ def linux_add_user_txt(user_info_list: List[UserInfo], password: str = ""):
             shell=shell,
         ) + "\n"
 
-    return final_text
+    return final_text.strip()
 
 
 def create_user(user_info: UserInfo, password: str = ""):
     linux_user_obj = LinuxUser(user_info.name_eng)
 
-    if linux_user_obj.is_exist():
+    if not linux_user_obj.is_exist():
         print(f"User {user_info.name_eng} already exist")
-        return
 
-    if not linux_user_obj.create(password=password):
-        print(f"Create user {user_info.name_eng} failed")
-        return
+        if not linux_user_obj.create(password=password):
+            print(f"Create user {user_info.name_eng} failed")
+            return
 
     linux_user_obj.uid = user_info.linux_user.uid
     linux_user_obj.gid = user_info.linux_user.gid
