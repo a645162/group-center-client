@@ -16,7 +16,7 @@ def get_linux_user_add_text(
     return f"{user_name}:{password}:{uid}:{gid}:{group_name}:{home_dir}:{shell}"
 
 
-def linux_add_user_list(user_info_list: List[UserInfo], password: str = ""):
+def linux_add_user_txt(user_info_list: List[UserInfo], password: str = ""):
     final_text = ""
 
     for user_info in user_info_list:
