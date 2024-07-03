@@ -1,6 +1,7 @@
 from typing import List
 
 from group_center.client.user.datatype.user_info import UserInfo
+from group_center.user.linux.linux_user import LinuxUser
 
 
 def get_linux_user_add_text(
@@ -40,3 +41,23 @@ def linux_add_user_txt(user_info_list: List[UserInfo], password: str = ""):
         ) + "\n"
 
     return final_text
+
+
+def create_user(user_info: UserInfo, password: str = ""):
+    linux_user_obj = LinuxUser(user_info.name_eng)
+
+    if linux_user_obj.is_exist():
+        print(f"User {user_info.name_eng} already exist")
+        return
+
+    if not linux_user_obj.create(password=password):
+        print(f"Create user {user_info.name_eng} failed")
+        return
+
+    linux_user_obj.uid = user_info.linux_user.uid
+    linux_user_obj.gid = user_info.linux_user.gid
+
+
+def create_users(user_info_list: List[UserInfo], password: str = ""):
+    for user_info in user_info_list:
+        create_user(user_info=user_info, password=password)

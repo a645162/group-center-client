@@ -34,6 +34,30 @@ class LinuxUser(SystemUser):
     def get_groups_list(self) -> List[str]:
         return get_user_groups_list(self.user_name)
 
+    @property
+    def uid(self):
+        return get_uid(self.user_name)
+
+    @uid.setter
+    def uid(self, value):
+        if not isinstance(value, int):
+            raise ValueError("uid must be int")
+        if value == get_uid(self.user_name):
+            return
+        set_uid(self.user_name, value)
+
+    @property
+    def gid(self):
+        return get_gid(self.user_name)
+
+    @gid.setter
+    def gid(self, value):
+        if not isinstance(value, int):
+            raise ValueError("gid must be int")
+        if value == get_gid(self.user_name):
+            return
+        set_gid(self.user_name, value)
+
 
 if __name__ == "__main__":
     print()

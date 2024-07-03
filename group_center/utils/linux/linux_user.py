@@ -102,6 +102,70 @@ def get_user_groups_list(username: str) -> List[str]:
     return result_list
 
 
+def get_uid(username):
+    try:
+        result = subprocess.run(
+            ['id', '-u', username],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        if result.returncode == 0:
+            return int(result.stdout.strip())
+        else:
+            return 0
+    except Exception as e:
+        return 0
+
+
+def get_gid(username):
+    try:
+        result = subprocess.run(
+            ['id', '-g', username],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        if result.returncode == 0:
+            return int(result.stdout.strip())
+        else:
+            return 0
+    except Exception as e:
+        return 0
+
+
+def set_uid(username, uid):
+    try:
+        result = subprocess.run(
+            ['usermod', '-u', str(uid), username],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        if result.returncode == 0:
+            return True
+        else:
+            return False
+    except Exception as e:
+        return False
+
+
+def set_gid(username, gid):
+    try:
+        result = subprocess.run(
+            ['usermod', '-g', str(gid), username],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        if result.returncode == 0:
+            return True
+        else:
+            return False
+    except Exception as e:
+        return False
+
+
 def get_current_user_name() -> str:
     try:
         # 获取当前用户的用户名
