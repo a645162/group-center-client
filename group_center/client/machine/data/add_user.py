@@ -1,5 +1,7 @@
 from typing import List
 
+from group_center.client.user.datatype.user_info import UserInfo
+
 
 def get_linux_user_add_text(
         user_name: str,
@@ -14,17 +16,17 @@ def get_linux_user_add_text(
     return f"{user_name}:{password}:{uid}:{gid}:{group_name}:{home_dir}:{shell}"
 
 
-def linux_add_user_list(user_list: List[dict], password: str = ""):
+def linux_add_user_list(user_info_list: List[UserInfo], password: str = ""):
     final_text = ""
 
-    for user_dict in user_list:
-        user_name: str = user_dict["nameEng"]
+    for user_info in user_info_list:
+        user_name: str = user_info.name_eng
 
-        uid: int = user_dict["linuxUser"]["uid"]
-        gid: int = user_dict["linuxUser"]["gid"]
+        uid: int = user_info.linux_user.uid
+        gid: int = user_info.linux_user.gid
 
         group_name: str = user_name
-        home_dir: str = f"/home/{user_name}"
+        home_dir: str = user_info.home_dir
         shell: str = "/bin/bash"
 
         final_text += get_linux_user_add_text(

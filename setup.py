@@ -25,7 +25,7 @@ setup(
             "test",
         ]
     ),
-    python_requires=">=3.5",
+    python_requires=">=3.6",
     install_requires=[
         "urllib3<2", "requests",
         "loguru"

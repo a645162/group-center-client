@@ -1,6 +1,8 @@
 import argparse
+from typing import List
 
 from group_center.client.machine.data.add_user import linux_add_user_list
+from group_center.client.user.datatype.user_info import get_user_info_list, UserInfo
 from group_center.core.feature.remote_config import (
     get_user_config_json_str,
 )
@@ -37,27 +39,21 @@ def connect_to_group_center(opt):
     group_center_login()
 
 
-def create_user():
-    user_config_json = get_user_config_json_str()
-    user_list = json.loads(user_config_json)
-
-    linux_add_user_text = linux_add_user_list(user_list)
+def create_user(user_info_list: List[UserInfo]):
+    linux_add_user_text = linux_add_user_list(user_info_list)
 
     print(linux_add_user_text)
 
 
-def save_add_user_text(opt):
+def save_add_user_text(opt, user_info_list: List[UserInfo]):
     save_path: str = opt.add_user_txt
     password: str = opt.user_password
 
     if not save_path:
         save_path = "add_user.txt"
 
-    user_config_json = get_user_config_json_str()
-    user_list = json.loads(user_config_json)
-
     linux_add_user_text = linux_add_user_list(
-        user_list=user_list,
+        user_info_list=user_info_list,
         password=password
     )
 
@@ -70,11 +66,16 @@ def main():
 
     connect_to_group_center(opt)
 
+    # Get User List
+    user_config_json = get_user_config_json_str()
+    user_dict_list = json.loads(user_config_json)
+    user_info_list: List[UserInfo] = get_user_info_list(user_dict_list)
+
     if opt.create_user:
-        create_user()
+        create_user(user_info_list)
 
     if opt.add_user_txt:
-        save_add_user_text(opt)
+        save_add_user_text(opt, user_info_list)
 
 
 if __name__ == "__main__":
