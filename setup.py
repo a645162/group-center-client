@@ -33,6 +33,7 @@ setup(
     entry_points={
         "console_scripts": [
             "group_center_machine_user = group_center.client.machine.user_manager:main",
+            "group_center_terminal = group_center.user.windows_terminal:main",
         ],
     },
 )

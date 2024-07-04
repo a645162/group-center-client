@@ -38,6 +38,10 @@ def get_user_config_json_str() -> str:
     return get_json_str(target_api="/api/client/config/user_list")
 
 
+def get_machine_config_json_str() -> str:
+    return get_json_str(target_api="/api/client/config/machine_list")
+
+
 def get_env_json_str() -> str:
     return get_json_str(target_api="/api/client/config/env_list")
 
