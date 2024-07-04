@@ -46,9 +46,9 @@ def linux_add_user_txt(user_info_list: List[UserInfo], password: str = ""):
 def create_user(user_info: UserInfo, password: str = ""):
     linux_user_obj = LinuxUser(user_info.name_eng)
 
-    if not linux_user_obj.is_exist():
+    if linux_user_obj.is_exist():
         print(f"User {user_info.name_eng} already exist")
-
+    else:
         if not linux_user_obj.create(password=password):
             print(f"Create user {user_info.name_eng} failed")
             return

@@ -47,9 +47,7 @@ def connect_to_group_center(opt):
 def create_user(opt, user_info_list: List[UserInfo]):
     password: str = opt.user_password
 
-    linux_add_user_text = create_linux_users(user_info_list, password)
-
-    print(linux_add_user_text)
+    create_linux_users(user_info_list, password)
 
 
 def save_add_user_text(opt, user_info_list: List[UserInfo]):
