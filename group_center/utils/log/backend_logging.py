@@ -1,17 +1,17 @@
-import logging
-
 from group_center.utils.log.log_level import get_log_level
+from group_center.utils.log import new_logging
 
 
-def get_logging():
+def __setup_logging():
     log_level = get_log_level()
 
-    logging.basicConfig(
+    new_logging.basicConfig(
         level=log_level.get_logging_level(),
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
-    return logging.getLogger(__name__)
 
 
 def get_logging_backend():
-    return get_logging()
+    __setup_logging()
+
+    return new_logging

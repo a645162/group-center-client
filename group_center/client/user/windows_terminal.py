@@ -5,8 +5,14 @@ import argparse
 import uuid
 from typing import List
 
+from group_center.utils.log.logger import set_is_print_mode
+
+set_is_print_mode(True)
+
 from group_center.core.group_center_machine import *
 from group_center.core.feature.remote_config import get_machine_config_json_str
+
+logger = get_logger()
 
 
 def get_options():
@@ -53,28 +59,28 @@ def get_windows_terminal_config_path():
 
 
 def main():
-    print("Windows Terminal add SSH")
+    logger.info("Windows Terminal add SSH")
 
     opt = get_options()
 
     connect_to_group_center(opt)
 
     json_path = get_windows_terminal_config_path()
-    print("Windows Terminal Config Path:")
-    print(json_path)
+    logger.info("Windows Terminal Config Path:")
+    logger.info(json_path)
     json_dict: dict = json.load(open(json_path, 'r'))
     if not (
             "profiles" in json_dict.keys() and
             "list" in json_dict["profiles"].keys() and
             isinstance(json_dict["profiles"]["list"], list)
     ):
-        print("Invalid json")
+        logger.error("Invalid json")
         exit(1)
 
     user_name = str(opt.user_name).strip()
 
     if len(user_name) == 0:
-        print("Invalid user name")
+        logger.error("Invalid user name")
         exit(1)
 
     machine_list_json = get_machine_config_json_str()
@@ -82,21 +88,42 @@ def main():
 
     config_list: List[dict] = json_dict["profiles"]["list"]
 
+    count = 0
     for machine_dict in machine_list:
         host = machine_dict["host"]
         name_eng = machine_dict["nameEng"]
 
+        command_line = f"ssh {user_name}@{host}"
+
+        # Ignore Exists
+        found = False
+        for config in config_list:
+            if (
+                    "commandline" in config.keys() and
+                    config["commandline"].strip() == command_line
+            ):
+                logger.info(f"Skip {name_eng}-{user_name} because exists")
+                found = True
+                break
+        if found:
+            continue
+
         config_list.append({
-            "commandline": f"ssh {user_name}@{host}",
+            "commandline": command_line,
             "guid": "{" + str(uuid.uuid4()) + "}",
             "hidden": False,
             "name": f"{name_eng}-{user_name}"
         })
+        count += 1
+
+    logger.info(f"Add {count} SSH Config")
 
     json_dict["profiles"]["list"] = config_list
 
     with open(json_path, 'w') as f:
         json.dump(json_dict, f, indent=4)
+
+    logger.success("Success!")
 
 
 if __name__ == "__main__":
