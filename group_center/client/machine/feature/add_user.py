@@ -57,6 +57,6 @@ def create_user(user_info: UserInfo, password: str = ""):
     linux_user_obj.gid = user_info.linux_user.gid
 
 
-def create_users(user_info_list: List[UserInfo], password: str = ""):
+def create_linux_users(user_info_list: List[UserInfo], password: str = ""):
     for user_info in user_info_list:
         create_user(user_info=user_info, password=password)

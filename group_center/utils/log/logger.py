@@ -10,7 +10,7 @@ except ImportError:
 from group_center.utils.log.backend_logging import get_logging_backend
 from group_center.utils.log.backend_print import get_print_backend
 
-__is_print_mode = False
+__is_print_mode = True
 
 
 def set_is_print_mode(is_print: bool):
@@ -33,6 +33,11 @@ def __init_logger():
             logger = get_loguru_backend()
         else:
             logger = get_logging_backend()
+
+
+def set_logger(exist_logger):
+    global logger
+    logger = exist_logger
 
 
 def get_logger():

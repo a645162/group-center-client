@@ -1,7 +1,10 @@
 import argparse
 from typing import List
 
-from group_center.client.machine.feature.add_user import linux_add_user_txt
+from group_center.client.machine.feature.add_user import (
+    linux_add_user_txt,
+    create_linux_users,
+)
 from group_center.client.user.datatype.user_info import get_user_info_list, UserInfo
 from group_center.core.feature.remote_config import (
     get_user_config_json_str,
@@ -44,7 +47,7 @@ def connect_to_group_center(opt):
 def create_user(opt, user_info_list: List[UserInfo]):
     password: str = opt.user_password
 
-    linux_add_user_text = linux_add_user_txt(user_info_list, password)
+    linux_add_user_text = create_linux_users(user_info_list, password)
 
     print(linux_add_user_text)
 

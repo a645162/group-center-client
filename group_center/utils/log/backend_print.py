@@ -1,3 +1,6 @@
+from group_center.utils.log.log_level import get_log_level
+
+
 class BackendPrint:
     class Level:
         INFO = 0
@@ -13,16 +16,28 @@ class BackendPrint:
     def set_level(self, level: Level):
         self.level = level
 
+    def debug(self, message):
+        get_log_level().DEBUG.is_valid()
+        print(message)
+
     def info(self, message):
+        get_log_level().INFO.is_valid()
+        print(message)
+
+    def success(self, message):
+        get_log_level().INFO.is_valid()
         print(message)
 
     def error(self, message):
+        get_log_level().ERROR.is_valid()
         print(message)
 
     def warning(self, message):
+        get_log_level().WARNING.is_valid()
         print(message)
 
-    def debug(self, message):
+    def critical(self, message):
+        get_log_level().CRITICAL.is_valid()
         print(message)
 
 
