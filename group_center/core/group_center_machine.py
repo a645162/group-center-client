@@ -28,11 +28,6 @@ def init_logger():
         logger = get_logger()
 
 
-def set_logger(exist_logger):
-    global logger
-    logger = exist_logger
-
-
 def set_group_center_host_url(host_url: str):
     global GROUP_CENTER_URL
     GROUP_CENTER_URL = host_url

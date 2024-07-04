@@ -15,6 +15,7 @@ __is_print_mode = True
 
 def set_is_print_mode(is_print: bool):
     global __is_print_mode
+
     __is_print_mode = is_print
 
 
@@ -22,7 +23,8 @@ logger = None
 
 
 def __init_logger():
-    global logger
+    global logger, is_loguru_mode, __is_print_mode
+
     if logger is not None:
         return
 
