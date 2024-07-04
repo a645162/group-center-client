@@ -60,3 +60,18 @@ def create_user(user_info: UserInfo, password: str = ""):
 def create_linux_users(user_info_list: List[UserInfo], password: str = ""):
     for user_info in user_info_list:
         create_user(user_info=user_info, password=password)
+
+
+def remove_user(user_info: UserInfo):
+    linux_user_obj = LinuxUser(user_info.name_eng)
+
+    if not linux_user_obj.is_exist():
+        print(f"User {user_info.name_eng} not exist")
+
+    if not linux_user_obj.delete():
+        print(f"Remove user {user_info.name_eng} failed")
+
+
+def remove_linux_users(user_info_list: List[UserInfo]):
+    for user_info in user_info_list:
+        remove_user(user_info=user_info)

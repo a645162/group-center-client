@@ -3,7 +3,7 @@ from typing import List
 
 from group_center.client.machine.feature.add_user import (
     linux_add_user_txt,
-    create_linux_users,
+    create_linux_users, remove_linux_users,
 )
 from group_center.client.user.datatype.user_info import get_user_info_list, UserInfo
 from group_center.core.feature.remote_config import (
@@ -26,8 +26,15 @@ def get_options():
 
     parser.add_argument(
         "-c",
-        "--create-user",
+        "--create-users",
         help="Create Users",
+        action="store_true",
+    )
+
+    parser.add_argument(
+        "-r",
+        "--remove-users",
+        help="Remove Users",
         action="store_true",
     )
 
@@ -83,8 +90,11 @@ def main():
             if user_info.year == opt.year
         ]
 
-    if opt.create_user:
+    if opt.create_users:
         create_user(opt, user_info_list)
+
+    if opt.remove_users:
+        remove_linux_users(user_info_list)
 
     if opt.add_user_txt:
         save_add_user_text(opt, user_info_list)
