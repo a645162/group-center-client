@@ -75,3 +75,9 @@ def remove_user(user_info: UserInfo):
 def remove_linux_users(user_info_list: List[UserInfo]):
     for user_info in user_info_list:
         remove_user(user_info=user_info)
+
+
+def add_users_to_linux_group(user_info_list: List[UserInfo], group_name: str):
+    for user_info in user_info_list:
+        linux_user_obj = LinuxUser(user_info.name_eng)
+        linux_user_obj.add_to_group(group_name=group_name)

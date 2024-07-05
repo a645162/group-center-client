@@ -4,6 +4,7 @@ from typing import List
 from group_center.client.machine.feature.add_user import (
     linux_add_user_txt,
     create_linux_users, remove_linux_users,
+    add_users_to_linux_group,
 )
 from group_center.client.user.datatype.user_info import get_user_info_list, UserInfo
 from group_center.core.feature.remote_config import (
@@ -21,6 +22,8 @@ def get_options():
 
     parser.add_argument("--add-user-txt", type=str, default="")
     parser.add_argument("--user-password", type=str, default="")
+
+    parser.add_argument("--user-group", type=str, default="")
 
     parser.add_argument("--year", type=int, default=0)
 
@@ -98,6 +101,13 @@ def main():
 
     if opt.add_user_txt:
         save_add_user_text(opt, user_info_list)
+
+    if opt.user_group and isinstance(opt.user_group, str):
+        linux_groups = opt.user_group
+        linux_groups_list = linux_groups.split(",")
+
+        for linux_group in linux_groups_list:
+            add_users_to_linux_group(user_info_list, linux_group)
 
 
 if __name__ == "__main__":
