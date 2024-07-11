@@ -5,13 +5,15 @@ Group Center(https://github.com/a645162/group-center) Client
 ## Struct
 
 - [x] Python Package For Group Center Client
-  - [x] Group Center Auth(Machine)
-  - [x] Remote Config
-  - [x] Send Json Array Dict To Group Center
-  - [x] Send Message Directly To Group Center
+    - [x] Group Center Auth(Machine)
+    - [x] Remote Config
+    - [x] Send Json Array Dict To Group Center
+    - [x] Send Message Directly To Group Center
 - [x] User Python Package
-  - [x] Push Message To `nvi-notify` finally push to `group-center`
+    - [x] (Python)Push Message To `nvi-notify` finally push to `group-center`
+    - [x] (Terminal)Push Message To `nvi-notify` finally push to `group-center`
 - [ ] Machine Tools
+    - [x] User Tools
 
 ## Install
 
@@ -33,7 +35,17 @@ pip install --upgrade li-group-center -i https://pypi.python.org/simple
 
 ### Machine User Message
 
-#### Usage
+#### Terminal Command
+
+- `-n,--user-name` to set username.
+- `-m,--message` to set message content.
+- `-s,--screen` to contain screen session name.
+
+```bash
+group_center_user_message -m "Test Message~"
+```
+
+#### Python Version
 
 User use their own account to push message to Group Center.
 
@@ -74,16 +86,16 @@ from group_center.user_tools import *
 parser = argparse.ArgumentParser(description="Example of Group Center")
 
 parser.add_argument(
-  "-g",
-  "--group-center",
-  help="Enable Group Center",
-  action="store_true",
+    "-g",
+    "--group-center",
+    help="Enable Group Center",
+    action="store_true",
 )
 
 opt = parser.parse_args()
 
 if opt.groupcenter:
-  group_center_set_is_valid()
+    group_center_set_is_valid()
 ```
 
 ## Feature(Machine)
