@@ -1,6 +1,5 @@
 import argparse
 
-from group_center.user_env import ENV_SCREEN_SESSION_NAME
 from group_center.user_tools import *
 
 
@@ -40,7 +39,7 @@ def main():
         print("No message")
         return
 
-    if opt.screen_name:
+    if opt.screen:
         screen_name = ENV_SCREEN_SESSION_NAME()
 
     if screen_name:
