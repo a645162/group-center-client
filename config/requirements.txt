@@ -1,6 +1,6 @@
 loguru
 
-urllib3<2
+urllib3
 requests
 
 termcolor >= 1.0.0

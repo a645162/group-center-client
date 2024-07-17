@@ -27,12 +27,16 @@ setup(
     ),
     python_requires=">=3.6",
     install_requires=[
-        "urllib3<2", "requests",
-        "loguru"
+        "urllib3", "requests",
+        "loguru",
+        "termcolor >= 1.0.0",
+        "colorama >= 0.4.0; platform_system == 'Windows'",
+        "windows-curses >= 2.2.0; platform_system == 'Windows'",
     ],
     entry_points={
         "console_scripts": [
             "group_center_machine_user = group_center.client.machine.user_manager:main",
+            "group_center_ssh_helper = group_center.client.machine.ssh_helper:main",
             "group_center_user_message = group_center.client.user.shell_message:main",
             "group_center_terminal = group_center.user.windows_terminal:main",
         ],
