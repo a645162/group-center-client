@@ -1,10 +1,10 @@
 import os
 import shutil
 
-from group_center.utils.log.log_level import get_log_level
-
-log_level = get_log_level()
-log_level.current_level = log_level.DEBUG
+# from group_center.utils.log.log_level import get_log_level
+#
+# log_level = get_log_level()
+# log_level.current_level = log_level.DEBUG
 
 from group_center.client.machine.feature. \
     ssh.ssh_key_pair_manager import fix_ssh_dir, SshKeyPairManager, restore_ssh_zip
@@ -145,13 +145,7 @@ class LinuxUserSsh:
                 }
             )
 
-        isValid = False
-        if download_result:
-            with open(tmp_file_path, "r") as f:
-                authorized_keys_content = f.read().strip()
-
-            if authorized_keys_content:
-                isValid = True
+        isValid = download_result
 
         if isValid:
             restore_ssh_zip(zip_path=tmp_file_path)
