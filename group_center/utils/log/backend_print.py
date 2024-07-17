@@ -32,16 +32,16 @@ def print_with_level(message: str, current_level: LogLevelObject):
     if background_color:
         print(
             colored(
-                final_text,
-                foreground_color,
-                background_color
+                text=final_text,
+                color=foreground_color,
+                on_color=background_color
             )
         )
     else:
         print(
             colored(
-                final_text,
-                foreground_color
+                text=final_text,
+                color=foreground_color
             )
         )
 
