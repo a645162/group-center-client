@@ -55,34 +55,34 @@ class LogLevel:
         self.__level_list.append(self.CRITICAL)
 
         self.DEBUG.level_name = "DEBUG"
-        self.DEBUG.level_color = "BLUE"
-        self.DEBUG.foreground_color = "BLUE"
+        self.DEBUG.level_color = "blue"
+        self.DEBUG.foreground_color = "blue"
         self.DEBUG.background_color = ""
 
         self.INFO.level_name = "INFO"
-        self.INFO.level_color = "BLACK"
-        self.INFO.foreground_color = "BLACK"
-        self.INFO.background_color = "WHITE"
+        self.INFO.level_color = ""
+        self.INFO.foreground_color = ""
+        self.INFO.background_color = ""
 
         self.SUCCESS.level_name = "SUCCESS"
-        self.SUCCESS.level_color = "GREEN"
-        self.SUCCESS.foreground_color = "GREEN"
+        self.SUCCESS.level_color = "green"
+        self.SUCCESS.foreground_color = "green"
         self.SUCCESS.background_color = ""
 
         self.WARNING.level_name = "WARNING"
-        self.WARNING.level_color = "YELLOW"
-        self.WARNING.foreground_color = "YELLOW"
+        self.WARNING.level_color = "yellow"
+        self.WARNING.foreground_color = "yellow"
         self.WARNING.background_color = ""
 
         self.ERROR.level_name = "ERROR"
-        self.ERROR.level_color = "RED"
-        self.ERROR.foreground_color = "RED"
+        self.ERROR.level_color = "red"
+        self.ERROR.foreground_color = "red"
         self.ERROR.background_color = ""
 
         self.CRITICAL.level_name = "CRITICAL"
-        self.CRITICAL.level_color = "CYAN"
-        self.CRITICAL.foreground_color = "CYAN"
-        self.CRITICAL.background_color = "RED"
+        self.CRITICAL.level_color = "cyan"
+        self.CRITICAL.foreground_color = "cyan"
+        self.CRITICAL.background_color = "on_red"
 
         for index, level in enumerate(self.__level_list):
             level.level = index + 1

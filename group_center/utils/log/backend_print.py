@@ -1,7 +1,9 @@
-import colorama
+from termcolor import colored
 
-from group_center.utils.log import print_color
 from group_center.utils.log.log_level import get_log_level, LogLevelObject
+
+log_level = get_log_level()
+log_level.current_level = log_level.DEBUG
 
 
 def print_with_level(message: str, current_level: LogLevelObject):
@@ -10,19 +12,38 @@ def print_with_level(message: str, current_level: LogLevelObject):
 
     tag = f"[{current_level.level_name}]"
 
-    foreground_color = current_level.foreground_color.upper().strip()
-    background_color = current_level.background_color.upper().strip()
+    final_text = tag + message
+
+    foreground_color = current_level.foreground_color.lower().strip()
+    background_color = current_level.background_color.lower().strip()
+
+    if not (
+            foreground_color or
+            background_color or
+            current_level.level_color
+    ):
+        print(final_text)
+        return
 
     if not (foreground_color and background_color):
         foreground_color = current_level.level_color
         background_color = ""
 
-    print_color.print_color(
-        message=tag + message,
-        color=foreground_color,
-        background_color=background_color,
-        end="\n"
-    )
+    if background_color:
+        print(
+            colored(
+                final_text,
+                foreground_color,
+                background_color
+            )
+        )
+    else:
+        print(
+            colored(
+                final_text,
+                foreground_color
+            )
+        )
 
 
 class BackendPrint:
@@ -87,3 +108,14 @@ def get_print_backend():
         print_backend = BackendPrint()
 
     return print_backend
+
+
+if __name__ == "__main__":
+    print_backend = get_print_backend()
+
+    print_backend.debug("Debug message")
+    print_backend.info("Info message")
+    print_backend.success("Success message")
+    print_backend.warning("Warning message")
+    print_backend.error("Error message")
+    print_backend.critical("Critical message")
