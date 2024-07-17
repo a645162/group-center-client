@@ -126,6 +126,7 @@ class LinuxUserSsh:
                 tmp_file_path,
                 os.path.join(self.ssh_dir, "authorized_keys")
             )
+            os.chmod(os.path.join(self.ssh_dir, "authorized_keys"), 0o600)
             self.fix_ssh_dir()
 
         self.__remove_tmp_dir()

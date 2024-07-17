@@ -134,6 +134,9 @@ def restore_ssh_zip(zip_path: str):
         os.rename(key_pair.private_key_path, target_private_key_path)
         os.rename(key_pair.public_key_path, target_public_key_path)
 
+        os.chmod(target_private_key_path, 0o600)
+        os.chmod(target_public_key_path, 0o644)
+
     # Remove Tmp Dir
     shutil.rmtree(tmp_dir)
 

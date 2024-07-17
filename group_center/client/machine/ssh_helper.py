@@ -2,7 +2,7 @@ import argparse
 import os
 import platform
 
-from typing import List, Any
+from typing import List
 
 from termcolor import colored
 
@@ -232,6 +232,10 @@ def get_options():
 
 
 def main():
+    from group_center.utils.log.log_level import get_log_level
+    log_level = get_log_level()
+    log_level.current_level = log_level.INFO
+    
     opt = get_options()
 
     setup_group_center_by_opt(opt)
