@@ -5,6 +5,8 @@ from typing import List, Any
 
 from termcolor import colored
 
+from group_center.client.machine.feature.ssh.ssh_helper_linux import LinuxUserSsh
+
 system_name = platform.system()
 
 is_linux = system_name == "Linux"
@@ -29,16 +31,56 @@ class OptionItem:
             self.handler()
 
 
+def print_color_bool(text: str, is_success: bool):
+    if is_success:
+        print(colored(text, "green"))
+    else:
+        print(colored(text, "red"))
+
+
 def generate_new_ssh_key():
     os.system("ssh-keygen")
 
 
-def backup_current_user():
-    pass
+def backup_current_user(user_name=""):
+    linux_user_ssh = LinuxUserSsh(user_name=user_name)
+
+    result_backup_authorized_keys = linux_user_ssh.backup_authorized_keys()
+    print_color_bool(
+        "Backup authorized_keys:" + str(result_backup_authorized_keys),
+        result_backup_authorized_keys
+    )
+
+    result_backup_ssh_key_pair = linux_user_ssh.backup_ssh_key_pair()
+    print_color_bool(
+        "Backup Key pair:" + str(result_backup_ssh_key_pair),
+        result_backup_ssh_key_pair
+    )
 
 
-def restore_current_user():
-    pass
+def restore_current_user(user_name=""):
+    restore_current_user_authorized_keys(user_name=user_name)
+    restore_current_user_key_pair(user_name=user_name)
+
+
+def restore_current_user_authorized_keys(user_name=""):
+    linux_user_ssh = LinuxUserSsh(user_name=user_name)
+
+    result = linux_user_ssh.restore_authorized_keys()
+    print_color_bool(
+        "Restore authorized_keys:" + str(result),
+        result
+    )
+
+
+def restore_current_user_key_pair(user_name=""):
+    linux_user_ssh = LinuxUserSsh(user_name=user_name)
+
+    result = linux_user_ssh.restore_ssh_key_pair()
+    print_color_bool(
+        "Restore Key pair:" + str(result),
+        result
+    )
 
 
 def get_all_user_list() -> List[str]:
@@ -53,11 +95,15 @@ def get_all_user_list() -> List[str]:
 
 
 def backup_all_user():
-    pass
+    user_list = get_all_user_list()
+    for user_name in user_list:
+        backup_current_user(user_name)
 
 
 def restore_all_user():
-    pass
+    user_list = get_all_user_list()
+    for user_name in user_list:
+        restore_current_user(user_name)
 
 
 def init_main_interface_content() -> List[OptionItem]:
@@ -74,12 +120,22 @@ def init_main_interface_content() -> List[OptionItem]:
 
     str_list.append(OptionItem("Generate New 'SSH key'", key="c", handler=generate_new_ssh_key))
 
-    str_list.append(OptionItem("Backup Current User", key="1", handler=backup_current_user))
-    str_list.append(OptionItem("Restore Current User", key="2", handler=restore_current_user))
+    str_list.append(OptionItem(
+        "Backup Current User", key="1",
+        handler=backup_current_user))
+    str_list.append(OptionItem(
+        "Restore Current User", key="2",
+        handler=restore_current_user))
+    str_list.append(OptionItem(
+        "Restore Current User(authorized_key)", key="3",
+        handler=restore_current_user_authorized_keys))
+    str_list.append(OptionItem(
+        "Restore Current User(Key pair)", key="4",
+        handler=restore_current_user_key_pair))
 
     if is_root_user:
-        str_list.append(OptionItem("Backup All User(Root Only)", key="3", handler=backup_current_user))
-        str_list.append(OptionItem("Restore All User(Root Only)", key="4", handler=restore_current_user))
+        str_list.append(OptionItem("Backup All User(Root Only)", key="5", handler=backup_all_user()))
+        str_list.append(OptionItem("Restore All User(Root Only)", key="6", handler=restore_all_user()))
 
     str_list.append(OptionItem(""))
     str_list.append(OptionItem("Exit", key="q", handler=lambda: exit(0)))
