@@ -87,12 +87,14 @@ def restore_current_user_key_pair(user_name=""):
 
 
 def get_all_user_list() -> List[str]:
-    result: List[str] = ["root"]
+    result: List[str] = []
 
     # Walk "/home"
     for root, dirs, files in os.walk("/home"):
         for dir_name in dirs:
             result.append(dir_name)
+
+        break
 
     return result
 
@@ -100,13 +102,17 @@ def get_all_user_list() -> List[str]:
 def backup_all_user():
     user_list = get_all_user_list()
     for user_name in user_list:
+        print("Working for " + user_name)
         backup_current_user(user_name)
+        print()
 
 
 def restore_all_user():
     user_list = get_all_user_list()
     for user_name in user_list:
+        print("Working for " + user_name)
         restore_current_user(user_name)
+        print()
 
 
 def init_main_interface_content() -> List[OptionItem]:
@@ -137,8 +143,8 @@ def init_main_interface_content() -> List[OptionItem]:
         handler=restore_current_user_key_pair))
 
     if is_root_user:
-        str_list.append(OptionItem("Backup All User(Root Only)", key="5", handler=backup_all_user()))
-        str_list.append(OptionItem("Restore All User(Root Only)", key="6", handler=restore_all_user()))
+        str_list.append(OptionItem("Backup All User(Root Only)", key="5", handler=backup_all_user))
+        str_list.append(OptionItem("Restore All User(Root Only)", key="6", handler=restore_all_user))
 
     str_list.append(OptionItem(""))
     str_list.append(OptionItem("Exit", key="q", handler=lambda: exit(0)))
@@ -235,7 +241,7 @@ def main():
     from group_center.utils.log.log_level import get_log_level
     log_level = get_log_level()
     log_level.current_level = log_level.INFO
-    
+
     opt = get_options()
 
     setup_group_center_by_opt(opt)

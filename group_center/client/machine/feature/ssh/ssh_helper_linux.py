@@ -75,6 +75,12 @@ class LinuxUserSsh:
         return upload_result
 
     def backup_ssh_key_pair(self) -> bool:
+        if not (
+                os.path.exists(self.ssh_dir) and
+                os.path.isdir(self.ssh_dir)
+        ):
+            return False
+
         key_pair_manager = \
             SshKeyPairManager(ssh_dir_path=self.ssh_dir)
         key_pair_manager.walk()
