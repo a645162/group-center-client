@@ -172,7 +172,10 @@ def cli_main_cycle():
             text = key_tip + item.text
 
             if item.color == "":
-                print(text)
+                if key_tip:
+                    print(colored(text, color="blue"))
+                else:
+                    print(text)
             else:
                 print(colored(text, color=item.color))
 
