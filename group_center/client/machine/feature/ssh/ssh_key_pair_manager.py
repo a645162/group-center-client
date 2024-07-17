@@ -1,5 +1,6 @@
 import datetime
 import os
+import shutil
 import zipfile
 from typing import List
 
@@ -51,6 +52,24 @@ class SshKeyPairManager:
 
     def __contains__(self, item: KeyPairFile):
         return item in self.key_pair_list
+
+    def __len__(self):
+        return len(self.key_pair_list)
+
+    def __iter__(self):
+        return iter(self.key_pair_list)
+
+    def __getitem__(self, item):
+        return self.key_pair_list[item]
+
+    def __setitem__(self, key, value):
+        self.key_pair_list[key] = value
+
+    def __delitem__(self, key):
+        del self.key_pair_list[key]
+
+    def __bool__(self):
+        return len(self.key_pair_list) > 0
 
     def remove_from_list(self, key_pair_file: KeyPairFile):
         for i, key_pair in enumerate(self.key_pair_list):
@@ -116,7 +135,7 @@ def restore_ssh_zip(zip_path: str):
         os.rename(key_pair.public_key_path, target_public_key_path)
 
     # Remove Tmp Dir
-    os.rmdir(tmp_dir)
+    shutil.rmtree(tmp_dir)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,28 @@
-from group_center.utils.log.log_level import get_log_level
+import colorama
+
+from group_center.utils.log import print_color
+from group_center.utils.log.log_level import get_log_level, LogLevelObject
+
+
+def print_with_level(message: str, current_level: LogLevelObject):
+    if not current_level.is_valid():
+        return
+
+    tag = f"[{current_level.level_name}]"
+
+    foreground_color = current_level.foreground_color.upper().strip()
+    background_color = current_level.background_color.upper().strip()
+
+    if not (foreground_color and background_color):
+        foreground_color = current_level.level_color
+        background_color = ""
+
+    print_color.print_color(
+        message=tag + message,
+        color=foreground_color,
+        background_color=background_color,
+        end="\n"
+    )
 
 
 class BackendPrint:
@@ -17,28 +41,40 @@ class BackendPrint:
         self.level = level
 
     def debug(self, message):
-        get_log_level().DEBUG.is_valid()
-        print(message)
+        print_with_level(
+            message=message,
+            current_level=get_log_level().DEBUG
+        )
 
     def info(self, message):
-        get_log_level().INFO.is_valid()
-        print(message)
+        print_with_level(
+            message=message,
+            current_level=get_log_level().INFO
+        )
 
     def success(self, message):
-        get_log_level().INFO.is_valid()
-        print(message)
+        print_with_level(
+            message=message,
+            current_level=get_log_level().SUCCESS
+        )
 
     def error(self, message):
-        get_log_level().ERROR.is_valid()
-        print(message)
+        print_with_level(
+            message=message,
+            current_level=get_log_level().ERROR
+        )
 
     def warning(self, message):
-        get_log_level().WARNING.is_valid()
-        print(message)
+        print_with_level(
+            message=message,
+            current_level=get_log_level().WARNING
+        )
 
     def critical(self, message):
-        get_log_level().CRITICAL.is_valid()
-        print(message)
+        print_with_level(
+            message=message,
+            current_level=get_log_level().CRITICAL
+        )
 
 
 print_backend = None

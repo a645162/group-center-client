@@ -6,6 +6,10 @@ class LogLevelObject:
     level_name: str
     level_threshold: int
 
+    level_color: str = ""
+    foreground_color: str = ""
+    background_color: str = ""
+
     def __init__(self):
         self.level = 0
         self.level_name = ""
@@ -51,11 +55,34 @@ class LogLevel:
         self.__level_list.append(self.CRITICAL)
 
         self.DEBUG.level_name = "DEBUG"
+        self.DEBUG.level_color = "BLUE"
+        self.DEBUG.foreground_color = "BLUE"
+        self.DEBUG.background_color = ""
+
         self.INFO.level_name = "INFO"
+        self.INFO.level_color = "BLACK"
+        self.INFO.foreground_color = "BLACK"
+        self.INFO.background_color = "WHITE"
+
         self.SUCCESS.level_name = "SUCCESS"
+        self.SUCCESS.level_color = "GREEN"
+        self.SUCCESS.foreground_color = "GREEN"
+        self.SUCCESS.background_color = ""
+
         self.WARNING.level_name = "WARNING"
+        self.WARNING.level_color = "YELLOW"
+        self.WARNING.foreground_color = "YELLOW"
+        self.WARNING.background_color = ""
+
         self.ERROR.level_name = "ERROR"
+        self.ERROR.level_color = "RED"
+        self.ERROR.foreground_color = "RED"
+        self.ERROR.background_color = ""
+
         self.CRITICAL.level_name = "CRITICAL"
+        self.CRITICAL.level_color = "CYAN"
+        self.CRITICAL.foreground_color = "CYAN"
+        self.CRITICAL.background_color = "RED"
 
         for index, level in enumerate(self.__level_list):
             level.level = index + 1

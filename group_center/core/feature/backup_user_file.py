@@ -2,6 +2,9 @@ import os
 import requests
 
 from group_center.core import group_center_machine
+from group_center.utils.log.logger import get_logger
+
+logger = get_logger()
 
 
 def upload_file(file_path: str, target_api: str, params: dict = None) -> bool:
@@ -15,6 +18,9 @@ def upload_file(file_path: str, target_api: str, params: dict = None) -> bool:
         access_key = group_center_machine.get_access_key()
         params.update({"accessKey": access_key})
 
+        logger.debug(f"Upload file: {file_path}")
+        logger.debug(f"Target URL: {target_url}")
+
         with open(file_path, 'rb') as f:
             file_name = os.path.basename(file_path)
 
@@ -26,6 +32,7 @@ def upload_file(file_path: str, target_api: str, params: dict = None) -> bool:
                 params=params
             )
 
+        logger.debug(f"Response({response.status_code}): {response.text}")
         if response.status_code != 200:
             return False
 
@@ -50,11 +57,15 @@ def download_file(
         access_key = group_center_machine.get_access_key()
         params.update({"accessKey": access_key})
 
+        logger.debug(f"Download file: {target_url}")
+        logger.debug(f"Save path: {save_path}")
+
         response = requests.get(
             target_url,
             params=params
         )
 
+        logger.debug(f"Response({response.status_code}): {response.text}")
         if response.status_code != 200:
             return False
 

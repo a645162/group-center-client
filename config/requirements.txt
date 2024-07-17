@@ -2,3 +2,7 @@ loguru
 
 urllib3<2
 requests
+
+termcolor >= 1.0.0
+colorama >= 0.4.0; platform_system == 'Windows'
+windows-curses >= 2.2.0; platform_system == 'Windows'
