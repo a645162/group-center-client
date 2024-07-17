@@ -1,3 +1,4 @@
+import argparse
 import os
 import platform
 
@@ -6,6 +7,8 @@ from typing import List, Any
 from termcolor import colored
 
 from group_center.client.machine.feature.ssh.ssh_helper_linux import LinuxUserSsh
+from group_center.core.group_center_machine import setup_group_center_by_opt
+from group_center.utils.linux.linux_system import is_run_with_sudo
 
 system_name = platform.system()
 
@@ -195,8 +198,67 @@ def init_cli():
         cli_main_cycle()
 
 
+def get_options():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--host", type=str, default="")
+    parser.add_argument("--center-name", type=str, default="")
+    parser.add_argument("--center-password", type=str, default="")
+
+    parser.add_argument(
+        "-b",
+        "--backup",
+        help="Backup Mode",
+        action="store_true",
+    )
+
+    parser.add_argument(
+        "-r",
+        "--restore",
+        help="Restore Mode",
+        action="store_true",
+    )
+
+    parser.add_argument(
+        "-a",
+        "--all",
+        help="All User Mode",
+        action="store_true",
+    )
+
+    opt = parser.parse_args()
+
+    return opt
+
+
 def main():
-    init_cli()
+    opt = get_options()
+
+    setup_group_center_by_opt(opt)
+
+    backup_mode = opt.backup
+    restore_mode = opt.restore
+
+    if not (backup_mode or restore_mode):
+        init_cli()
+        return
+
+    all_user_mode = opt.all and is_run_with_sudo()
+
+    if not (backup_mode ^ restore_mode):
+        print_color_bool("Cannot backup and restore at the same time!", False)
+        return
+
+    if backup_mode:
+        if all_user_mode:
+            backup_all_user()
+        else:
+            backup_current_user()
+    else:
+        if all_user_mode:
+            restore_all_user()
+        else:
+            restore_current_user()
 
 
 if __name__ == "__main__":

@@ -48,6 +48,19 @@ def set_machine_password(password: str):
     MACHINE_PASSWORD = password
 
 
+def setup_group_center_by_opt(opt):
+    if hasattr(opt, "host") and opt.host:
+        set_group_center_host_url(opt.host)
+
+    if hasattr(opt, "center_name") and opt.center_name:
+        set_machine_name_short(opt.center_name)
+
+    if hasattr(opt, "center_password") and opt.center_password:
+        set_machine_password(opt.center_password)
+
+    group_center_login()
+
+
 def __init_from_env(skip_if_exist: bool = True):
     if skip_if_exist and GROUP_CENTER_URL != "":
         return

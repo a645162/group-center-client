@@ -9,11 +9,20 @@ Group Center(https://github.com/a645162/group-center) Client
     - [x] Remote Config
     - [x] Send Json Array Dict To Group Center
     - [x] Send Message Directly To Group Center
-- [x] User Python Package
+- [x] User Tools(Python Package)
     - [x] (Python)Push Message To `nvi-notify` finally push to `group-center`
     - [x] (Terminal)Push Message To `nvi-notify` finally push to `group-center`
-- [ ] Machine Tools
-    - [x] User Tools
+- [ ] Machine Tools(Command Line Tools)
+    - [x] User Manage Tool
+    - [x] SSH Helper
+- [ ] User Tools(Command Line Tools)
+
+## Command Line Tools
+
+- group_center_machine_user
+- group_center_ssh_helper
+- group_center_user_message
+- group_center_terminal
 
 ## Install
 
@@ -22,7 +31,7 @@ pip install li-group-center -i https://pypi.python.org/simple
 ```
 
 ```bash
-pip install li-group-center==1.4.0 -i https://pypi.python.org/simple
+pip install li-group-center==1.6.0 -i https://pypi.python.org/simple
 ```
 
 ## Upgrade
