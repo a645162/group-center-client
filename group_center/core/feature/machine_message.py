@@ -3,7 +3,6 @@ import queue
 import threading
 import time
 from queue import Queue
-from typing import Tuple
 
 import requests
 
@@ -14,7 +13,12 @@ from group_center.core.group_center_machine import logger
 def send_dict_to_center(data: dict, target: str) -> bool:
     url = group_center_machine.group_center_get_url(target_api=target)
     try:
-        response = requests.post(url, json=data, timeout=10)
+        response = requests.post(
+            url=url,
+            params=group_center_machine.get_public_part(),
+            json=data,
+            timeout=10
+        )
 
         response_dict: dict = json.loads(response.text)
 
@@ -37,7 +41,7 @@ def send_dict_to_center(data: dict, target: str) -> bool:
         return False
 
 
-task_queue: Queue[Tuple[dict, str]] = Queue()
+task_queue: Queue = Queue()
 
 
 class GroupCenterWorkThread(threading.Thread):
@@ -54,11 +58,7 @@ class GroupCenterWorkThread(threading.Thread):
 
             try:
                 data, target = task_queue.get(timeout=10)
-                final_data = {
-                    **group_center_machine.get_public_part(),
-                    **data,
-                }
-                if send_dict_to_center(data=final_data, target=target):
+                if send_dict_to_center(data=data, target=target):
                     task_queue.task_done()
                 else:
                     # 发送失败，将任务放回队列，以便重试

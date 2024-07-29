@@ -2,6 +2,10 @@
 
 Group Center(https://github.com/a645162/group-center) Client
 
+[GitHub](https://github.com/a645162/group-center-client)
+
+[PyPI](https://pypi.org/project/li-group-center/)
+
 ## Struct
 
 - [x] Python Package For Group Center Client

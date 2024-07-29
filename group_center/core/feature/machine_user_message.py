@@ -11,3 +11,7 @@ def machine_user_message_directly(
     }
 
     new_message_enqueue(data_dict, "/api/client/user/message")
+
+
+if __name__ == "__main__":
+    machine_user_message_directly("konghaomin", "test")
