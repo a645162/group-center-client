@@ -28,7 +28,6 @@ setup(
     python_requires=">=3.6",
     install_requires=[
         "urllib3", "requests",
-        "loguru",
         "termcolor >= 1.0.0",
         "colorama >= 0.4.0; platform_system == 'Windows'",
         "windows-curses >= 2.2.0; platform_system == 'Windows'",
