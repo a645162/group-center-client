@@ -144,6 +144,11 @@ def CONDA_ENV_NAME() -> str:
     return env_str
 
 
+def set_epoch_str(epoch_str: str) -> None:
+    # Set Env "GROUP_CENTER_USER_ENV_EPOCH"
+    os.environ["GROUP_CENTER_USER_ENV_EPOCH"] = epoch_str
+
+
 if __name__ == "__main__":
     print(PythonVersion())
 
