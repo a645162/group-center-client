@@ -59,7 +59,7 @@ def create_user(opt, user_info_list: List[UserInfo]):
 
     create_linux_users(user_info_list, password)
 
-
+# newusers add_user.txt
 def save_add_user_text(opt, user_info_list: List[UserInfo]):
     save_path: str = opt.add_user_txt
     password: str = opt.user_password
