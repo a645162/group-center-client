@@ -131,8 +131,8 @@ def restore_ssh_zip(zip_path: str):
             target_public_key_path = \
                 os.path.join(system_ssh_dir, private_key_name + ".pub")
 
-        os.rename(key_pair.private_key_path, target_private_key_path)
-        os.rename(key_pair.public_key_path, target_public_key_path)
+        shutil.move(key_pair.private_key_path, target_private_key_path)
+        shutil.move(key_pair.public_key_path, target_public_key_path)
 
         os.chmod(target_private_key_path, 0o600)
         os.chmod(target_public_key_path, 0o644)
