@@ -5,7 +5,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/li_group_center.egg-info" />
     </content>
-    <orderEntry type="jdk" jdkName="group-center-client" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="nvitop" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

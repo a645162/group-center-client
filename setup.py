@@ -38,6 +38,8 @@ setup(
             "group_center_ssh_helper = group_center.client.machine.ssh_helper:main",
             "group_center_user_message = group_center.client.user.shell_message:main",
             "group_center_terminal = group_center.user.windows_terminal:main",
+
+            "torch_ddp_port = group_center.tools.dl.ddp_port:main",
         ],
     },
 )
