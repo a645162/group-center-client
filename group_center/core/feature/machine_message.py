@@ -3,6 +3,7 @@ import queue
 import threading
 import time
 from queue import Queue
+from typing import List
 
 import requests
 
@@ -11,12 +12,35 @@ from group_center.core.group_center_machine import logger
 
 
 def send_dict_to_center(data: dict, target: str) -> bool:
+    data_dict = {}
+    data_dict.update(data)
+
+    # For Java Spring Boot JSON Deserializer
+    # https://blog.csdn.net/lijingjingchn/article/details/120553128
+
+    # Find out all bool keys
+    bool_keys_list: List[str] = []
+    for key in data_dict.keys():
+        if isinstance(data_dict[key], bool):
+            bool_keys_list.append(key)
+
+    # Clone all bool keys to new keys
+    for key in bool_keys_list:
+        if key.startswith("is"):
+            new_key = key[2:]
+
+            # Check first letter is upper or not
+            if new_key[0].isupper():
+                new_key = new_key[0].lower() + new_key[1:]
+
+            data_dict[new_key] = data_dict[key]
+
     url = group_center_machine.group_center_get_url(target_api=target)
     try:
         response = requests.post(
             url=url,
             params=group_center_machine.get_public_part(),
-            json=data,
+            json=data_dict,
             timeout=10
         )
 
