@@ -40,6 +40,8 @@ setup(
             "group_center_terminal = group_center.user.windows_terminal:main",
 
             "torch_ddp_port = group_center.tools.dl.ddp_port:main",
+
+            "rtsp_viewer = group_center.tools.rtsp.rtsp_viewer:main",
         ],
     },
 )
