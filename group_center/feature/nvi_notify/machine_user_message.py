@@ -5,11 +5,12 @@ __all__ = ["machine_user_message_via_local_nvi_notify"]
 
 
 def machine_user_message_via_local_nvi_notify(
-        content: str,
-        user_name: str = "",
+    content: str,
+    user_name: str = "",
 ) -> bool:
     user_name = user_name.strip()
 
+    # If user name is empty, use current user name.
     if user_name == "":
         user_name = get_current_user_name()
 
@@ -23,8 +24,7 @@ def machine_user_message_via_local_nvi_notify(
 
     try:
         notify_api.send_to_nvi_notify(
-            dict_data=data_dict,
-            target="/machine_user_message"
+            dict_data=data_dict, target="/machine_user_message"
         )
 
         return True

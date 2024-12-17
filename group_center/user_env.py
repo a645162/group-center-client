@@ -95,7 +95,7 @@ def ENV_CUDA_WORLD_SIZE() -> str:
 
 
 def cuda_local_rank() -> int:
-    local_rank = ENV_CUDA_LOCAL_RANK()
+    local_rank = ENV_CUDA_LOCAL_RANK().strip()t
     if local_rank == "":
         return -1
     try:
@@ -105,7 +105,7 @@ def cuda_local_rank() -> int:
 
 
 def cuda_world_size() -> int:
-    world_size = ENV_CUDA_WORLD_SIZE()
+    world_size = ENV_CUDA_WORLD_SIZE().strip()
     if world_size == "":
         return -1
     try:
