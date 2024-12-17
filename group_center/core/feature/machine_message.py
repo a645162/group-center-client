@@ -8,7 +8,10 @@ from typing import List
 import requests
 
 from group_center.core import group_center_machine
-from group_center.core.group_center_machine import logger
+from group_center.utils.log.logger import get_logger
+
+
+logger = get_logger()
 
 
 def send_dict_to_center(data: dict, target: str) -> bool:
@@ -41,14 +44,14 @@ def send_dict_to_center(data: dict, target: str) -> bool:
             url=url,
             params=group_center_machine.get_public_part(),
             json=data_dict,
-            timeout=10
+            timeout=10,
         )
 
         response_dict: dict = json.loads(response.text)
 
         if not (
-                "isAuthenticated" in response_dict.keys()
-                and response_dict["isAuthenticated"]
+            "isAuthenticated" in response_dict.keys()
+            and response_dict["isAuthenticated"]
         ):
             logger.error("[Group Center] Not authorized")
             group_center_machine.group_center_login()
