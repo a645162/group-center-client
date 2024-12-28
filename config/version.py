@@ -2,7 +2,7 @@ import os
 
 from config import global_config
 
-__version__ = "1.8.0"
+__version__ = "1.8.2"
 
 
 def get_version_path() -> str:
