@@ -6,3 +6,5 @@ colorama>=0.4.0; platform_system == 'Windows'
 windows-curses>=2.2.0; platform_system == 'Windows'
 
 objprint
+
+psutil

@@ -2,7 +2,7 @@ import os
 import platform
 
 
-def is_run_on_linux():
+def is_run_on_linux() -> bool:
     return platform.system() == "Linux"
 
 

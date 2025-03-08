@@ -1,7 +1,9 @@
 import os
 import re
 import sys
-from typing import List
+from typing import List, Optional
+
+from group_center.core.path import get_rt_str_path
 
 
 def PythonVersion() -> str:
@@ -144,9 +146,36 @@ def CONDA_ENV_NAME() -> str:
     return env_str
 
 
-def set_epoch_str(epoch_str: str) -> None:
-    # Set Env "GROUP_CENTER_USER_ENV_EPOCH"
-    os.environ["GROUP_CENTER_USER_ENV_EPOCH"] = epoch_str
+def set_realtime_str(rt_str: str, pid: Optional[int]) -> bool:
+    try:
+        file_path = get_rt_str_path(pid=pid)
+        if not os.path.exists(file_path):
+            return False
+
+        # Format the string
+        rt_str = rt_str.strip()
+
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(rt_str)
+
+        return True
+    except Exception:
+        return False
+
+
+def show_realtime_str(pid: Optional[int]) -> str:
+    try:
+        file_path = get_rt_str_path(pid=pid)
+
+        if not os.path.exists(file_path):
+            return ""
+
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read().strip()
+
+        return content
+    except Exception:
+        return ""
 
 
 if __name__ == "__main__":
