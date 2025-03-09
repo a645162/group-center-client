@@ -51,7 +51,8 @@ def get_env_machine_config() -> MachineConfig:
                 "GROUP_CENTER_PASSWORD",
             ]
         )
-
+        
+        # print(url, name_full, name_short, password)
         if not all([url, name_full, name_short, password]):
             return None
 
