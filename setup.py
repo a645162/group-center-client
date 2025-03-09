@@ -38,10 +38,10 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "group_center_machine_user = group_center.client.machine.user_manager:main",
-            "group_center_ssh_helper = group_center.client.machine.ssh_helper:main",
-            "group_center_user_message = group_center.client.user.shell_message:main",
-            "group_center_terminal = group_center.user.windows_terminal:main",
+            "user_manager = group_center.client.machine.user_manager:main",
+            "ssh_helper = group_center.client.machine.ssh_helper:main",
+            "user_message = group_center.client.user.shell_message:main",
+            "group_center_windows_terminal = group_center.client.user.windows_terminal:main",
             "torch_ddp_port = group_center.tools.dl.ddp_port:main",
             "rtsp_viewer = group_center.tools.rtsp.rtsp_viewer:main",
         ],

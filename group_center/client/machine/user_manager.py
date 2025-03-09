@@ -3,7 +3,8 @@ from typing import List
 
 from group_center.client.machine.feature.add_user import (
     linux_add_user_txt,
-    create_linux_users, remove_linux_users,
+    create_linux_users,
+    remove_linux_users,
     add_users_to_linux_group,
 )
 from group_center.client.user.datatype.user_info import get_user_info_list, UserInfo
@@ -59,6 +60,7 @@ def create_user(opt, user_info_list: List[UserInfo]):
 
     create_linux_users(user_info_list, password)
 
+
 # newusers add_user.txt
 def save_add_user_text(opt, user_info_list: List[UserInfo]):
     save_path: str = opt.add_user_txt
@@ -68,8 +70,7 @@ def save_add_user_text(opt, user_info_list: List[UserInfo]):
         save_path = "add_user.txt"
 
     linux_add_user_text = linux_add_user_txt(
-        user_info_list=user_info_list,
-        password=password
+        user_info_list=user_info_list, password=password
     )
 
     with open(save_path, "w") as f:
@@ -81,6 +82,8 @@ def main():
 
     connect_to_group_center(opt)
 
+    have_option: bool = False
+
     # Get User List
     user_config_json = get_user_config_json_str()
     user_dict_list = json.loads(user_config_json)
@@ -88,26 +91,33 @@ def main():
 
     if opt.year > 0:
         user_info_list = [
-            user_info
-            for user_info in user_info_list
-            if user_info.year == opt.year
+            user_info for user_info in user_info_list if user_info.year == opt.year
         ]
 
     if opt.create_users:
+        have_option = True
         create_user(opt, user_info_list)
 
     if opt.remove_users:
+        have_option = True
         remove_linux_users(user_info_list)
 
     if opt.add_user_txt:
+        have_option = True
         save_add_user_text(opt, user_info_list)
 
     if opt.user_group and isinstance(opt.user_group, str):
+        have_option = True
         linux_groups = opt.user_group
         linux_groups_list = linux_groups.split(",")
 
         for linux_group in linux_groups_list:
             add_users_to_linux_group(user_info_list, linux_group)
+
+    if not have_option:
+        print("No option!")
+    else:
+        print("Done!")
 
 
 if __name__ == "__main__":
