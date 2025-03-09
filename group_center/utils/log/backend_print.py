@@ -1,15 +1,12 @@
 from termcolor import colored
 
-from group_center.utils.log.log_level import get_log_level, LogLevelObject
+from group_center.utils.log.log_level import get_log_level, LogLevel
 
 log_level = get_log_level()
 log_level.current_level = log_level.DEBUG
 
 
-def print_with_level(message: str, current_level: LogLevelObject):
-    if not current_level.is_valid():
-        return
-
+def print_with_level(message: str, current_level: LogLevel):
     tag = f"[{current_level.level_name}]"
 
     final_text = tag + message
@@ -17,11 +14,7 @@ def print_with_level(message: str, current_level: LogLevelObject):
     foreground_color = current_level.foreground_color.lower().strip()
     background_color = current_level.background_color.lower().strip()
 
-    if not (
-            foreground_color or
-            background_color or
-            current_level.level_color
-    ):
+    if not (foreground_color or background_color or current_level.level_color):
         print(final_text)
         return
 
@@ -31,19 +24,10 @@ def print_with_level(message: str, current_level: LogLevelObject):
 
     if background_color:
         print(
-            colored(
-                text=final_text,
-                color=foreground_color,
-                on_color=background_color
-            )
+            colored(text=final_text, color=foreground_color, on_color=background_color)
         )
     else:
-        print(
-            colored(
-                text=final_text,
-                color=foreground_color
-            )
-        )
+        print(colored(text=final_text, color=foreground_color))
 
 
 class BackendPrint:
@@ -62,40 +46,22 @@ class BackendPrint:
         self.level = level
 
     def debug(self, message):
-        print_with_level(
-            message=message,
-            current_level=get_log_level().DEBUG
-        )
+        print_with_level(message=message, current_level=get_log_level().DEBUG)
 
     def info(self, message):
-        print_with_level(
-            message=message,
-            current_level=get_log_level().INFO
-        )
+        print_with_level(message=message, current_level=get_log_level().INFO)
 
     def success(self, message):
-        print_with_level(
-            message=message,
-            current_level=get_log_level().SUCCESS
-        )
+        print_with_level(message=message, current_level=get_log_level().SUCCESS)
 
     def error(self, message):
-        print_with_level(
-            message=message,
-            current_level=get_log_level().ERROR
-        )
+        print_with_level(message=message, current_level=get_log_level().ERROR)
 
     def warning(self, message):
-        print_with_level(
-            message=message,
-            current_level=get_log_level().WARNING
-        )
+        print_with_level(message=message, current_level=get_log_level().WARNING)
 
     def critical(self, message):
-        print_with_level(
-            message=message,
-            current_level=get_log_level().CRITICAL
-        )
+        print_with_level(message=message, current_level=get_log_level().CRITICAL)
 
 
 print_backend = None
@@ -119,3 +85,5 @@ if __name__ == "__main__":
     print_backend.warning("Warning message")
     print_backend.error("Error message")
     print_backend.critical("Critical message")
+
+    print()

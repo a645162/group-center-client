@@ -1,4 +1,9 @@
 pyinstaller
+
 twine
+
 setuptools
 build
+
+flake8
+#ruff

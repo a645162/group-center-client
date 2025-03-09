@@ -27,10 +27,14 @@ setup(
     ),
     python_requires=">=3.6",
     install_requires=[
-        "urllib3", "requests",
+        "urllib3",
+        "requests",
         "termcolor >= 1.0.0",
         "colorama >= 0.4.0; platform_system == 'Windows'",
         "windows-curses >= 2.2.0; platform_system == 'Windows'",
+        "objprint",
+        "psutil",
+        "rich>=13.0.0",
     ],
     entry_points={
         "console_scripts": [
@@ -38,9 +42,7 @@ setup(
             "group_center_ssh_helper = group_center.client.machine.ssh_helper:main",
             "group_center_user_message = group_center.client.user.shell_message:main",
             "group_center_terminal = group_center.user.windows_terminal:main",
-
             "torch_ddp_port = group_center.tools.dl.ddp_port:main",
-
             "rtsp_viewer = group_center.tools.rtsp.rtsp_viewer:main",
         ],
     },

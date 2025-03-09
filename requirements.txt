@@ -8,3 +8,4 @@ windows-curses>=2.2.0; platform_system == 'Windows'
 objprint
 
 psutil
+rich>=13.0.0

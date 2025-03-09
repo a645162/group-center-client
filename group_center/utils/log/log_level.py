@@ -1,137 +1,159 @@
-from typing import List
+from enum import Enum, auto
+from typing import Dict, Optional
+import logging
 
 
-class LogLevelObject:
-    level: int
-    level_name: str
-    level_threshold: int
+class LogLevel(Enum):
+    """日志级别枚举"""
 
-    level_color: str = ""
-    foreground_color: str = ""
-    background_color: str = ""
-
-    def __init__(self):
-        self.level = 0
-        self.level_name = ""
-        self.level_threshold = 0
-
-    def is_valid(self) -> bool:
-        return (
-                self.level > 0 and
-                0 < self.level_threshold <= self.level
-        )
-
-    def __int__(self):
-        return self.level
-
-
-class LogLevel:
-    __level_list: List[LogLevelObject]
-
-    __current_level: LogLevelObject
-
-    DEBUG: LogLevelObject
-    INFO: LogLevelObject
-    SUCCESS: LogLevelObject
-    WARNING: LogLevelObject
-    ERROR: LogLevelObject
-    CRITICAL: LogLevelObject
-
-    def __init__(self):
-        self.__level_list = []
-
-        self.DEBUG = LogLevelObject()
-        self.INFO = LogLevelObject()
-        self.SUCCESS = LogLevelObject()
-        self.WARNING = LogLevelObject()
-        self.ERROR = LogLevelObject()
-        self.CRITICAL = LogLevelObject()
-
-        self.__level_list.append(self.DEBUG)
-        self.__level_list.append(self.INFO)
-        self.__level_list.append(self.SUCCESS)
-        self.__level_list.append(self.WARNING)
-        self.__level_list.append(self.ERROR)
-        self.__level_list.append(self.CRITICAL)
-
-        self.DEBUG.level_name = "DEBUG"
-        self.DEBUG.level_color = "blue"
-        self.DEBUG.foreground_color = "blue"
-        self.DEBUG.background_color = ""
-
-        self.INFO.level_name = "INFO"
-        self.INFO.level_color = ""
-        self.INFO.foreground_color = ""
-        self.INFO.background_color = ""
-
-        self.SUCCESS.level_name = "SUCCESS"
-        self.SUCCESS.level_color = "green"
-        self.SUCCESS.foreground_color = "green"
-        self.SUCCESS.background_color = ""
-
-        self.WARNING.level_name = "WARNING"
-        self.WARNING.level_color = "yellow"
-        self.WARNING.foreground_color = "yellow"
-        self.WARNING.background_color = ""
-
-        self.ERROR.level_name = "ERROR"
-        self.ERROR.level_color = "red"
-        self.ERROR.foreground_color = "red"
-        self.ERROR.background_color = ""
-
-        self.CRITICAL.level_name = "CRITICAL"
-        self.CRITICAL.level_color = "cyan"
-        self.CRITICAL.foreground_color = "cyan"
-        self.CRITICAL.background_color = "on_red"
-
-        for index, level in enumerate(self.__level_list):
-            level.level = index + 1
-
-        self.current_level = self.INFO
+    DEBUG = auto()
+    INFO = auto()
+    WARNING = auto()
+    ERROR = auto()
+    CRITICAL = auto()
+    SUCCESS = auto()
 
     @property
-    def current_level(self) -> LogLevelObject:
-        return self.__current_level
+    def level_name(self) -> str:
+        """获取日志级别名称"""
+        return self.name
 
-    @current_level.setter
-    def current_level(self, value: int):
-        if isinstance(value, LogLevelObject):
-            self.__current_level = value
-            self.update_level_threshold()
-            return
+    @property
+    def foreground_color(self) -> str:
+        """获取前景色"""
+        return {
+            "DEBUG": "cyan",
+            "INFO": "white",
+            "WARNING": "yellow",
+            "ERROR": "red",
+            "CRITICAL": "magenta",
+            "SUCCESS": "green",
+        }[self.name]
 
-        if not isinstance(value, int):
-            value = int(value)
+    @property
+    def background_color(self) -> str:
+        """获取背景色"""
+        return {
+            "DEBUG": "",
+            "INFO": "",
+            "WARNING": "",
+            "ERROR": "",
+            "CRITICAL": "",
+            "SUCCESS": "",
+        }[self.name]
 
-        for level in self.__level_list:
-            if level.level == value:
-                self.__current_level = level
-                self.update_level_threshold()
-                return
+    @property
+    def level_color(self) -> str:
+        """获取级别颜色"""
+        return self.foreground_color
 
-        raise ValueError("Invalid log level")
+    @classmethod
+    def from_str(cls, level_str: str) -> Optional["LogLevel"]:
+        """从字符串转换日志级别
 
-    def update_level_threshold(self):
-        for level in self.__level_list:
-            level.level_threshold = self.current_level.level
+        Args:
+            level_str: 日志级别字符串
 
-    def get_loguru_level(self):
-        return self.__current_level.level_name
-
-    def get_logging_level(self):
-        import logging
-
-        level_name = self.__current_level.level_name
-
-        # Replace SUCCESS with INFO
-        if level_name == "SUCCESS":
-            level_name = "INFO"
-
-        return getattr(logging, level_name)
+        Returns:
+            日志级别枚举值，如果无效返回None
+        """
+        try:
+            return cls[level_str.upper()]
+        except KeyError:
+            return None
 
 
-__log_level = LogLevel()
+class LogColorConfig:
+    """日志颜色配置"""
+
+    def __init__(
+        self,
+        level_color: str = "",
+        foreground_color: str = "",
+        background_color: str = "",
+    ):
+        self.level_color = level_color
+        self.foreground_color = foreground_color
+        self.background_color = background_color
+
+
+class LogLevelManager:
+    """日志级别管理器"""
+
+    _instance = None
+    _level_colors: Dict[LogLevel, LogColorConfig] = {
+        LogLevel.DEBUG: LogColorConfig(level_color="blue", foreground_color="blue"),
+        LogLevel.INFO: LogColorConfig(),
+        LogLevel.WARNING: LogColorConfig(
+            level_color="yellow", foreground_color="yellow"
+        ),
+        LogLevel.ERROR: LogColorConfig(level_color="red", foreground_color="red"),
+        LogLevel.CRITICAL: LogColorConfig(
+            level_color="cyan", foreground_color="cyan", background_color="on_red"
+        ),
+        LogLevel.SUCCESS: LogColorConfig(level_color="green", foreground_color="green"),
+    }
+    _current_level: LogLevel = LogLevel.INFO
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+    @classmethod
+    def set_level(cls, level: LogLevel) -> None:
+        """设置当前日志级别
+
+        Args:
+            level: 要设置的日志级别
+        """
+        cls._current_level = level
+
+    @classmethod
+    def get_level(cls) -> LogLevel:
+        """获取当前日志级别
+
+        Returns:
+            当前日志级别
+        """
+        return cls._current_level
+
+    @classmethod
+    def get_color_config(cls, level: LogLevel) -> LogColorConfig:
+        """获取日志级别对应的颜色配置
+
+        Args:
+            level: 日志级别
+
+        Returns:
+            日志颜色配置
+        """
+        return cls._level_colors.get(level, LogColorConfig())
+
+    @classmethod
+    def to_logging_level(cls, level: LogLevel) -> int:
+        """将日志级别转换为logging模块的级别
+
+        Args:
+            level: 日志级别
+
+        Returns:
+            logging模块对应的级别值
+        """
+        level_map = {
+            LogLevel.DEBUG: logging.DEBUG,
+            LogLevel.INFO: logging.INFO,
+            LogLevel.WARNING: logging.WARNING,
+            LogLevel.ERROR: logging.ERROR,
+            LogLevel.CRITICAL: logging.CRITICAL,
+        }
+        return level_map.get(level, logging.INFO)
 
 
 def get_log_level() -> LogLevel:
-    return __log_level
+    """获取当前日志级别
+
+    Returns:
+        当前日志级别
+    """
+    return LogLevelManager.get_level()

@@ -1,6 +1,7 @@
 import argparse
 import subprocess
 import sys
+import os
 
 from config.version import __version__
 
@@ -44,6 +45,12 @@ def main():
     if not args.no_gui:
         print("Installing GUI dependencies...")
         install_requirements("./config/r-gui-requirements.txt")
+
+    ret = os.system("pip install -e .")
+    if ret != 0:
+        print("Error installing group-center-client")
+        sys.exit(1)
+
     print("Installation completed.")
 
 

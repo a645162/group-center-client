@@ -1,32 +1,80 @@
-# -*- coding: utf-8 -*-
-
-import os
-
+from typing import Optional
+from pathlib import Path
+from datetime import timedelta
 import loguru
+from loguru import logger
 
-log_dir = "log"
-
-# Check Log Directory
-if not os.path.exists(log_dir):
-    os.mkdir(log_dir)
-
-# Permission Check
-try:
-    test_file = os.path.join(log_dir, "test.log")
-    with open(test_file, "w") as f:
-        f.write(str(test_file))
-    os.remove(test_file)
-except Exception as e:
-    print("Cannot write to log directory.")
-    print(e)
-    exit(1)
-
-log_path = os.path.join(log_dir, "group_center_client.log")
-
-logger = loguru.logger
-
-logger.add(log_path, retention="30 days")
+from group_center.utils.log.log_level import LogLevel, LogLevelManager
+from group_center.utils.envs import get_a_tmp_dir
 
 
-def get_loguru_backend() -> loguru.logger:
+class LoguruConfig:
+    """Loguru 日志配置类"""
+    
+    def __init__(
+        self,
+        log_dir: Optional[Path] = None,
+        retention: timedelta = timedelta(days=30),
+        rotation: str = "10 MB",
+        compression: Optional[str] = "zip",
+        format_str: str = "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | "
+                         "<level>{level: <8}</level> | "
+                         "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - "
+                         "<level>{message}</level>",
+        config_name: Optional[str] = None
+    ):
+        self.log_dir = log_dir or get_a_tmp_dir()
+        self.retention = retention
+        self.rotation = rotation
+        self.compression = compression
+        self.format_str = format_str
+        self.config_name = config_name
+
+
+def _configure_loguru(config: Optional[LoguruConfig] = None) -> None:
+    """配置 Loguru 日志记录器
+    
+    Args:
+        config: Loguru 配置对象
+    """
+    if config is None:
+        config = LoguruConfig()
+
+    # 确保日志目录存在
+    config.log_dir.mkdir(parents=True, exist_ok=True)
+
+    # 清除现有处理器
+    logger.remove()
+
+    # 添加文件处理器
+    from datetime import datetime
+    log_file_name = f"group_center_{config.config_name or 'default'}_{datetime.now().strftime('%Y-%m-%d')}.log"
+    log_file = config.log_dir / log_file_name
+    logger.add(
+        sink=log_file,
+        retention=config.retention,
+        rotation=config.rotation,
+        compression=config.compression,
+        format=config.format_str,
+        level=str(LogLevelManager.get_level().name).upper()
+    )
+
+    # 添加控制台处理器
+    logger.add(
+        sink=lambda msg: print(msg, end=""),
+        format=config.format_str,
+        level=str(LogLevelManager.get_level().name).upper()
+    )
+
+
+def get_loguru_backend(config: Optional[LoguruConfig] = None) -> loguru.logger: # type: ignore
+    """获取配置好的 Loguru 日志记录器
+    
+    Args:
+        config: Loguru 配置对象
+        
+    Returns:
+        loguru.Logger: 配置好的日志记录器
+    """
+    _configure_loguru(config)
     return logger
