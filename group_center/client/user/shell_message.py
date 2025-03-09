@@ -1,21 +1,18 @@
 import argparse
 
-from group_center.user_tools import *
+from group_center.user_env import ENV_SCREEN_SESSION_NAME
+from group_center.user_tools import (
+    group_center_set_user_name,
+    group_center_set_is_valid,
+    push_message,
+)
 
 
 def get_options():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument(
-        "-n", "--user-name",
-        help="User name",
-        type=str, default=""
-    )
-    parser.add_argument(
-        "-m", "--message",
-        help="Message Content",
-        type=str, default=""
-    )
+    parser.add_argument("-n", "--user-name", help="User name", type=str, default="")
+    parser.add_argument("-m", "--message", help="Message Content", type=str, default="")
     parser.add_argument(
         "-s",
         "--screen",
@@ -53,6 +50,8 @@ def main():
 
     push_message(message)
 
+    print("Message sent!")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
