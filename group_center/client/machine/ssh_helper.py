@@ -1,12 +1,17 @@
 import argparse
 import os
 import platform
-
 from typing import List
 
-from termcolor import colored
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.text import Text
+from rich.prompt import Prompt
 
 from group_center.client.machine.feature.ssh.ssh_helper_linux import LinuxUserSsh
+
+console = Console()
 from group_center.core.group_center_machine import setup_group_center_by_opt
 from group_center.utils.linux.linux_system import is_run_with_sudo
 
@@ -35,10 +40,8 @@ class OptionItem:
 
 
 def print_color_bool(text: str, is_success: bool):
-    if is_success:
-        print(colored(text, "green"))
-    else:
-        print(colored(text, "red"))
+    style = "bold green" if is_success else "bold red"
+    console.print(text, style=style)
 
 
 def generate_new_ssh_key():
@@ -51,13 +54,12 @@ def backup_current_user(user_name=""):
     result_backup_authorized_keys = linux_user_ssh.backup_authorized_keys()
     print_color_bool(
         "Backup authorized_keys:" + str(result_backup_authorized_keys),
-        result_backup_authorized_keys
+        result_backup_authorized_keys,
     )
 
     result_backup_ssh_key_pair = linux_user_ssh.backup_ssh_key_pair()
     print_color_bool(
-        "Backup Key pair:" + str(result_backup_ssh_key_pair),
-        result_backup_ssh_key_pair
+        "Backup Key pair:" + str(result_backup_ssh_key_pair), result_backup_ssh_key_pair
     )
 
 
@@ -70,20 +72,14 @@ def restore_current_user_authorized_keys(user_name=""):
     linux_user_ssh = LinuxUserSsh(user_name=user_name)
 
     result = linux_user_ssh.restore_authorized_keys()
-    print_color_bool(
-        "Restore authorized_keys:" + str(result),
-        result
-    )
+    print_color_bool("Restore authorized_keys:" + str(result), result)
 
 
 def restore_current_user_key_pair(user_name=""):
     linux_user_ssh = LinuxUserSsh(user_name=user_name)
 
     result = linux_user_ssh.restore_ssh_key_pair()
-    print_color_bool(
-        "Restore Key pair:" + str(result),
-        result
-    )
+    print_color_bool("Restore Key pair:" + str(result), result)
 
 
 def get_all_user_list() -> List[str]:
@@ -127,24 +123,38 @@ def init_main_interface_content() -> List[OptionItem]:
 
     str_list.append(OptionItem(""))
 
-    str_list.append(OptionItem("Generate New 'SSH key'", key="c", handler=generate_new_ssh_key))
+    str_list.append(
+        OptionItem("Generate New 'SSH key'", key="c", handler=generate_new_ssh_key)
+    )
 
-    str_list.append(OptionItem(
-        "Backup Current User", key="1",
-        handler=backup_current_user))
-    str_list.append(OptionItem(
-        "Restore Current User", key="2",
-        handler=restore_current_user))
-    str_list.append(OptionItem(
-        "Restore Current User(authorized_key)", key="3",
-        handler=restore_current_user_authorized_keys))
-    str_list.append(OptionItem(
-        "Restore Current User(Key pair)", key="4",
-        handler=restore_current_user_key_pair))
+    str_list.append(
+        OptionItem("Backup Current User", key="1", handler=backup_current_user)
+    )
+    str_list.append(
+        OptionItem("Restore Current User", key="2", handler=restore_current_user)
+    )
+    str_list.append(
+        OptionItem(
+            " - Restore Current User(authorized_key)",
+            key="3",
+            handler=restore_current_user_authorized_keys,
+        )
+    )
+    str_list.append(
+        OptionItem(
+            " - Restore Current User(Key pair)",
+            key="4",
+            handler=restore_current_user_key_pair,
+        )
+    )
 
     if is_root_user:
-        str_list.append(OptionItem("Backup All User(Root Only)", key="5", handler=backup_all_user))
-        str_list.append(OptionItem("Restore All User(Root Only)", key="6", handler=restore_all_user))
+        str_list.append(
+            OptionItem("Backup All User(Root Only)", key="5", handler=backup_all_user)
+        )
+        str_list.append(
+            OptionItem("Restore All User(Root Only)", key="6", handler=restore_all_user)
+        )
 
     str_list.append(OptionItem(""))
     str_list.append(OptionItem("Exit", key="q", handler=lambda: exit(0)))
@@ -153,13 +163,18 @@ def init_main_interface_content() -> List[OptionItem]:
 
 
 def hello():
-    print(colored("Hello, Group Center Client!", "green"))
-    print()
+    console.print(
+        Panel.fit(
+            "[bold green]Hello, Group Center Client![/]",
+            border_style="green",
+            padding=(1, 4),
+        )
+    )
 
 
 def press_enter_to_continue():
-    input_text = input("Press 'Enter' to continue...").strip()
-    if input_text == "q":
+    input_text = Prompt.ask("[blue]Press 'Enter' to continue...[/]", default="")
+    if input_text.lower() == "q":
         exit(0)
 
 
@@ -167,35 +182,43 @@ def cli_main_cycle():
     interface_content = init_main_interface_content()
 
     def print_main_interface_content():
+        table = Table(show_header=False, box=None, padding=(0, 2))
+
         for item in interface_content:
             key_tip = f"({item.key})" if item.key else ""
             text = key_tip + item.text
 
-            if item.color == "":
-                if key_tip:
-                    print(colored(text, color="blue"))
-                else:
-                    print(text)
+            if item.color:
+                style = item.color
             else:
-                print(colored(text, color=item.color))
+                style = "blue" if key_tip else ""
 
-        print()
+            table.add_row(Text(text, style=style))
+
+        panel = Panel(
+            table,
+            title="[bold green]SSH Helper - Group Center Client[/]",
+            border_style="blue",
+            padding=(1, 4),
+        )
+        console.print(panel)
 
     print_main_interface_content()
 
     # Waiting for user input
-    key = input("Please input the key:").strip()
+    key = Prompt.ask("[blue]Please input the key[/]")
+    # key = input("Please input the key:").strip()
 
     found = False
     for item in interface_content:
         if item.key == key:
             found = True
-            print(colored("Go to => " + item.text, "green"))
+            console.print(f"[bold green]Go to => {item.text}[/]")
             item.try_to_handle()
             break
 
     if not found:
-        print(colored("Invalid key!", "red"))
+        console.print("[bold red]Invalid key![/]")
 
     press_enter_to_continue()
 
@@ -242,6 +265,7 @@ def get_options():
 
 def main():
     from group_center.utils.log.log_level import get_log_level
+
     log_level = get_log_level()
     log_level.current_level = log_level.INFO
 
