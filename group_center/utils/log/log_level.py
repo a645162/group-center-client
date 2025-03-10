@@ -1,17 +1,16 @@
-from enum import Enum, auto
-from typing import Dict, Optional
+from enum import Enum
 import logging
-
+from typing import Dict, Optional
 
 class LogLevel(Enum):
     """日志级别枚举"""
-
-    DEBUG = auto()
-    INFO = auto()
-    WARNING = auto()
-    ERROR = auto()
-    CRITICAL = auto()
-    SUCCESS = auto()
+    
+    DEBUG = logging.DEBUG       # 10
+    INFO = logging.INFO         # 20
+    SUCCESS = 25                # 自定义成功级别（介于INFO和WARNING之间）
+    WARNING = logging.WARNING   # 30
+    ERROR = logging.ERROR       # 40
+    CRITICAL = logging.CRITICAL # 50
 
     @property
     def level_name(self) -> str:
@@ -146,6 +145,7 @@ class LogLevelManager:
             LogLevel.WARNING: logging.WARNING,
             LogLevel.ERROR: logging.ERROR,
             LogLevel.CRITICAL: logging.CRITICAL,
+            LogLevel.SUCCESS: 25,  # 添加SUCCESS级别映射
         }
         return level_map.get(level, logging.INFO)
 

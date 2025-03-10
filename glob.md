@@ -1,0 +1,7 @@
+# Glob
+
+## Python
+
+```glob
+**/*.py
+```

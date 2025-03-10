@@ -24,7 +24,7 @@ class TestLoggingBackend(unittest.TestCase):
         logger.warning("This is a warning message")
         logger.error("This is an error message")
         logger.critical("This is a critical message")
-        # logger.success("This is a success message")
+        logger.success("This is a success message")
 
         log_file = list(self.log_dir.glob("*.log"))[0]
         print(log_file)

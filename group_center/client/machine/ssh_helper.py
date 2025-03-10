@@ -179,13 +179,13 @@ def press_enter_to_continue():
 
 
 def cli_main_cycle():
-    interface_content = init_main_interface_content()
+    interface_content: List[OptionItem] = init_main_interface_content()
 
     def print_main_interface_content():
         table = Table(show_header=False, box=None, padding=(0, 2))
 
         for item in interface_content:
-            key_tip = f"({item.key})" if item.key else ""
+            key_tip = f"({item.key}) " if item.key else ""
             text = key_tip + item.text
 
             if item.color:

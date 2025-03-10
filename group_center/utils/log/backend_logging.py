@@ -7,13 +7,16 @@ from group_center.utils.log.log_level import LogLevel
 from group_center.utils.log import new_logging
 from group_center.utils.envs import get_a_tmp_dir
 
+# 注册SUCCESS日志级别
+logging.addLevelName(LogLevel.SUCCESS.value, "SUCCESS")
+logging.SUCCESS = LogLevel.SUCCESS.value  # 设置logging模块的SUCCESS常量
 
 class LoggingConfig:
     """日志配置类"""
 
     def __init__(
         self,
-        level: LogLevel = LogLevel.INFO,
+        level: LogLevel = LogLevel.DEBUG,
         format_str: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         date_format: str = "%Y-%m-%d %H:%M:%S",
         max_file_size: int = 10 * 1024 * 1024,  # 10MB
@@ -75,6 +78,12 @@ def _setup_logging(config: Optional[LoggingConfig] = None) -> None:
     logger.setLevel(config.level.value)
     logger.addHandler(console_handler)
     logger.addHandler(file_handler)
+
+    # 添加SUCCESS方法到Logger类
+    def success(self, msg, *args, **kwargs):
+        if self.isEnabledFor(LogLevel.SUCCESS.value):
+            self._log(LogLevel.SUCCESS.value, msg, args, **kwargs)
+    logging.Logger.success = success
 
 
 def get_logging_backend(config: Optional[LoggingConfig] = None) -> logging.Logger:
