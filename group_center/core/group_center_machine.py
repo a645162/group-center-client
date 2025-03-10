@@ -1,54 +1,92 @@
-import json
-from typing import Tuple
+import json  # JSON处理 / JSON processing
+from typing import Tuple, Any, Dict, Optional, Type, Union, Literal
 
-import requests
+import requests  # HTTP请求 / HTTP requests
+from requests.models import Response  # HTTP响应类型 / HTTP response type
 
-from group_center.core import group_center_encrypt
-from group_center.core.config_core import MachineConfig, get_env_machine_config
-from group_center.utils.log.logger import get_logger
+from group_center.core import group_center_encrypt  # 加密模块 / Encryption module
+from group_center.core.config_core import (
+    MachineConfig,
+    get_env_machine_config,
+)  # 配置管理 / Configuration management
+from group_center.utils.log.logger import get_logger  # 日志模块 / Logging module
 
-GROUP_CENTER_URL = ""
-MACHINE_NAME_FULL = ""
-MACHINE_NAME_SHORT = ""
-MACHINE_PASSWORD = ""
+# 全局配置变量 / Global configuration variables
+GROUP_CENTER_URL: str = ""  # Group Center服务URL / Group Center service URL
+MACHINE_NAME_FULL: str = ""  # 完整机器名 / Full machine name
+MACHINE_NAME_SHORT: str = ""  # 简短机器名 / Short machine name
+MACHINE_PASSWORD: str = ""  # 认证密码 / Authentication password
 
-access_key = ""
+access_key: str = ""  # 访问密钥 / Access key
 
-group_center_public_part: dict = {
+group_center_public_part: Dict[str, str] = {
     "serverName": MACHINE_NAME_FULL,
     "serverNameEng": MACHINE_NAME_SHORT,
-}
+}  # 公共信息部分 / Public information part
 
-logger = None
+logger: Optional[Any] = None  # 日志对象 / Logger object
 
 
-def init_logger():
+def init_logger() -> None:
+    """初始化日志对象
+    Initialize logger object
+    """
     global logger
     if logger is None:
         logger = get_logger()
 
 
-def set_group_center_host_url(host_url: str):
+def set_group_center_host_url(host_url: str) -> None:
+    """设置Group Center服务URL
+    Set Group Center service URL
+
+    Args:
+        host_url (str): 服务URL / Service URL
+    """
     global GROUP_CENTER_URL
     GROUP_CENTER_URL = host_url
 
 
-def set_machine_name_full(server_name: str):
+def set_machine_name_full(server_name: str) -> None:
+    """设置完整机器名
+    Set full machine name
+
+    Args:
+        server_name (str): 完整机器名 / Full machine name
+    """
     global MACHINE_NAME_FULL
     MACHINE_NAME_FULL = server_name
 
 
-def set_machine_name_short(server_name_short: str):
+def set_machine_name_short(server_name_short: str) -> None:
+    """设置简短机器名
+    Set short machine name
+
+    Args:
+        server_name_short (str): 简短机器名 / Short machine name
+    """
     global MACHINE_NAME_SHORT
     MACHINE_NAME_SHORT = server_name_short
 
 
-def set_machine_password(password: str):
+def set_machine_password(password: str) -> None:
+    """设置认证密码
+    Set authentication password
+
+    Args:
+        password (str): 认证密码 / Authentication password
+    """
     global MACHINE_PASSWORD
     MACHINE_PASSWORD = password
 
 
-def setup_group_center_by_opt(opt):
+def setup_group_center_by_opt(opt: Any) -> None:
+    """通过选项配置Group Center
+    Configure Group Center by options
+
+    Args:
+        opt (Any): 配置选项 / Configuration options
+    """
     if hasattr(opt, "host") and opt.host:
         set_group_center_host_url(opt.host)
 
@@ -61,11 +99,17 @@ def setup_group_center_by_opt(opt):
     group_center_login()
 
 
-def __init_from_env(skip_if_exist: bool = True):
+def __init_from_env(skip_if_exist: bool = True) -> None:
+    """从环境变量初始化配置
+    Initialize configuration from environment variables
+
+    Args:
+        skip_if_exist (bool): 如果配置已存在则跳过 / Skip if configuration already exists
+    """
     if skip_if_exist and GROUP_CENTER_URL != "":
         return
 
-    env_machine_config: MachineConfig = get_env_machine_config()
+    env_machine_config: Optional[MachineConfig] = get_env_machine_config()
 
     if env_machine_config is None:
         print("Group Center Config Not Found in Env.")
@@ -77,7 +121,16 @@ def __init_from_env(skip_if_exist: bool = True):
     set_machine_password(env_machine_config.password)
 
 
-def group_center_get_url(target_api: str):
+def group_center_get_url(target_api: str) -> str:
+    """获取完整的API URL
+    Get complete API URL
+
+    Args:
+        target_api (str): 目标API路径 / Target API path
+
+    Returns:
+        str: 完整的URL / Complete URL
+    """
     __init_from_env()
 
     global GROUP_CENTER_URL
@@ -92,7 +145,13 @@ def group_center_get_url(target_api: str):
     return GROUP_CENTER_URL + target_api
 
 
-def get_public_part() -> dict:
+def get_public_part() -> Dict[str, str]:
+    """获取公共信息部分
+    Get public information part
+
+    Returns:
+        Dict[str, str]: 包含公共信息的字典 / Dictionary containing public information
+    """
     global group_center_public_part
 
     group_center_public_part.update(
@@ -107,20 +166,32 @@ def get_public_part() -> dict:
 
 
 def __group_center_login(username: str, password: str) -> bool:
+    """内部登录方法
+    Internal login method
+
+    Args:
+        username (str): 用户名 / Username
+        password (str): 密码 / Password
+
+    Returns:
+        bool: 登录是否成功 / Whether login is successful
+    """
     # Init logger if not set
     init_logger()
 
     logger.info("[Group Center] Login Start")
-    url = group_center_get_url(target_api="/auth/client/auth")
+    url: str = group_center_get_url(target_api="/auth/client/auth")
     try:
         logger.info(f"[Group Center] Auth To: {url}")
-        password_display = group_center_encrypt.encrypt_password_to_display(password)
-        password_encoded = group_center_encrypt.get_password_hash(password)
+        password_display: str = group_center_encrypt.encrypt_password_to_display(
+            password
+        )
+        password_encoded: str = group_center_encrypt.get_password_hash(password)
         logger.info(
             f"[Group Center] Auth userName:{username} password:{password_display}"
         )
 
-        response = requests.get(
+        response: Response = requests.get(
             url=url,
             params={"userName": username, "password": password_encoded},
             timeout=10,
@@ -130,7 +201,7 @@ def __group_center_login(username: str, password: str) -> bool:
             logger.error(f"[Group Center] Auth Failed: {response.text}")
             return False
 
-        response_dict: dict = json.loads(response.text)
+        response_dict: Dict[str, Any] = json.loads(response.text)
         if not (
             "isAuthenticated" in response_dict.keys()
             and response_dict["isAuthenticated"]
@@ -149,12 +220,24 @@ def __group_center_login(username: str, password: str) -> bool:
 
 
 def group_center_login() -> bool:
+    """Group Center登录
+    Group Center login
+
+    Returns:
+        bool: 登录是否成功 / Whether login is successful
+    """
     __init_from_env()
 
     return __group_center_login(username=MACHINE_NAME_SHORT, password=MACHINE_PASSWORD)
 
 
 def get_access_key() -> str:
+    """获取访问密钥
+    Get access key
+
+    Returns:
+        str: 访问密钥 / Access key
+    """
     global access_key
 
     if access_key == "":
