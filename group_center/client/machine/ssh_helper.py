@@ -22,31 +22,42 @@ is_root_user = is_linux and os.geteuid() == 0
 
 
 class OptionItem:
-    text: str = ""
+    """选项项类 / Option item class"""
 
-    key: str = ""
-
-    color: str
+    text: str = ""  # 显示文本 / Display text
+    key: str = ""  # 快捷键 / Shortcut key
+    color: str = ""  # 颜色 / Color
 
     def __init__(self, text: str, key: str = "", handler=None, color: str = ""):
+        """
+        初始化选项项 / Initialize option item
+
+        Args:
+            text (str): 显示文本 / Display text
+            key (str, optional): 快捷键 / Shortcut key. Defaults to "".
+            handler (callable, optional): 处理函数 / Handler function. Defaults to None.
+            color (str, optional): 颜色 / Color. Defaults to "".
+        """
         self.text = text
         self.key = key
         self.handler = handler
         self.color = color
 
-    def try_to_handle(self):
+    def try_to_handle(self) -> None:
+        """
+        尝试执行处理函数 / Try to execute handler function
+        """
         if self.handler:
             self.handler()
 
 
-def print_color_bool(
-    text: str,
-    is_success: bool,
-) -> None:
+def print_color_bool(text: str, is_success: bool) -> None:
     """
     打印带有颜色的布尔结果 / Print colored boolean result
-    - 文本内容 / Text content
-    - 成功状态 / Success status
+
+    Args:
+        text (str): 文本内容 / Text content
+        is_success (bool): 成功状态 / Success status
     """
     style = "bold green" if is_success else "bold red"
     console.print(text, style=style)
@@ -55,6 +66,8 @@ def print_color_bool(
 def generate_new_ssh_key() -> None:
     """
     生成新的 SSH 密钥对 / Generate new SSH key pair
+
+    使用系统ssh-keygen命令生成新的SSH密钥对 / Generate new SSH key pair using system ssh-keygen command
     """
     os.system("ssh-keygen")
 
@@ -62,7 +75,9 @@ def generate_new_ssh_key() -> None:
 def backup_current_user(user_name: str = "") -> None:
     """
     备份当前用户的 SSH 配置 / Backup current user's SSH configuration
-    - 用户名 / Username
+
+    Args:
+        user_name (str, optional): 用户名，默认为当前用户 / Username, defaults to current user
     """
     linux_user_ssh = LinuxUserSsh(user_name=user_name)
 
@@ -81,20 +96,34 @@ def backup_current_user(user_name: str = "") -> None:
 def restore_current_user(user_name: str = "") -> None:
     """
     恢复当前用户的 SSH 配置 / Restore current user's SSH configuration
-    - 用户名 / Username
+
+    Args:
+        user_name (str, optional): 用户名，默认为当前用户 / Username, defaults to current user
     """
     restore_current_user_authorized_keys(user_name=user_name)
     restore_current_user_key_pair(user_name=user_name)
 
 
-def restore_current_user_authorized_keys(user_name=""):
+def restore_current_user_authorized_keys(user_name: str = "") -> None:
+    """
+    恢复当前用户的authorized_keys文件 / Restore current user's authorized_keys file
+
+    Args:
+        user_name (str, optional): 用户名，默认为当前用户 / Username, defaults to current user
+    """
     linux_user_ssh = LinuxUserSsh(user_name=user_name)
 
     result = linux_user_ssh.restore_authorized_keys()
     print_color_bool("Restore authorized_keys:" + str(result), result)
 
 
-def restore_current_user_key_pair(user_name=""):
+def restore_current_user_key_pair(user_name: str = "") -> None:
+    """
+    恢复当前用户的SSH密钥对 / Restore current user's SSH key pairs
+
+    Args:
+        user_name (str, optional): 用户名，默认为当前用户 / Username, defaults to current user
+    """
     linux_user_ssh = LinuxUserSsh(user_name=user_name)
 
     result = linux_user_ssh.restore_ssh_key_pair()
@@ -104,7 +133,9 @@ def restore_current_user_key_pair(user_name=""):
 def get_all_user_list() -> List[str]:
     """
     获取所有用户列表 / Get list of all users
-    - 返回所有用户名的列表 / Returns list of all usernames
+
+    Returns:
+        List[str]: 所有用户名的列表 / List of all usernames
     """
     result: List[str] = []
 
@@ -121,6 +152,9 @@ def get_all_user_list() -> List[str]:
 def backup_all_user() -> None:
     """
     备份所有用户的 SSH 配置 / Backup SSH configuration for all users
+
+    遍历/home目录下的所有用户并备份其SSH配置 /
+    Iterate through all users in /home directory and backup their SSH configuration
     """
     user_list = get_all_user_list()
     for user_name in user_list:
@@ -132,6 +166,9 @@ def backup_all_user() -> None:
 def restore_all_user() -> None:
     """
     恢复所有用户的 SSH 配置 / Restore SSH configuration for all users
+
+    遍历/home目录下的所有用户并恢复其SSH配置 /
+    Iterate through all users in /home directory and restore their SSH configuration
     """
     user_list = get_all_user_list()
     for user_name in user_list:
@@ -143,7 +180,9 @@ def restore_all_user() -> None:
 def init_main_interface_content() -> List[OptionItem]:
     """
     初始化主界面内容 / Initialize main interface content
-    - 返回界面选项列表 / Returns list of interface options
+
+    Returns:
+        List[OptionItem]: 界面选项列表 / List of interface options
     """
     str_list: List[OptionItem] = []
 
@@ -198,6 +237,8 @@ def init_main_interface_content() -> List[OptionItem]:
 def hello() -> None:
     """
     显示欢迎信息 / Display welcome message
+
+    使用rich库显示带样式的欢迎信息 / Display styled welcome message using rich library
     """
     console.print(
         Panel.fit(
@@ -211,6 +252,8 @@ def hello() -> None:
 def press_enter_to_continue() -> None:
     """
     等待用户按下回车继续 / Wait for user to press Enter to continue
+
+    如果用户输入'q'则退出程序 / Exit program if user inputs 'q'
     """
     input_text = Prompt.ask("[blue]Press 'Enter' to continue...[/]", default="")
     if input_text.lower() == "q":
@@ -220,6 +263,8 @@ def press_enter_to_continue() -> None:
 def cli_main_cycle() -> None:
     """
     主界面循环 / Main interface loop
+
+    显示主界面并处理用户输入 / Display main interface and handle user input
     """
     interface_content: List[OptionItem] = init_main_interface_content()
 
@@ -265,7 +310,12 @@ def cli_main_cycle() -> None:
     press_enter_to_continue()
 
 
-def init_cli():
+def init_cli() -> None:
+    """
+    初始化命令行界面 / Initialize command line interface
+
+    显示欢迎信息并进入主循环 / Display welcome message and enter main loop
+    """
     hello()
 
     while True:
@@ -275,7 +325,9 @@ def init_cli():
 def get_options() -> argparse.Namespace:
     """
     获取命令行选项 / Get command line options
-    - 返回解析后的选项对象 / Returns parsed options object
+
+    Returns:
+        argparse.Namespace: 解析后的选项对象 / Parsed options object
     """
     parser = argparse.ArgumentParser()
 
@@ -312,6 +364,8 @@ def get_options() -> argparse.Namespace:
 def main() -> None:
     """
     主程序入口 / Main program entry point
+
+    初始化日志级别并处理命令行参数 / Initialize log level and handle command line arguments
     """
     from group_center.utils.log.log_level import get_log_level
 

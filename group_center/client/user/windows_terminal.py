@@ -23,21 +23,45 @@ from group_center.utils.log.logger import get_logger
 LOGGER = get_logger()
 
 
-def get_options():
+def get_options() -> argparse.Namespace:
+    """获取命令行参数 / Get command line arguments
+
+    Returns:
+        argparse.Namespace: 包含解析后参数的命名空间 / Namespace containing parsed arguments
+    """
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--host", type=str, default="")
-    parser.add_argument("--center-name", type=str, default="")
-    parser.add_argument("--center-password", type=str, default="")
-
-    parser.add_argument("--user-name", type=str, default="")
+    parser.add_argument(
+        "--host",
+        type=str,
+        default="",
+        help="Group Center 主机地址 / Group Center host URL",
+    )
+    parser.add_argument(
+        "--center-name",
+        type=str,
+        default="",
+        help="Group Center 名称 / Group Center name",
+    )
+    parser.add_argument(
+        "--center-password",
+        type=str,
+        default="",
+        help="Group Center 密码 / Group Center password",
+    )
+    parser.add_argument("--user-name", type=str, default="", help="用户名 / User name")
 
     opt = parser.parse_args()
 
     return opt
 
 
-def connect_to_group_center(opt):
+def connect_to_group_center(opt: argparse.Namespace):
+    """连接到 Group Center / Connect to Group Center
+
+    Args:
+        opt (argparse.Namespace): 包含连接参数的命名空间 / Namespace containing connection parameters
+    """
     set_group_center_host_url(opt.host)
     set_machine_name_short(opt.center_name)
     set_machine_password(opt.center_password)
@@ -45,8 +69,13 @@ def connect_to_group_center(opt):
     group_center_login()
 
 
-def get_windows_terminal_config_path():
-    # Check is Windows
+def get_windows_terminal_config_path() -> str:
+    """获取 Windows 终端配置文件路径 / Get Windows Terminal config file path
+
+    Returns:
+        str: 配置文件路径 / Config file path
+    """
+    # 检查是否是 Windows 系统 / Check if system is Windows
     if platform.system() != "Windows":
         return ""
 
@@ -69,20 +98,25 @@ def get_windows_terminal_config_path():
 
 
 def main():
-    LOGGER.info("Windows Terminal add SSH")
+    """主函数，添加 SSH 配置到 Windows 终端 / Main function to add SSH config to Windows Terminal"""
+    LOGGER.info("Windows Terminal 添加 SSH / Windows Terminal add SSH")
 
     opt = get_options()
 
     connect_to_group_center(opt)
 
-    # Json Path
+    # JSON 文件路径 / JSON file path
     json_path = get_windows_terminal_config_path()
-    LOGGER.info("Windows Terminal Config Path:" + json_path)
+    LOGGER.info("Windows Terminal 配置文件路径: " + json_path)
     if len(json_path) == 0:
-        LOGGER.error("Windows Terminal Config Path is empty")
+        LOGGER.error(
+            "Windows Terminal 配置文件路径为空 / Windows Terminal config path is empty"
+        )
         exit(1)
     if not os.path.exists(json_path):
-        LOGGER.error("Windows Terminal Config Path is not exists")
+        LOGGER.error(
+            "Windows Terminal 配置文件不存在 / Windows Terminal config file does not exist"
+        )
         exit(1)
 
     json_dict: dict = json.load(open(json_path, "r"))
@@ -91,13 +125,13 @@ def main():
         and "list" in json_dict["profiles"].keys()
         and isinstance(json_dict["profiles"]["list"], list)
     ):
-        LOGGER.error("Invalid json")
+        LOGGER.error("无效的 JSON 文件 / Invalid JSON file")
         exit(1)
 
     user_name = str(opt.user_name).strip()
 
     if len(user_name) == 0:
-        LOGGER.error("Invalid user name")
+        LOGGER.error("无效的用户名 / Invalid user name")
         exit(1)
 
     machine_list_json = get_machine_config_json_str()
@@ -112,14 +146,16 @@ def main():
 
         command_line = f"ssh {user_name}@{host}"
 
-        # Ignore Exists
+        # 忽略已存在的配置 / Ignore existing config
         found = False
         for config in config_list:
             if (
                 "commandline" in config.keys()
                 and config["commandline"].strip() == command_line
             ):
-                LOGGER.info(f"Skip {name_eng}-{user_name} because exists")
+                LOGGER.info(
+                    f"跳过 {name_eng}-{user_name}，因为已存在 / Skip {name_eng}-{user_name} because exists"
+                )
                 found = True
                 break
         if found:
@@ -135,14 +171,14 @@ def main():
         )
         count += 1
 
-    LOGGER.info(f"Add {count} SSH Config")
+    LOGGER.info(f"添加了 {count} 个 SSH 配置 / Added {count} SSH configs")
 
     json_dict["profiles"]["list"] = config_list
 
     with open(json_path, "w") as f:
         json.dump(json_dict, f, indent=4)
 
-    LOGGER.success("Success!")
+    LOGGER.success("成功! / Success!")
 
 
 if __name__ == "__main__":

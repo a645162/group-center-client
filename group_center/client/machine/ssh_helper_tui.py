@@ -14,30 +14,31 @@ wait_key_input = True
 
 
 class TuiItem:
-    """TUI item representation.
+    """TUI项表示 / TUI item representation
 
     Attributes:
-        text (str): The display text of the item.
-        x (int): The x-coordinate position.
-        y (int): The y-coordinate position.
-        key (str): The activation key for this item.
-        color (int): The color code for display.
+        text (str): 显示文本 / Display text
+        x (int): x坐标 / x-coordinate
+        y (int): y坐标 / y-coordinate
+        key (str): 激活键 / Activation key
+        color (int): 颜色代码 / Color code
     """
 
-    text: str = ""
-    x: int = -1
-    y: int = -1
-    key: str = ""
-    color: int = 0
+    text: str = ""  # 显示文本 / Display text
+    x: int = -1  # x坐标 / x-coordinate
+    y: int = -1  # y坐标 / y-coordinate
+    key: str = ""  # 激活键 / Activation key
+    color: int = 0  # 颜色代码 / Color code
 
     def __init__(self, text: str, key: str = "", handler=None, color: int = -1) -> None:
-        """Initialize a TuiItem instance.
+        """
+        初始化TUI项 / Initialize TUI item
 
         Args:
-            text (str): The display text.
-            key (str, optional): Activation key. Defaults to "".
-            handler (callable, optional): Action handler. Defaults to None.
-            color (int, optional): Color code. Defaults to -1.
+            text (str): 显示文本 / Display text
+            key (str, optional): 激活键 / Activation key. Defaults to "".
+            handler (callable, optional): 处理函数 / Handler function. Defaults to None.
+            color (int, optional): 颜色代码 / Color code. Defaults to -1.
         """
         self.text = text
         self.key = key
@@ -45,33 +46,45 @@ class TuiItem:
         self.color = color
 
     def try_to_handle(self) -> None:
-        """Execute the associated handler if available."""
+        """
+        尝试执行处理函数 / Try to execute handler function
+        """
         if self.handler:
             self.handler()
 
 
 def generate_new_ssh_key() -> None:
-    """Generate a new SSH key pair using the system's ssh-keygen command."""
+    """
+    生成新的SSH密钥对 / Generate new SSH key pair
+
+    使用系统ssh-keygen命令生成新的SSH密钥对 /
+    Generate new SSH key pair using system's ssh-keygen command
+    """
     os.system("ssh-keygen")
 
 
 def backup_current_user() -> None:
-    """Backup current user's SSH configuration.
+    """
+    备份当前用户的SSH配置 / Backup current user's SSH configuration
 
-    Currently not implemented. Place holder function only."""
+    当前未实现，占位函数 / Currently not implemented. Place holder function only.
+    """
 
 
 def restore_current_user() -> None:
-    """Restore current user's SSH configuration.
+    """
+    恢复当前用户的SSH配置 / Restore current user's SSH configuration
 
-    Currently not implemented. Place holder function only."""
+    当前未实现，占位函数 / Currently not implemented. Place holder function only.
+    """
 
 
 def get_all_user_list() -> List[str]:
-    """Retrieve a list of all system users.
+    """
+    获取所有系统用户列表 / Retrieve list of all system users
 
     Returns:
-        List[str]: A list containing usernames of all system users.
+        List[str]: 包含所有系统用户名的列表 / List containing usernames of all system users
     """
     result: List[str] = ["root"]
 
@@ -84,22 +97,27 @@ def get_all_user_list() -> List[str]:
 
 
 def backup_all_user() -> None:
-    """Backup SSH configuration for all users.
+    """
+    备份所有用户的SSH配置 / Backup SSH configuration for all users
 
-    Currently not implemented. Place holder function only."""
+    当前未实现，占位函数 / Currently not implemented. Place holder function only.
+    """
 
 
 def restore_all_user() -> None:
-    """Restore SSH configuration for all users.
+    """
+    恢复所有用户的SSH配置 / Restore SSH configuration for all users
 
-    Currently not implemented. Place holder function only."""
+    当前未实现，占位函数 / Currently not implemented. Place holder function only.
+    """
 
 
 def init_main_interface_content() -> List[TuiItem]:
-    """Initialize and return the main interface content as a list of TuiItems.
+    """
+    初始化并返回主界面内容 / Initialize and return main interface content
 
     Returns:
-        List[TuiItem]: A list containing all TuiItem instances for display.
+        List[TuiItem]: 包含所有TUI项实例的列表 / List containing all TuiItem instances for display
     """
     str_list: List[TuiItem] = []
 
@@ -138,10 +156,13 @@ def init_main_interface_content() -> List[TuiItem]:
 
 
 def main_interface(stdscr) -> None:
-    """Main interface rendering function using curses.
+    """
+    主界面渲染函数 / Main interface rendering function
+
+    使用curses库渲染界面 / Render interface using curses library
 
     Args:
-        stdscr: The main window object provided by curses.
+        stdscr: curses提供的主窗口对象 / Main window object provided by curses
     """
     # Clear screen
     stdscr.clear()
@@ -213,7 +234,9 @@ def main_interface(stdscr) -> None:
 
 
 def signal_handler(signal: int, frame: Any) -> None:
-    """Handle system signals to clean up resources before exit."""
+    """
+    处理系统信号以在退出前清理资源 / Handle system signals to clean up resources before exit
+    """
     global wait_key_input
     wait_key_input = False
 
@@ -221,7 +244,9 @@ def signal_handler(signal: int, frame: Any) -> None:
 
 
 def init_tui() -> None:
-    """Initialize the TUI environment and setup signal handlers."""
+    """
+    初始化TUI环境并设置信号处理程序 / Initialize TUI environment and setup signal handlers
+    """
     # Register the signal handler
     # Ctrl+C
     signal.signal(signal.SIGINT, signal_handler)
@@ -231,7 +256,9 @@ def init_tui() -> None:
 
 
 def main() -> None:
-    """Main entry point for the TUI application."""
+    """
+    TUI应用程序的主入口 / Main entry point for the TUI application
+    """
     init_tui()
 
 

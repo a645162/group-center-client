@@ -8,6 +8,17 @@ logger = get_logger()
 
 
 def upload_file(file_path: str, target_api: str, params: dict = None) -> bool:
+    """上传文件到指定API
+    Upload file to specified API
+
+    Args:
+        file_path (str): 文件路径 / File path
+        target_api (str): 目标API路径 / Target API path
+        params (dict, optional): 请求参数 / Request parameters. Defaults to None.
+
+    Returns:
+        bool: 上传是否成功 / Whether upload is successful
+    """
     target_url = group_center_machine.group_center_get_url(target_api=target_api)
 
     if params is None:
@@ -38,6 +49,17 @@ def upload_file(file_path: str, target_api: str, params: dict = None) -> bool:
 
 
 def download_file(save_path: str, target_api: str, params: dict = None) -> bool:
+    """从指定API下载文件
+    Download file from specified API
+
+    Args:
+        save_path (str): 文件保存路径 / File save path
+        target_api (str): 目标API路径 / Target API path
+        params (dict, optional): 请求参数 / Request parameters. Defaults to None.
+
+    Returns:
+        bool: 下载是否成功 / Whether download is successful
+    """
     target_url = group_center_machine.group_center_get_url(target_api=target_api)
 
     if params is None:

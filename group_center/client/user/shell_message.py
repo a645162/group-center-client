@@ -8,15 +8,24 @@ from group_center.user_tools import (
 )
 
 
-def get_options():
+def get_options() -> argparse.Namespace:
+    """获取命令行参数 / Get command line arguments
+
+    Returns:
+        argparse.Namespace: 包含解析后参数的命名空间 / Namespace containing parsed arguments
+    """
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-n", "--user-name", help="User name", type=str, default="")
-    parser.add_argument("-m", "--message", help="Message Content", type=str, default="")
+    parser.add_argument(
+        "-n", "--user-name", help="用户名称 / User name", type=str, default=""
+    )
+    parser.add_argument(
+        "-m", "--message", help="消息内容 / Message content", type=str, default=""
+    )
     parser.add_argument(
         "-s",
         "--screen",
-        help="Include screen session name",
+        help="包含屏幕会话名称 / Include screen session name",
         action="store_true",
     )
 
@@ -26,6 +35,7 @@ def get_options():
 
 
 def main():
+    """主函数，处理 shell 消息 / Main function to handle shell messages"""
     opt = get_options()
 
     user_name = str(opt.user_name).strip()
@@ -33,7 +43,7 @@ def main():
     screen_name = ""
 
     if not message:
-        print("No message")
+        print("没有消息 / No message")
         return
 
     if opt.screen:
@@ -44,13 +54,13 @@ def main():
 
     message = f"{screen_name}{message}"
 
-    # Enable Group Center
+    # 启用 Group Center / Enable Group Center
     group_center_set_is_valid()
     group_center_set_user_name(user_name)
 
     push_message(message)
 
-    print("Message sent!")
+    print("消息已发送! / Message sent!")
 
 
 if __name__ == "__main__":

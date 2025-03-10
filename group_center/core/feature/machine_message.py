@@ -15,6 +15,16 @@ logger = get_logger()
 
 
 def send_dict_to_center(data: dict, target: str) -> bool:
+    """发送字典数据到中心
+    Send dictionary data to center
+
+    Args:
+        data (dict): 要发送的数据 / Data to send
+        target (str): 目标API路径 / Target API path
+
+    Returns:
+        bool: 是否发送成功 / Whether the send was successful
+    """
     data_dict = {}
     data_dict.update(data)
 
@@ -72,14 +82,24 @@ task_queue: Queue = Queue()
 
 
 class GroupCenterWorkThread(threading.Thread):
+    """Group Center 工作线程
+    Group Center work thread
+    """
+
     def __init__(self):
         super(GroupCenterWorkThread, self).__init__()
         self._stop_event = threading.Event()
 
     def stop(self):
+        """停止线程
+        Stop the thread
+        """
         self._stop_event.set()
 
     def run(self):
+        """线程主循环
+        Thread main loop
+        """
         while not self._stop_event.is_set():
             group_center_machine.get_access_key()
 
@@ -89,8 +109,10 @@ class GroupCenterWorkThread(threading.Thread):
                     task_queue.task_done()
                 else:
                     # 发送失败，将任务放回队列，以便重试
+                    # Send failed, put task back to queue for retry
                     task_queue.put((data, target))
                     # 多休息一会儿再重试
+                    # Sleep longer before retry
                     time.sleep(20)
             except queue.Empty:
                 pass
@@ -102,6 +124,13 @@ work_thread = None
 
 
 def new_message_enqueue(data: dict, target: str):
+    """将新消息加入队列
+    Enqueue new message
+
+    Args:
+        data (dict): 消息数据 / Message data
+        target (str): 目标API路径 / Target API path
+    """
     global task_queue, work_thread
 
     task_queue.put((data, target))

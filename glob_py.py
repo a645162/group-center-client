@@ -1,7 +1,7 @@
 import os
 import glob
 from typing import List
-import argparse  # 新增：引入 argparse 用于命令行参数解析
+import argparse  # 用于命令行参数解析 for command-line argument parsing
 
 import tqdm
 

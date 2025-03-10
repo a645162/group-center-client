@@ -11,6 +11,15 @@ max_retry_times = 5
 
 
 def get_json_str(target_api: str) -> str:
+    """获取远程配置的JSON字符串
+    Get JSON string of remote configuration
+
+    Args:
+        target_api (str): 目标API路径 / Target API path
+
+    Returns:
+        str: JSON字符串 / JSON string
+    """
     url = group_center_machine.group_center_get_url(target_api=target_api)
 
     for _ in range(max_retry_times):
@@ -35,14 +44,32 @@ def get_json_str(target_api: str) -> str:
 
 
 def get_user_config_json_str() -> str:
+    """获取用户配置的JSON字符串
+    Get JSON string of user configuration
+
+    Returns:
+        str: 用户配置的JSON字符串 / JSON string of user configuration
+    """
     return get_json_str(target_api="/api/client/config/user_list")
 
 
 def get_machine_config_json_str() -> str:
+    """获取机器配置的JSON字符串
+    Get JSON string of machine configuration
+
+    Returns:
+        str: 机器配置的JSON字符串 / JSON string of machine configuration
+    """
     return get_json_str(target_api="/api/client/config/machine_list")
 
 
 def get_env_json_str() -> str:
+    """获取环境配置的JSON字符串
+    Get JSON string of environment configuration
+
+    Returns:
+        str: 环境配置的JSON字符串 / JSON string of environment configuration
+    """
     return get_json_str(target_api="/api/client/config/env_list")
 
 

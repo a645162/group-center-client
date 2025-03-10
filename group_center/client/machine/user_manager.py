@@ -21,10 +21,11 @@ from group_center.core.group_center_machine import (
 
 
 def get_options() -> argparse.Namespace:
-    """Get command line options.
+    """
+    获取命令行选项 / Get command line options
 
     Returns:
-        argparse.Namespace: Parsed options object containing command line arguments.
+        argparse.Namespace: 解析后的选项对象 / Parsed options object containing command line arguments
     """
     parser = argparse.ArgumentParser()
 
@@ -59,10 +60,11 @@ def get_options() -> argparse.Namespace:
 
 
 def connect_to_group_center(opt: argparse.Namespace) -> None:
-    """Connect to the Group Center service.
+    """
+    连接到Group Center服务 / Connect to the Group Center service
 
     Args:
-        opt (argparse.Namespace): Command line options containing connection details.
+        opt (argparse.Namespace): 包含连接详细信息的命令行选项 / Command line options containing connection details
     """
     set_group_center_host_url(opt.host)
     set_machine_name_short(opt.center_name)
@@ -72,11 +74,12 @@ def connect_to_group_center(opt: argparse.Namespace) -> None:
 
 
 def create_user(opt: argparse.Namespace, user_info_list: List[UserInfo]) -> None:
-    """Create new user accounts on the system.
+    """
+    在系统上创建新用户账户 / Create new user accounts on the system
 
     Args:
-        opt (argparse.Namespace): Command line options containing creation parameters.
-        user_info_list (List[UserInfo]): List of user information objects to process.
+        opt (argparse.Namespace): 包含创建参数的命令行选项 / Command line options containing creation parameters
+        user_info_list (List[UserInfo]): 要处理的用户信息对象列表 / List of user information objects to process
     """
     password: str = opt.user_password
 
@@ -84,11 +87,12 @@ def create_user(opt: argparse.Namespace, user_info_list: List[UserInfo]) -> None
 
 
 def save_add_user_text(opt: argparse.Namespace, user_info_list: List[UserInfo]) -> None:
-    """Save user addition instructions to a text file.
+    """
+    将用户添加说明保存到文本文件 / Save user addition instructions to a text file
 
     Args:
-        opt (argparse.Namespace): Options including output path and password details.
-        user_info_list (List[UserInfo]): User information objects to document.
+        opt (argparse.Namespace): 包含输出路径和密码详细信息的选项 / Options including output path and password details
+        user_info_list (List[UserInfo]): 要记录的用户信息对象 / User information objects to document
     """
     save_path: str = opt.add_user_txt
     password: str = opt.user_password
@@ -105,7 +109,9 @@ def save_add_user_text(opt: argparse.Namespace, user_info_list: List[UserInfo]) 
 
 
 def main() -> None:
-    """Main execution entry point for the user management module."""
+    """
+    用户管理模块的主执行入口 / Main execution entry point for the user management module
+    """
     opt = get_options()
 
     connect_to_group_center(opt)

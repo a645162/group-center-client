@@ -21,14 +21,28 @@ logger = get_logger()
 
 
 class LinuxUserSsh:
-    __user_name: str = ""
-    __tmp_dir_path: str = ""
+    """Linux用户SSH管理类 / Linux user SSH management class"""
+
+    __user_name: str = ""  # 用户名 / Username
+    __tmp_dir_path: str = ""  # 临时目录路径 / Temporary directory path
 
     def __init__(self, user_name: str = ""):
+        """
+        初始化Linux用户SSH管理器 / Initialize Linux user SSH manager
+
+        Args:
+            user_name (str, optional): 用户名，默认为当前用户 / Username, defaults to current user
+        """
         self.__user_name = user_name
 
     @property
     def user_name(self) -> str:
+        """
+        获取用户名 / Get username
+
+        Returns:
+            str: 当前用户名 / Current username
+        """
         if not self.__user_name:
             return get_current_user_name()
 
@@ -36,6 +50,12 @@ class LinuxUserSsh:
 
     @property
     def home_dir(self) -> str:
+        """
+        获取用户主目录 / Get user home directory
+
+        Returns:
+            str: 用户主目录路径 / User home directory path
+        """
         if not self.__user_name:
             return os.path.expanduser("~")
 
@@ -43,22 +63,46 @@ class LinuxUserSsh:
 
     @property
     def ssh_dir(self) -> str:
+        """
+        获取SSH目录 / Get SSH directory
+
+        Returns:
+            str: SSH目录路径 / SSH directory path
+        """
         return os.path.join(self.home_dir, ".ssh")
 
     def fix_ssh_dir(self) -> None:
+        """
+        修复SSH目录权限 / Fix SSH directory permissions
+        """
         fix_ssh_dir(self.ssh_dir)
 
     def __get_tmp_dir(self) -> str:
+        """
+        获取临时目录 / Get temporary directory
+
+        Returns:
+            str: 临时目录路径 / Temporary directory path
+        """
         if not self.__tmp_dir_path:
             self.__tmp_dir_path = get_a_tmp_dir()
 
         return self.__tmp_dir_path
 
     def __remove_tmp_dir(self) -> None:
+        """
+        删除临时目录 / Remove temporary directory
+        """
         if os.path.exists(self.__tmp_dir_path):
             shutil.rmtree(self.__tmp_dir_path)
 
-    def backup_authorized_keys(self):
+    def backup_authorized_keys(self) -> bool:
+        """
+        备份authorized_keys文件 / Backup authorized_keys file
+
+        Returns:
+            bool: 备份是否成功 / Whether backup succeeded
+        """
         authorized_keys_file_path = os.path.join(self.ssh_dir, "authorized_keys")
         if not os.path.exists(authorized_keys_file_path):
             logger.info(f"authorized_keys file not found: {authorized_keys_file_path}")
@@ -73,6 +117,12 @@ class LinuxUserSsh:
         return upload_result
 
     def backup_ssh_key_pair(self) -> bool:
+        """
+        备份SSH密钥对 / Backup SSH key pairs
+
+        Returns:
+            bool: 备份是否成功 / Whether backup succeeded
+        """
         if not (os.path.exists(self.ssh_dir) and os.path.isdir(self.ssh_dir)):
             return False
 
@@ -97,6 +147,12 @@ class LinuxUserSsh:
         return upload_result
 
     def restore_authorized_keys(self) -> bool:
+        """
+        恢复authorized_keys文件 / Restore authorized_keys file
+
+        Returns:
+            bool: 恢复是否成功 / Whether restore succeeded
+        """
         tmp_dir = self.__get_tmp_dir()
         file_name = "authorized_keys"
         tmp_file_path = os.path.join(tmp_dir, file_name)
@@ -124,6 +180,12 @@ class LinuxUserSsh:
         return isValid
 
     def restore_ssh_key_pair(self) -> bool:
+        """
+        恢复SSH密钥对 / Restore SSH key pairs
+
+        Returns:
+            bool: 恢复是否成功 / Whether restore succeeded
+        """
         tmp_dir = self.__get_tmp_dir()
         file_name = "ssh_key_pair.zip"
         tmp_file_path = os.path.join(tmp_dir, file_name)
