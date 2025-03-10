@@ -6,7 +6,14 @@ import os
 from config.version import __version__
 
 
-def install_requirements(requirements_path):
+def install_requirements(requirements_path: str) -> None:
+    """
+    Install Python requirements from specified file.
+    从指定文件安装Python依赖
+
+    Args:
+        requirements_path (str): Path to requirements file
+    """
     try:
         subprocess.run(["pip", "install", "-r", requirements_path], check=True)
     except subprocess.CalledProcessError as e:
@@ -14,7 +21,11 @@ def install_requirements(requirements_path):
         sys.exit(1)
 
 
-def main():
+def main() -> None:
+    """
+    Main function for installing dependencies.
+    安装依赖的主函数
+    """
     parser = argparse.ArgumentParser(
         description="Dependency installation script for group-center-client."
     )

@@ -21,12 +21,30 @@ prompt = """
 
 
 def traverse_files(extension: str = "py") -> List[str]:
+    """遍历指定扩展名的文件
+    Traverse files with specified extension
+
+    Args:
+        extension (str): 文件扩展名 | File extension
+
+    Returns:
+        List[str]: 匹配的文件路径列表 | List of matched file paths
+    """
     pattern = f"**/*.{extension}"  # 构造匹配模式 构建 pattern string
     files = glob.glob(pattern, recursive=True)  # 遍历所有子目录 Traverse subdirectories
     return files
 
 
 def convert_to_cline_list(files: List[str]) -> List[str]:
+    """将文件路径转换为Cline格式
+    Convert file paths to Cline format
+
+    Args:
+        files (List[str]): 文件路径列表 | List of file paths
+
+    Returns:
+        List[str]: 转换后的文件路径列表 | Converted file paths list
+    """
     return [f"@/{file}" for file in files]
 
 
@@ -34,6 +52,13 @@ def batch_files(files: List[str], batch_size: int) -> List[List[str]]:
     """
     将文件列表按 batch_size 切分
     Split the file list into batches with batch_size
+
+    Args:
+        files (List[str]): 文件路径列表 | List of file paths
+        batch_size (int): 每批文件数量 | Number of files per batch
+
+    Returns:
+        List[List[str]]: 分批次的文件路径列表 | Batched file paths list
     """
     if batch_size <= 0:
         return [files]
@@ -57,6 +82,9 @@ if __name__ == "__main__":
 
     files: List[str] = traverse_files()
     files: List[str] = convert_to_cline_list(files)
+
+    # Sort
+    files.sort()
 
     batches: List[List[str]] = batch_files(files, args.batch_size)
 

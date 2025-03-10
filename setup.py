@@ -6,9 +6,9 @@ from setuptools import setup, find_packages
 
 from config.version import __version__
 
-this_directory = Path(__file__).parent
+this_directory: Path = Path(__file__).parent
 with open(this_directory / "README.md", encoding="utf-8") as f:
-    long_description = f.read()
+    long_description: str = f.read()
 
 setup(
     name="li_group_center",

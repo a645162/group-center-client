@@ -7,7 +7,9 @@ from pathlib import Path
 
 
 def run_tests():
-    """Run all tests."""
+    """Run all tests.
+    运行所有测试
+    """
     test_dir = Path("test")
     discovery = unittest.defaultTestLoader.discover(test_dir)
     runner = unittest.TextTestRunner()

@@ -7,8 +7,11 @@ import sys
 from pathlib import Path
 
 
-def main():
-    """Main function for uninstalling dependencies."""
+def main() -> None:
+    """
+    Main function for uninstalling dependencies.
+    卸载依赖的主函数
+    """
     try:
         # Uninstall Python packages
         os.system("python3 -m pip uninstall -y -r requirements.txt")
