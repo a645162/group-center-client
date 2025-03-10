@@ -3,7 +3,6 @@
 # Pillow push to RTSP Server example
 # Author: Haomin Kong
 import datetime
-from typing import Tuple
 
 from PIL import Image, ImageDraw
 

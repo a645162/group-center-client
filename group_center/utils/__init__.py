@@ -16,6 +16,7 @@ __all__ = [
     "linux",  # Linux 模块 / Linux module
     "process",  # 进程管理模块 / Process management module
     "command",  # 命令执行模块 / Command execution module
+    "hardward",  # 硬件信息模块 / Hardware information module
 ]
 
 from . import (
@@ -24,4 +25,5 @@ from . import (
     linux,  # Linux 模块 / Linux module
     process,  # 进程管理模块 / Process management module
     command,  # 命令执行模块 / Command execution module
+    hardward,  # 硬件信息模块 / Hardware information module
 )

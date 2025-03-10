@@ -1,5 +1,6 @@
 import os
 import platform
+from group_center.utils.command.command import cat_info
 
 
 def is_run_on_linux() -> bool:

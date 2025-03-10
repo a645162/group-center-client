@@ -3,7 +3,6 @@
 # OpenCV push to RTSP Server example
 # Author: Haomin Kong
 import time
-from typing import Tuple
 
 import cv2
 import numpy as np  # 添加numpy导入 / Add numpy import

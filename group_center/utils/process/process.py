@@ -1,32 +1,12 @@
 import os
 import sys
 from typing import List
+from group_center.utils.process.memory import (
+    get_process_memory_usage,
+    get_total_memory_usage,
+)
 
 import psutil
-
-
-def is_debug_mode() -> bool:
-    """
-    Check if the current environment is in debug mode.
-
-    Returns:
-        bool: True if in debug mode, False otherwise.
-    """
-
-    if is_run_by_screen():
-        return False
-
-    if sys.gettrace():
-        return True
-
-    if is_run_by_gateway() or is_run_by_vscode_remote():
-        return True
-
-    debug_str = os.getenv("DEBUG")
-    if debug_str is None:
-        debug_str = ""
-
-    return debug_str.lower() == "true" or debug_str == "1"
 
 
 def get_parent_process_pid(pid: int) -> int:
@@ -75,7 +55,7 @@ def get_process_name_list(pid_list: List[int]) -> List[str]:
     Returns:
         List[str]: 进程名称列表 / List of process names
     """
-    return [get_process_name(pid) for pid in pid]
+    return [get_process_name(pid) for pid in pid_list]
 
 
 def get_chain_of_process(pid: int) -> List[int]:
@@ -156,36 +136,37 @@ def get_top_python_process_pid(pid: int) -> int:
     return -1
 
 
-def check_parent_process_name_keywords(keywords: List[str]) -> bool:
-    pid_list = get_chain_of_process(get_parent_process_pid(-1))
-    p_name_list = get_process_name_list(pid_list)
-
-    for process_name in p_name_list:
-        for keyword in keywords:
-            if keyword and (keyword in process_name):
-                return True
-
-    return False
-
-
-def is_run_by_gateway() -> bool:
-    keywords = ["remote-dev-serv", "launcher.sh"]
-    return check_parent_process_name_keywords(keywords)
+def get_process_path(pid: int) -> str:
+    """
+    获取给定进程ID的进程路径
+    Get the process path of the given process ID.
+    Args:
+        pid (int): 进程ID / Process ID
+    Returns:
+        str: 进程路径 / Process path
+    """
+    process = psutil.Process(pid)
+    return process.exe()
 
 
-def is_run_by_vscode_remote() -> bool:
-    keywords = ["code-"]
-    return check_parent_process_name_keywords(keywords)
+def get_child_processes(pid: int, recursive: bool = True) -> List[int]:
+    """
+    递归获取给定进程ID的所有子进程ID
+    Recursively get all child process IDs for a given process ID.
 
+    Args:
+        pid (int): 父进程ID / Parent process ID
+        recursive (bool): 是否递归获取子进程的子进程 / Whether to recursively get children of children
 
-def is_run_by_screen() -> bool:
-    keywords = ["screen"]
-    return check_parent_process_name_keywords(keywords)
-
-
-def is_run_by_tmux() -> bool:
-    keywords = ["tmux"]
-    return check_parent_process_name_keywords(keywords)
+    Returns:
+        List[int]: 子进程ID列表 / List of child process IDs
+    """
+    try:
+        parent = psutil.Process(pid)
+        children = parent.children(recursive=recursive)
+        return [child.pid for child in children]
+    except psutil.NoSuchProcess:
+        return []
 
 
 if __name__ == "__main__":
@@ -195,15 +176,19 @@ if __name__ == "__main__":
     pid_list = get_chain_of_process(-1)
     print(pid_list)
 
+    path_list = [get_process_path(pid) for pid in pid_list]
+    print(path_list)
+
     p_name_list = get_process_name_list(pid_list)
     print(p_name_list)
 
     p_is_python_list = [check_is_python_process(pid) for pid in pid_list]
     print(p_is_python_list)
 
-    print("is_run_by_gateway", is_run_by_gateway())
-    print("is_run_by_vscode_remote", is_run_by_vscode_remote())
-    print("is_run_by_screen", is_run_by_screen())
-    print("is_run_by_tmux", is_run_by_tmux())
-
     print(get_top_python_process_pid(-1))
+
+    current_pid = os.getpid()
+    print(f"子进程列表: {get_child_processes(current_pid)}")
+    print(f"当前进程内存占用: {get_process_memory_usage(current_pid):.2f} MB")
+
+    print(f"进程链总内存占用: {get_total_memory_usage(pid_list):.2f} MB")

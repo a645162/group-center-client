@@ -1,4 +1,3 @@
-from typing import Dict
 from group_center.feature.nvi_notify import notify_api
 from group_center.utils.linux.linux_user import get_current_user_name
 

@@ -8,8 +8,8 @@ logger = get_logger()
 
 
 def upload_file(file_path: str, target_api: str, params: dict = None) -> bool:
-    """上传文件到指定API
-    Upload file to specified API
+    """上传用户文件到群组中心
+    Upload user file to group center
 
     Args:
         file_path (str): 文件路径 / File path
@@ -49,8 +49,8 @@ def upload_file(file_path: str, target_api: str, params: dict = None) -> bool:
 
 
 def download_file(save_path: str, target_api: str, params: dict = None) -> bool:
-    """从指定API下载文件
-    Download file from specified API
+    """从群组中心下载用户文件
+    Download user file from group center
 
     Args:
         save_path (str): 文件保存路径 / File save path

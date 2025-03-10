@@ -2,12 +2,16 @@ import subprocess
 from typing import Tuple
 
 
-def cat_info(path):
+def cat_info(path) -> str:
     try:
         with open(path, "r") as f:
             return f.read()
     except (IOError, FileNotFoundError) as e:
-        return f"Error reading file: {e}"
+        print(e)
+        return ""
+    except Exception as e:
+        print(e)
+        return ""
 
 
 def do_command(cmd: str, text: bool = True) -> Tuple[int, str, str]:
