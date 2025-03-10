@@ -4,8 +4,7 @@ import shutil
 import zipfile
 from typing import List
 
-from group_center.client.machine.feature. \
-    ssh.key_pair_file import KeyPairFile
+from group_center.client.machine.feature.ssh.key_pair_file import KeyPairFile
 from group_center.utils.envs import get_a_tmp_dir
 
 
@@ -30,10 +29,7 @@ class SshKeyPairManager:
 
     def __init__(self, ssh_dir_path: str = "~/.ssh"):
         ssh_dir_path = os.path.expanduser(ssh_dir_path)
-        if (
-                not os.path.exists(ssh_dir_path) or
-                not os.path.isdir(ssh_dir_path)
-        ):
+        if not os.path.exists(ssh_dir_path) or not os.path.isdir(ssh_dir_path):
             raise ValueError(f"Invalid ssh_dir: {ssh_dir_path}")
 
         self.ssh_dir = os.path.abspath(ssh_dir_path)
@@ -85,7 +81,7 @@ class SshKeyPairManager:
                 file_list.append(key_pair.public_key_path)
                 file_list.append(key_pair.private_key_path)
 
-        with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        with zipfile.ZipFile(zip_filename, "w", zipfile.ZIP_DEFLATED) as zipf:
             for file_path in file_list:
                 arc_name = os.path.basename(file_path)
                 zipf.write(file_path, arcname=arc_name)
@@ -97,7 +93,7 @@ def restore_ssh_zip(zip_path: str):
     system_ssh_dir = get_system_ssh_dir()
     tmp_dir = get_a_tmp_dir()
 
-    with zipfile.ZipFile(zip_path, 'r') as zipf:
+    with zipfile.ZipFile(zip_path, "r") as zipf:
         zipf.extractall(tmp_dir)
 
     ssh_manager_zip = SshKeyPairManager(tmp_dir)
@@ -116,20 +112,21 @@ def restore_ssh_zip(zip_path: str):
 
         private_key_name = os.path.basename(key_pair.private_key_path)
 
-        target_private_key_path = \
-            os.path.join(system_ssh_dir, key_pair.private_key_name)
-        target_public_key_path = \
-            os.path.join(system_ssh_dir, key_pair.public_key_name)
+        target_private_key_path = os.path.join(
+            system_ssh_dir, key_pair.private_key_name
+        )
+        target_public_key_path = os.path.join(system_ssh_dir, key_pair.public_key_name)
 
-        if os.path.exists(target_private_key_path) or \
-                os.path.exists(target_public_key_path):
+        if os.path.exists(target_private_key_path) or os.path.exists(
+            target_public_key_path
+        ):
             current_time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
             private_key_name += "_" + current_time
 
-            target_private_key_path = \
-                os.path.join(system_ssh_dir, private_key_name)
-            target_public_key_path = \
-                os.path.join(system_ssh_dir, private_key_name + ".pub")
+            target_private_key_path = os.path.join(system_ssh_dir, private_key_name)
+            target_public_key_path = os.path.join(
+                system_ssh_dir, private_key_name + ".pub"
+            )
 
         shutil.move(key_pair.private_key_path, target_private_key_path)
         shutil.move(key_pair.public_key_path, target_public_key_path)

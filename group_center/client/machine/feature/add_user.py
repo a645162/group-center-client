@@ -5,13 +5,13 @@ from group_center.user.linux.linux_user import LinuxUser
 
 
 def get_linux_user_add_text(
-        user_name: str,
-        password: str,
-        uid: int,
-        gid: int,
-        group_name: str,
-        home_dir: str,
-        shell: str,
+    user_name: str,
+    password: str,
+    uid: int,
+    gid: int,
+    group_name: str,
+    home_dir: str,
+    shell: str,
 ):
     # user001::600:100:user:/home/user001:/bin/bash
     return f"{user_name}:{password}:{uid}:{gid}:{group_name}:{home_dir}:{shell}"
@@ -30,15 +30,18 @@ def linux_add_user_txt(user_info_list: List[UserInfo], password: str = ""):
         home_dir: str = user_info.home_dir
         shell: str = "/bin/bash"
 
-        final_text += get_linux_user_add_text(
-            user_name=user_name,
-            password=password,
-            uid=uid,
-            gid=gid,
-            group_name=group_name,
-            home_dir=home_dir,
-            shell=shell,
-        ) + "\n"
+        final_text += (
+            get_linux_user_add_text(
+                user_name=user_name,
+                password=password,
+                uid=uid,
+                gid=gid,
+                group_name=group_name,
+                home_dir=home_dir,
+                shell=shell,
+            )
+            + "\n"
+        )
 
     return final_text.strip()
 

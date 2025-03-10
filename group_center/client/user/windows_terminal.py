@@ -5,9 +5,9 @@ import argparse
 import uuid
 from typing import List
 
-from group_center.utils.log.logger import set_is_print_mode
+from group_center.utils.log.logger import set_print_mode
 
-set_is_print_mode(True)
+set_print_mode(True)
 
 from group_center.core.group_center_machine import *
 from group_center.core.feature.remote_config import get_machine_config_json_str
@@ -39,19 +39,19 @@ def connect_to_group_center(opt):
 
 def get_windows_terminal_config_path():
     # Check is Windows
-    if platform.system() != 'Windows':
+    if platform.system() != "Windows":
         return ""
 
-    current_user_dir = os.path.expanduser('~')
+    current_user_dir = os.path.expanduser("~")
 
-    root_dir = os.path.join(current_user_dir, 'AppData', 'Local', 'Packages')
+    root_dir = os.path.join(current_user_dir, "AppData", "Local", "Packages")
 
     pattern = os.path.join(root_dir, "Microsoft.WindowsTerminal*")
 
     matched_paths = glob.glob(pattern)
 
     for path in matched_paths:
-        settings_json = os.path.join(path, 'LocalState', 'settings.json')
+        settings_json = os.path.join(path, "LocalState", "settings.json")
         if os.path.exists(settings_json):
             return settings_json.strip()
         else:
@@ -65,14 +65,21 @@ def main():
 
     connect_to_group_center(opt)
 
+    # Json Path
     json_path = get_windows_terminal_config_path()
-    logger.info("Windows Terminal Config Path:")
-    logger.info(json_path)
-    json_dict: dict = json.load(open(json_path, 'r'))
+    logger.info("Windows Terminal Config Path:" + json_path)
+    if len(json_path) == 0:
+        logger.error("Windows Terminal Config Path is empty")
+        exit(1)
+    if not os.path.exists(json_path):
+        logger.error("Windows Terminal Config Path is not exists")
+        exit(1)
+
+    json_dict: dict = json.load(open(json_path, "r"))
     if not (
-            "profiles" in json_dict.keys() and
-            "list" in json_dict["profiles"].keys() and
-            isinstance(json_dict["profiles"]["list"], list)
+        "profiles" in json_dict.keys()
+        and "list" in json_dict["profiles"].keys()
+        and isinstance(json_dict["profiles"]["list"], list)
     ):
         logger.error("Invalid json")
         exit(1)
@@ -99,8 +106,8 @@ def main():
         found = False
         for config in config_list:
             if (
-                    "commandline" in config.keys() and
-                    config["commandline"].strip() == command_line
+                "commandline" in config.keys()
+                and config["commandline"].strip() == command_line
             ):
                 logger.info(f"Skip {name_eng}-{user_name} because exists")
                 found = True
@@ -108,19 +115,21 @@ def main():
         if found:
             continue
 
-        config_list.append({
-            "commandline": command_line,
-            "guid": "{" + str(uuid.uuid4()) + "}",
-            "hidden": False,
-            "name": f"{name_eng}-{user_name}"
-        })
+        config_list.append(
+            {
+                "commandline": command_line,
+                "guid": "{" + str(uuid.uuid4()) + "}",
+                "hidden": False,
+                "name": f"{name_eng}-{user_name}",
+            }
+        )
         count += 1
 
     logger.info(f"Add {count} SSH Config")
 
     json_dict["profiles"]["list"] = config_list
 
-    with open(json_path, 'w') as f:
+    with open(json_path, "w") as f:
         json.dump(json_dict, f, indent=4)
 
     logger.success("Success!")

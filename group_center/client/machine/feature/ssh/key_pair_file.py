@@ -25,8 +25,7 @@ class KeyPairFile:
         if not value.endswith(self.__pub_ext__):
             raise ValueError("Public key file must end with .pub")
 
-        self.private_key_path = \
-            value[:len(value) - len(self.__pub_ext__)]
+        self.private_key_path = value[: len(value) - len(self.__pub_ext__)]
 
     @property
     def private_key_name(self):
@@ -37,9 +36,8 @@ class KeyPairFile:
         return os.path.basename(self.public_key_path)
 
     def is_valid(self) -> bool:
-        return (
-                os.path.exists(self.private_key_path) and
-                os.path.exists(self.public_key_path)
+        return os.path.exists(self.private_key_path) and os.path.exists(
+            self.public_key_path
         )
 
     def __str__(self):
@@ -47,8 +45,8 @@ class KeyPairFile:
 
     def __eq__(self, other):
         if (
-                self.private_key_path == other.private_key_path or
-                self.public_key_path == other.public_key_path
+            self.private_key_path == other.private_key_path
+            or self.public_key_path == other.public_key_path
         ):
             return True
 

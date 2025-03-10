@@ -10,7 +10,7 @@ from group_center.utils.envs import get_a_tmp_dir
 
 class LoguruConfig:
     """Loguru 日志配置类"""
-    
+
     def __init__(
         self,
         log_dir: Optional[Path] = None,
@@ -18,10 +18,10 @@ class LoguruConfig:
         rotation: str = "10 MB",
         compression: Optional[str] = "zip",
         format_str: str = "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | "
-                         "<level>{level: <8}</level> | "
-                         "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - "
-                         "<level>{message}</level>",
-        config_name: Optional[str] = None
+        "<level>{level: <8}</level> | "
+        "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - "
+        "<level>{message}</level>",
+        config_name: Optional[str] = None,
     ):
         self.log_dir = log_dir or get_a_tmp_dir()
         self.retention = retention
@@ -33,7 +33,7 @@ class LoguruConfig:
 
 def _configure_loguru(config: Optional[LoguruConfig] = None) -> None:
     """配置 Loguru 日志记录器
-    
+
     Args:
         config: Loguru 配置对象
     """
@@ -48,6 +48,7 @@ def _configure_loguru(config: Optional[LoguruConfig] = None) -> None:
 
     # 添加文件处理器
     from datetime import datetime
+
     log_file_name = f"group_center_{config.config_name or 'default'}_{datetime.now().strftime('%Y-%m-%d')}.log"
     log_file = config.log_dir / log_file_name
     logger.add(
@@ -56,23 +57,23 @@ def _configure_loguru(config: Optional[LoguruConfig] = None) -> None:
         rotation=config.rotation,
         compression=config.compression,
         format=config.format_str,
-        level=str(LogLevelManager.get_level().name).upper()
+        level=str(LogLevelManager.get_level().name).upper(),
     )
 
     # 添加控制台处理器
     logger.add(
         sink=lambda msg: print(msg, end=""),
         format=config.format_str,
-        level=str(LogLevelManager.get_level().name).upper()
+        level=str(LogLevelManager.get_level().name).upper(),
     )
 
 
-def get_loguru_backend(config: Optional[LoguruConfig] = None) -> loguru.logger: # type: ignore
+def get_loguru_backend(config: Optional[LoguruConfig] = None) -> loguru.logger:  # type: ignore
     """获取配置好的 Loguru 日志记录器
-    
+
     Args:
         config: Loguru 配置对象
-        
+
     Returns:
         loguru.Logger: 配置好的日志记录器
     """

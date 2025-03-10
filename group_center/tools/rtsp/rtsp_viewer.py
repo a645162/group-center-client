@@ -15,8 +15,8 @@ def start_viewer(server_url: str):
 
         # TODO: Add your code here
 
-        cv2.imshow('frame', frame)
-        if cv2.waitKey(1) == ord('q'):
+        cv2.imshow("frame", frame)
+        if cv2.waitKey(1) == ord("q"):
             break
 
     cap.release()

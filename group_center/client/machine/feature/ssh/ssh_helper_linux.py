@@ -6,13 +6,14 @@ import shutil
 # log_level = get_log_level()
 # log_level.current_level = log_level.DEBUG
 
-from group_center.client.machine.feature. \
-    ssh.ssh_key_pair_manager import fix_ssh_dir, SshKeyPairManager, restore_ssh_zip
-from group_center.core.feature. \
-    backup_user_file import upload_file, download_file
+from group_center.client.machine.feature.ssh.ssh_key_pair_manager import (
+    fix_ssh_dir,
+    SshKeyPairManager,
+    restore_ssh_zip,
+)
+from group_center.core.feature.backup_user_file import upload_file, download_file
 from group_center.utils.envs import get_a_tmp_dir
-from group_center.utils.linux. \
-    linux_user import get_current_user_name
+from group_center.utils.linux.linux_user import get_current_user_name
 
 from group_center.utils.log.logger import get_logger
 
@@ -63,26 +64,19 @@ class LinuxUserSsh:
             logger.info(f"authorized_keys file not found: {authorized_keys_file_path}")
             return
 
-        upload_result = \
-            upload_file(
-                file_path=authorized_keys_file_path,
-                target_api="/api/client/file/ssh_key",
-                params={
-                    "userNameEng": self.user_name
-                }
-            )
+        upload_result = upload_file(
+            file_path=authorized_keys_file_path,
+            target_api="/api/client/file/ssh_key",
+            params={"userNameEng": self.user_name},
+        )
 
         return upload_result
 
     def backup_ssh_key_pair(self) -> bool:
-        if not (
-                os.path.exists(self.ssh_dir) and
-                os.path.isdir(self.ssh_dir)
-        ):
+        if not (os.path.exists(self.ssh_dir) and os.path.isdir(self.ssh_dir)):
             return False
 
-        key_pair_manager = \
-            SshKeyPairManager(ssh_dir_path=self.ssh_dir)
+        key_pair_manager = SshKeyPairManager(ssh_dir_path=self.ssh_dir)
         key_pair_manager.walk()
 
         if not key_pair_manager:
@@ -93,14 +87,11 @@ class LinuxUserSsh:
 
         key_pair_manager.zip(zip_filename=save_path)
 
-        upload_result = \
-            upload_file(
-                file_path=save_path,
-                target_api="/api/client/file/ssh_key",
-                params={
-                    "userNameEng": self.user_name
-                }
-            )
+        upload_result = upload_file(
+            file_path=save_path,
+            target_api="/api/client/file/ssh_key",
+            params={"userNameEng": self.user_name},
+        )
 
         self.__remove_tmp_dir()
         return upload_result
@@ -110,14 +101,11 @@ class LinuxUserSsh:
         file_name = "authorized_keys"
         tmp_file_path = os.path.join(tmp_dir, file_name)
 
-        download_result = \
-            download_file(
-                save_path=tmp_file_path,
-                target_api="/api/client/file/ssh_key/" + file_name,
-                params={
-                    "userNameEng": self.user_name
-                }
-            )
+        download_result = download_file(
+            save_path=tmp_file_path,
+            target_api="/api/client/file/ssh_key/" + file_name,
+            params={"userNameEng": self.user_name},
+        )
 
         isValid = False
         if download_result:
@@ -128,10 +116,7 @@ class LinuxUserSsh:
                 isValid = True
 
         if isValid:
-            shutil.copy(
-                tmp_file_path,
-                os.path.join(self.ssh_dir, "authorized_keys")
-            )
+            shutil.copy(tmp_file_path, os.path.join(self.ssh_dir, "authorized_keys"))
             os.chmod(os.path.join(self.ssh_dir, "authorized_keys"), 0o600)
             self.fix_ssh_dir()
 
@@ -143,14 +128,11 @@ class LinuxUserSsh:
         file_name = "ssh_key_pair.zip"
         tmp_file_path = os.path.join(tmp_dir, file_name)
 
-        download_result = \
-            download_file(
-                save_path=tmp_file_path,
-                target_api="/api/client/file/ssh_key/" + file_name,
-                params={
-                    "userNameEng": self.user_name
-                }
-            )
+        download_result = download_file(
+            save_path=tmp_file_path,
+            target_api="/api/client/file/ssh_key/" + file_name,
+            params={"userNameEng": self.user_name},
+        )
 
         isValid = download_result
 
@@ -162,7 +144,7 @@ class LinuxUserSsh:
         return isValid
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     linux_user_ssh = LinuxUserSsh()
 
     result_backup_authorized_keys = linux_user_ssh.backup_authorized_keys()

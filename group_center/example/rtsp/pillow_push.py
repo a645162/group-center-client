@@ -13,15 +13,10 @@ width = 640
 server_url = r""
 fps = 30
 
-pusher = RtspPush(
-    rtsp_url=server_url,
-    width=width,
-    height=height,
-    fps=fps
-)
+pusher = RtspPush(rtsp_url=server_url, width=width, height=height, fps=fps)
 pusher.set_encoder_gpu_amd()
 
-base_image = Image.new('RGB', (width, height), color='white')
+base_image = Image.new("RGB", (width, height), color="white")
 
 pusher.open()
 
@@ -33,12 +28,12 @@ try:
         current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         text = f"Current Time: {current_time}"
         draw = ImageDraw.Draw(current_image)
-        draw.text((50, 50), text, fill='red')
+        draw.text((50, 50), text, fill="red")
         del draw
 
         pusher.push_pillow(current_image)
 except KeyboardInterrupt:
-    print('KeyboardInterrupt')
+    print("KeyboardInterrupt")
 finally:
     pusher.close()
-    print('Done')
+    print("Done")

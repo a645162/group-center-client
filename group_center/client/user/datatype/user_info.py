@@ -1,9 +1,7 @@
 from typing import List
 
-from group_center.client.user. \
-    datatype.linux_user import LinuxUserJava
-from group_center.client.user. \
-    datatype.webhook import AllWebHookUser
+from group_center.client.user.datatype.linux_user import LinuxUserJava
+from group_center.client.user.datatype.webhook import AllWebHookUser
 
 
 class UserInfo:

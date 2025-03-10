@@ -51,8 +51,8 @@ def print_color(message, color: str = "", background_color: str = "", end: str =
     colorama.init(autoreset=True)
 
     print(
-        convert_str_to_colorama_color(color) +
-        convert_str_to_colorama_background_color(background_color) +
-        message,
-        end=end
+        convert_str_to_colorama_color(color)
+        + convert_str_to_colorama_background_color(background_color)
+        + message,
+        end=end,
     )

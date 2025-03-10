@@ -9,9 +9,9 @@ from group_center.utils.envs import get_env_string
 
 class RTSPConfig:
     """RTSP 配置管理类"""
-    
+
     _instance = None
-    
+
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
@@ -32,7 +32,7 @@ class RTSPConfig:
     @lru_cache(maxsize=32)
     def get_rtsp_server(self) -> str:
         """获取 RTSP 服务器地址
-        
+
         Returns:
             str: RTSP 服务器地址
         """
@@ -40,13 +40,13 @@ class RTSPConfig:
         server = get_env_string("RTSP_SERVER_URL")
         if server:
             return server
-            
+
         # 从配置文件获取
         return self._config.get("server", "")
 
     def get_rtsp_port(self) -> int:
         """获取 RTSP 端口
-        
+
         Returns:
             int: RTSP 端口号
         """
@@ -54,7 +54,7 @@ class RTSPConfig:
 
     def get_rtsp_timeout(self) -> int:
         """获取 RTSP 超时时间
-        
+
         Returns:
             int: 超时时间（秒）
         """
@@ -62,7 +62,7 @@ class RTSPConfig:
 
     def get_rtsp_auth(self) -> Optional[dict]:
         """获取 RTSP 认证信息
-        
+
         Returns:
             Optional[dict]: 认证信息字典，包含username和password
         """
@@ -72,7 +72,7 @@ class RTSPConfig:
 @lru_cache(maxsize=2)
 def get_rtsp_server() -> str:
     """获取 RTSP 服务器地址
-    
+
     Returns:
         str: RTSP 服务器地址
     """

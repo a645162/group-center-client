@@ -79,12 +79,22 @@ def init_main_interface_content() -> List[TuiItem]:
 
     # str_list.append(TuiItem("Generate New 'SSH key'", key="c", handler=generate_new_ssh_key))
 
-    str_list.append(TuiItem("Backup Current User", key="1", handler=backup_current_user))
-    str_list.append(TuiItem("Restore Current User", key="2", handler=restore_current_user))
+    str_list.append(
+        TuiItem("Backup Current User", key="1", handler=backup_current_user)
+    )
+    str_list.append(
+        TuiItem("Restore Current User", key="2", handler=restore_current_user)
+    )
 
     if is_root_user:
-        str_list.append(TuiItem("Backup All User(Root Only)", key="3", handler=backup_current_user))
-        str_list.append(TuiItem("Restore All User(Root Only)", key="4", handler=restore_current_user))
+        str_list.append(
+            TuiItem("Backup All User(Root Only)", key="3", handler=backup_current_user)
+        )
+        str_list.append(
+            TuiItem(
+                "Restore All User(Root Only)", key="4", handler=restore_current_user
+            )
+        )
 
     str_list.append(TuiItem(""))
     str_list.append(TuiItem("Exit", key="q", handler=lambda: exit(0)))
@@ -124,22 +134,18 @@ def main_interface(stdscr):
 
         if tui_item.color > 0:
             win.addstr(
-                i + 1, 2,
-                key_tip + tui_item.text,
-                curses.color_pair(tui_item.color)
+                i + 1, 2, key_tip + tui_item.text, curses.color_pair(tui_item.color)
             )
         else:
             if tui_item.key:
                 win.addstr(
-                    i + 1, 2,
+                    i + 1,
+                    2,
                     key_tip + tui_item.text,
-                    curses.color_pair(item_with_key_color_index)
+                    curses.color_pair(item_with_key_color_index),
                 )
             else:
-                win.addstr(
-                    i + 1, 2,
-                    key_tip + tui_item.text
-                )
+                win.addstr(i + 1, 2, key_tip + tui_item.text)
 
     # Refresh the window
     win.refresh()

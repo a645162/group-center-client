@@ -16,7 +16,7 @@ class AuthorizedKeysFile:
         self.authorized_keys_list = []
         self.parse()
 
-    def add(self, authorized_key: 'AuthorizedKey') -> None:
+    def add(self, authorized_key: "AuthorizedKey") -> None:
         for current_obj in self.authorized_keys_list:
             if current_obj.key == authorized_key.key:
                 if authorized_key.comment:
@@ -25,7 +25,9 @@ class AuthorizedKeysFile:
         self.authorized_keys_list.append(authorized_key)
 
     def parse(self) -> None:
-        authorized_keys_string_list = [line.strip() for line in self.authorized_keys.split('\n') if line.strip()]
+        authorized_keys_string_list = [
+            line.strip() for line in self.authorized_keys.split("\n") if line.strip()
+        ]
 
         for i, line in enumerate(authorized_keys_string_list):
             if line.startswith("#"):
@@ -45,11 +47,15 @@ class AuthorizedKeysFile:
             while comment_start_index >= 0:
                 if not authorized_keys_string_list[comment_start_index].startswith("#"):
                     break
-                comment = authorized_keys_string_list[comment_start_index] + "\n" + comment
+                comment = (
+                    authorized_keys_string_list[comment_start_index] + "\n" + comment
+                )
                 comment_start_index -= 1
             comment = comment.strip()
 
-            self.authorized_keys_list.append(self.AuthorizedKey(publicKeyString, comment, title))
+            self.authorized_keys_list.append(
+                self.AuthorizedKey(publicKeyString, comment, title)
+            )
 
     def build(self) -> str:
         output = []
@@ -66,6 +72,6 @@ class AuthorizedKeysFile:
                 output.append("\n\n")
         return "".join(output).rstrip() + "\n"
 
-    def combine(self, other: 'AuthorizedKeysFile') -> None:
+    def combine(self, other: "AuthorizedKeysFile") -> None:
         for authorized_key in other.authorized_keys_list:
             self.add(authorized_key)

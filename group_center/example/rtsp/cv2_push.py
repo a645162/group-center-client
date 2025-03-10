@@ -23,12 +23,7 @@ if not ret:
 height, width, layers = frame.shape
 fps = cap.get(cv2.CAP_PROP_FPS)
 
-pusher = RtspPush(
-    rtsp_url=server_url,
-    width=width,
-    height=height,
-    fps=fps
-)
+pusher = RtspPush(rtsp_url=server_url, width=width, height=height, fps=fps)
 pusher.set_encoder_gpu_amd()
 
 if not pusher.open():
@@ -63,13 +58,13 @@ try:
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
             (0, 0, 255),
-            2
+            2,
         )
 
         pusher.push(frame)
 
 except KeyboardInterrupt:
-    print('KeyboardInterrupt')
+    print("KeyboardInterrupt")
 
 finally:
     pusher.close()
