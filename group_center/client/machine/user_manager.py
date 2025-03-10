@@ -20,7 +20,12 @@ from group_center.core.group_center_machine import (
 )
 
 
-def get_options():
+def get_options() -> argparse.Namespace:
+    """Get command line options.
+
+    Returns:
+        argparse.Namespace: Parsed options object containing command line arguments.
+    """
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--host", type=str, default="")
@@ -53,7 +58,12 @@ def get_options():
     return opt
 
 
-def connect_to_group_center(opt):
+def connect_to_group_center(opt: argparse.Namespace) -> None:
+    """Connect to the Group Center service.
+
+    Args:
+        opt (argparse.Namespace): Command line options containing connection details.
+    """
     set_group_center_host_url(opt.host)
     set_machine_name_short(opt.center_name)
     set_machine_password(opt.center_password)
@@ -61,13 +71,25 @@ def connect_to_group_center(opt):
     group_center_login()
 
 
-def create_user(opt, user_info_list: List[UserInfo]):
+def create_user(opt: argparse.Namespace, user_info_list: List[UserInfo]) -> None:
+    """Create new user accounts on the system.
+
+    Args:
+        opt (argparse.Namespace): Command line options containing creation parameters.
+        user_info_list (List[UserInfo]): List of user information objects to process.
+    """
     password: str = opt.user_password
 
     create_linux_users(user_info_list, password)
 
 
-def save_add_user_text(opt, user_info_list: List[UserInfo]):
+def save_add_user_text(opt: argparse.Namespace, user_info_list: List[UserInfo]) -> None:
+    """Save user addition instructions to a text file.
+
+    Args:
+        opt (argparse.Namespace): Options including output path and password details.
+        user_info_list (List[UserInfo]): User information objects to document.
+    """
     save_path: str = opt.add_user_txt
     password: str = opt.user_password
 
@@ -82,7 +104,8 @@ def save_add_user_text(opt, user_info_list: List[UserInfo]):
         f.write(linux_add_user_text)
 
 
-def main():
+def main() -> None:
+    """Main execution entry point for the user management module."""
     opt = get_options()
 
     connect_to_group_center(opt)

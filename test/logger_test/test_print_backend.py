@@ -5,14 +5,23 @@ from group_center.utils.log.backend_print import get_print_backend
 
 
 class TestPrintBackend(unittest.TestCase):
+    """
+    测试打印后端的单元测试类 | Unit test class for print backend
+    """
+
     def setUp(self):
+        """设置测试前的初始化操作 | Setup method that runs before each test"""
         self.held_output = StringIO()
         sys.stdout = self.held_output
 
     def tearDown(self):
+        """设置测试后的清理操作 | Cleanup method that runs after each test"""
         sys.stdout = sys.__stdout__
 
     def test_basic_logging(self):
+        """
+        测试基本的日志记录功能 | Test basic logging functionality
+        """
         logger = get_print_backend()
 
         logger.debug("This is a debug message")

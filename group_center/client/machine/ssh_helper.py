@@ -39,16 +39,31 @@ class OptionItem:
             self.handler()
 
 
-def print_color_bool(text: str, is_success: bool):
+def print_color_bool(
+    text: str,
+    is_success: bool,
+) -> None:
+    """
+    打印带有颜色的布尔结果 / Print colored boolean result
+    - 文本内容 / Text content
+    - 成功状态 / Success status
+    """
     style = "bold green" if is_success else "bold red"
     console.print(text, style=style)
 
 
-def generate_new_ssh_key():
+def generate_new_ssh_key() -> None:
+    """
+    生成新的 SSH 密钥对 / Generate new SSH key pair
+    """
     os.system("ssh-keygen")
 
 
-def backup_current_user(user_name=""):
+def backup_current_user(user_name: str = "") -> None:
+    """
+    备份当前用户的 SSH 配置 / Backup current user's SSH configuration
+    - 用户名 / Username
+    """
     linux_user_ssh = LinuxUserSsh(user_name=user_name)
 
     result_backup_authorized_keys = linux_user_ssh.backup_authorized_keys()
@@ -63,7 +78,11 @@ def backup_current_user(user_name=""):
     )
 
 
-def restore_current_user(user_name=""):
+def restore_current_user(user_name: str = "") -> None:
+    """
+    恢复当前用户的 SSH 配置 / Restore current user's SSH configuration
+    - 用户名 / Username
+    """
     restore_current_user_authorized_keys(user_name=user_name)
     restore_current_user_key_pair(user_name=user_name)
 
@@ -83,6 +102,10 @@ def restore_current_user_key_pair(user_name=""):
 
 
 def get_all_user_list() -> List[str]:
+    """
+    获取所有用户列表 / Get list of all users
+    - 返回所有用户名的列表 / Returns list of all usernames
+    """
     result: List[str] = []
 
     # Walk "/home"
@@ -95,7 +118,10 @@ def get_all_user_list() -> List[str]:
     return result
 
 
-def backup_all_user():
+def backup_all_user() -> None:
+    """
+    备份所有用户的 SSH 配置 / Backup SSH configuration for all users
+    """
     user_list = get_all_user_list()
     for user_name in user_list:
         print("Working for " + user_name)
@@ -103,7 +129,10 @@ def backup_all_user():
         print()
 
 
-def restore_all_user():
+def restore_all_user() -> None:
+    """
+    恢复所有用户的 SSH 配置 / Restore SSH configuration for all users
+    """
     user_list = get_all_user_list()
     for user_name in user_list:
         print("Working for " + user_name)
@@ -112,6 +141,10 @@ def restore_all_user():
 
 
 def init_main_interface_content() -> List[OptionItem]:
+    """
+    初始化主界面内容 / Initialize main interface content
+    - 返回界面选项列表 / Returns list of interface options
+    """
     str_list: List[OptionItem] = []
 
     str_list.append(OptionItem("SSH Helper - Group Center Client", color="green"))
@@ -162,7 +195,10 @@ def init_main_interface_content() -> List[OptionItem]:
     return str_list
 
 
-def hello():
+def hello() -> None:
+    """
+    显示欢迎信息 / Display welcome message
+    """
     console.print(
         Panel.fit(
             "[bold green]Hello, Group Center Client![/]",
@@ -172,13 +208,19 @@ def hello():
     )
 
 
-def press_enter_to_continue():
+def press_enter_to_continue() -> None:
+    """
+    等待用户按下回车继续 / Wait for user to press Enter to continue
+    """
     input_text = Prompt.ask("[blue]Press 'Enter' to continue...[/]", default="")
     if input_text.lower() == "q":
         exit(0)
 
 
-def cli_main_cycle():
+def cli_main_cycle() -> None:
+    """
+    主界面循环 / Main interface loop
+    """
     interface_content: List[OptionItem] = init_main_interface_content()
 
     def print_main_interface_content():
@@ -230,7 +272,11 @@ def init_cli():
         cli_main_cycle()
 
 
-def get_options():
+def get_options() -> argparse.Namespace:
+    """
+    获取命令行选项 / Get command line options
+    - 返回解析后的选项对象 / Returns parsed options object
+    """
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--host", type=str, default="")
@@ -263,7 +309,10 @@ def get_options():
     return opt
 
 
-def main():
+def main() -> None:
+    """
+    主程序入口 / Main program entry point
+    """
     from group_center.utils.log.log_level import get_log_level
 
     log_level = get_log_level()

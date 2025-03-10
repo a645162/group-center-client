@@ -1,0 +1,41 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools>=42", "wheel"]
+
+[project]
+name = "li_group_center"
+# 动态版本从 config.version 导入
+authors = [
+  {name = "Haomin Kong", email = "a645162@gmail.com"},
+]
+dependencies = [
+  "urllib3",
+  "requests",
+  "termcolor >= 1.0.0",
+  "colorama >= 0.4.0; platform_system == 'Windows'",
+  "windows-curses >= 2.2.0; platform_system == 'Windows'",
+  "objprint",
+  "psutil",
+  "rich>=13.0.0",
+  "tqdm",
+]
+description = "Group Center Tools"
+dynamic = ["version"]
+license = {text = "GPLv3"}
+readme = "README.md"
+requires-python = ">=3.6"
+urls = {Homepage = "https://github.com/a645162/group-center-client"}
+
+[tool.setuptools]
+packages = {find = {exclude = ["test"]}}
+
+[tool.setuptools.dynamic]
+version = {attr = "config.version.__version__"}
+
+[project.scripts]
+group_center_windows_terminal = "group_center.client.user.windows_terminal:main"
+rtsp_viewer = "group_center.tools.rtsp.rtsp_viewer:main"
+ssh_helper = "group_center.client.machine.ssh_helper:main"
+torch_ddp_port = "group_center.tools.dl.ddp_port:main"
+user_manager = "group_center.client.machine.user_manager:main"
+user_message = "group_center.client.user.shell_message:main"

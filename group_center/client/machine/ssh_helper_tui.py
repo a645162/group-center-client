@@ -14,39 +14,65 @@ wait_key_input = True
 
 
 class TuiItem:
-    text: str = ""
+    """TUI item representation.
 
+    Attributes:
+        text (str): The display text of the item.
+        x (int): The x-coordinate position.
+        y (int): The y-coordinate position.
+        key (str): The activation key for this item.
+        color (int): The color code for display.
+    """
+
+    text: str = ""
     x: int = -1
     y: int = -1
-
     key: str = ""
+    color: int = 0
 
-    color: int
+    def __init__(self, text: str, key: str = "", handler=None, color: int = -1) -> None:
+        """Initialize a TuiItem instance.
 
-    def __init__(self, text: str, key: str = "", handler=None, color: int = -1):
+        Args:
+            text (str): The display text.
+            key (str, optional): Activation key. Defaults to "".
+            handler (callable, optional): Action handler. Defaults to None.
+            color (int, optional): Color code. Defaults to -1.
+        """
         self.text = text
         self.key = key
         self.handler = handler
         self.color = color
 
-    def try_to_handle(self):
+    def try_to_handle(self) -> None:
+        """Execute the associated handler if available."""
         if self.handler:
             self.handler()
 
 
-def generate_new_ssh_key():
+def generate_new_ssh_key() -> None:
+    """Generate a new SSH key pair using the system's ssh-keygen command."""
     os.system("ssh-keygen")
 
 
-def backup_current_user():
-    pass
+def backup_current_user() -> None:
+    """Backup current user's SSH configuration.
+
+    Currently not implemented. Place holder function only."""
 
 
-def restore_current_user():
-    pass
+def restore_current_user() -> None:
+    """Restore current user's SSH configuration.
+
+    Currently not implemented. Place holder function only."""
 
 
 def get_all_user_list() -> List[str]:
+    """Retrieve a list of all system users.
+
+    Returns:
+        List[str]: A list containing usernames of all system users.
+    """
     result: List[str] = ["root"]
 
     # Walk "/home"
@@ -57,15 +83,24 @@ def get_all_user_list() -> List[str]:
     return result
 
 
-def backup_all_user():
-    pass
+def backup_all_user() -> None:
+    """Backup SSH configuration for all users.
+
+    Currently not implemented. Place holder function only."""
 
 
-def restore_all_user():
-    pass
+def restore_all_user() -> None:
+    """Restore SSH configuration for all users.
+
+    Currently not implemented. Place holder function only."""
 
 
 def init_main_interface_content() -> List[TuiItem]:
+    """Initialize and return the main interface content as a list of TuiItems.
+
+    Returns:
+        List[TuiItem]: A list containing all TuiItem instances for display.
+    """
     str_list: List[TuiItem] = []
 
     str_list.append(TuiItem("SSH Helper - Group Center Client", color=1))
@@ -102,7 +137,12 @@ def init_main_interface_content() -> List[TuiItem]:
     return str_list
 
 
-def main_interface(stdscr):
+def main_interface(stdscr) -> None:
+    """Main interface rendering function using curses.
+
+    Args:
+        stdscr: The main window object provided by curses.
+    """
     # Clear screen
     stdscr.clear()
 
@@ -173,13 +213,15 @@ def main_interface(stdscr):
 
 
 def signal_handler(signal: int, frame: Any) -> None:
+    """Handle system signals to clean up resources before exit."""
     global wait_key_input
     wait_key_input = False
 
     sys.exit(0)
 
 
-def init_tui():
+def init_tui() -> None:
+    """Initialize the TUI environment and setup signal handlers."""
     # Register the signal handler
     # Ctrl+C
     signal.signal(signal.SIGINT, signal_handler)
@@ -188,7 +230,8 @@ def init_tui():
     curses.wrapper(main_interface)
 
 
-def main():
+def main() -> None:
+    """Main entry point for the TUI application."""
     init_tui()
 
 
