@@ -1,5 +1,5 @@
 import json  # JSON处理 / JSON processing
-from typing import Tuple, Any, Dict, Optional, Type, Union, Literal
+from typing import Any, Dict, Optional
 
 import requests  # HTTP请求 / HTTP requests
 from requests.models import Response  # HTTP响应类型 / HTTP response type

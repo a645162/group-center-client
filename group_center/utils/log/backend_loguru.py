@@ -51,20 +51,24 @@ def _configure_loguru(config: Optional[LoguruConfig] = None) -> None:
 
     log_file_name = f"group_center_{config.config_name or 'default'}_{datetime.now().strftime('%Y-%m-%d')}.log"
     log_file = config.log_dir / log_file_name
+
+    log_level: LogLevel = LogLevelManager.get_level()
+    loguru_level_str: str = str(log_level.name).upper()
+
     logger.add(
         sink=log_file,
         retention=config.retention,
         rotation=config.rotation,
         compression=config.compression,
         format=config.format_str,
-        level=str(LogLevelManager.get_level().name).upper(),
+        level=loguru_level_str,
     )
 
     # 添加控制台处理器
     logger.add(
         sink=lambda msg: print(msg, end=""),
         format=config.format_str,
-        level=str(LogLevelManager.get_level().name).upper(),
+        level=loguru_level_str,
     )
 
 

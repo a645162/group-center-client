@@ -222,7 +222,7 @@ class RtspPush:
         except Exception as e:
             print(e)
 
-            __open_have_error = True
+            self.__open_have_error = True
             self.__opened = False
 
             return False

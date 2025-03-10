@@ -24,5 +24,4 @@ from . import (
     backend_print,  # 打印样式日志模块 / Print styled logs module
     log_level,  # 日志级别管理模块 / Log level management module
     logger,  # 日志记录器模块 / Logger module
-    new_logging,  # 新的日志实现模块 / New logging implementation module
 )

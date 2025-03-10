@@ -2,7 +2,6 @@ import unittest
 from io import StringIO
 import sys
 from group_center.utils.log.backend_print import get_print_backend
-from group_center.utils.log.log_level import LogLevel
 
 
 class TestPrintBackend(unittest.TestCase):

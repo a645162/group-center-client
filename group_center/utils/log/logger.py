@@ -1,6 +1,5 @@
 from typing import Optional, Any
 from enum import Enum, auto
-import logging
 
 try:
     from group_center.utils.log.backend_loguru import get_loguru_backend

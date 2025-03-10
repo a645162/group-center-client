@@ -1,6 +1,5 @@
 import unittest
 from group_center.utils.log.backend_logging import get_logging_backend, LoggingConfig
-from group_center.utils.log.log_level import LogLevel
 from pathlib import Path
 import os
 

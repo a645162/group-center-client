@@ -2,15 +2,16 @@ from enum import Enum
 import logging
 from typing import Dict, Optional
 
+
 class LogLevel(Enum):
     """日志级别枚举"""
-    
-    DEBUG = logging.DEBUG       # 10
-    INFO = logging.INFO         # 20
-    SUCCESS = 25                # 自定义成功级别（介于INFO和WARNING之间）
-    WARNING = logging.WARNING   # 30
-    ERROR = logging.ERROR       # 40
-    CRITICAL = logging.CRITICAL # 50
+
+    DEBUG = logging.DEBUG  # 10
+    INFO = logging.INFO  # 20
+    SUCCESS = 25  # 自定义成功级别（介于INFO和WARNING之间）
+    WARNING = logging.WARNING  # 30
+    ERROR = logging.ERROR  # 40
+    CRITICAL = logging.CRITICAL  # 50
 
     @property
     def level_name(self) -> str:

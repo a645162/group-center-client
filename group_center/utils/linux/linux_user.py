@@ -105,7 +105,7 @@ def get_uid(username):
             return int(result.stdout.strip())
         else:
             return 0
-    except Exception as e:
+    except Exception:
         return 0
 
 
@@ -121,7 +121,7 @@ def get_gid(username):
             return int(result.stdout.strip())
         else:
             return 0
-    except Exception as e:
+    except Exception:
         return 0
 
 
@@ -137,7 +137,7 @@ def set_uid(username, uid):
             return True
         else:
             return False
-    except Exception as e:
+    except Exception:
         return False
 
 
@@ -153,7 +153,7 @@ def set_gid(username, gid):
             return True
         else:
             return False
-    except Exception as e:
+    except Exception:
         return False
 
 

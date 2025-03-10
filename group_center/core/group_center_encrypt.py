@@ -1,5 +1,5 @@
 import hashlib  # 哈希算法库 / Hash algorithm library
-from typing import Optional, Type, Union, Any, Literal
+from typing import Optional
 
 
 def encrypt_password_to_display(password: str, display_string: str = "*") -> str:

@@ -3,16 +3,24 @@ import os
 import platform
 import argparse
 import uuid
+import json
 from typing import List
 
 from group_center.utils.log.logger import set_print_mode
 
 set_print_mode(True)
 
-from group_center.core.group_center_machine import *
+from group_center.core.group_center_machine import (
+    set_group_center_host_url,
+    set_machine_name_short,
+    set_machine_password,
+    group_center_login,
+)
 from group_center.core.feature.remote_config import get_machine_config_json_str
 
-logger = get_logger()
+from group_center.utils.log.logger import get_logger
+
+LOGGER = get_logger()
 
 
 def get_options():
@@ -57,9 +65,11 @@ def get_windows_terminal_config_path():
         else:
             return ""
 
+    return ""
+
 
 def main():
-    logger.info("Windows Terminal add SSH")
+    LOGGER.info("Windows Terminal add SSH")
 
     opt = get_options()
 
@@ -67,12 +77,12 @@ def main():
 
     # Json Path
     json_path = get_windows_terminal_config_path()
-    logger.info("Windows Terminal Config Path:" + json_path)
+    LOGGER.info("Windows Terminal Config Path:" + json_path)
     if len(json_path) == 0:
-        logger.error("Windows Terminal Config Path is empty")
+        LOGGER.error("Windows Terminal Config Path is empty")
         exit(1)
     if not os.path.exists(json_path):
-        logger.error("Windows Terminal Config Path is not exists")
+        LOGGER.error("Windows Terminal Config Path is not exists")
         exit(1)
 
     json_dict: dict = json.load(open(json_path, "r"))
@@ -81,13 +91,13 @@ def main():
         and "list" in json_dict["profiles"].keys()
         and isinstance(json_dict["profiles"]["list"], list)
     ):
-        logger.error("Invalid json")
+        LOGGER.error("Invalid json")
         exit(1)
 
     user_name = str(opt.user_name).strip()
 
     if len(user_name) == 0:
-        logger.error("Invalid user name")
+        LOGGER.error("Invalid user name")
         exit(1)
 
     machine_list_json = get_machine_config_json_str()
@@ -109,7 +119,7 @@ def main():
                 "commandline" in config.keys()
                 and config["commandline"].strip() == command_line
             ):
-                logger.info(f"Skip {name_eng}-{user_name} because exists")
+                LOGGER.info(f"Skip {name_eng}-{user_name} because exists")
                 found = True
                 break
         if found:
@@ -125,14 +135,14 @@ def main():
         )
         count += 1
 
-    logger.info(f"Add {count} SSH Config")
+    LOGGER.info(f"Add {count} SSH Config")
 
     json_dict["profiles"]["list"] = config_list
 
     with open(json_path, "w") as f:
         json.dump(json_dict, f, indent=4)
 
-    logger.success("Success!")
+    LOGGER.success("Success!")
 
 
 if __name__ == "__main__":

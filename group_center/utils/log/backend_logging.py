@@ -1,15 +1,17 @@
-from typing import Any, Optional, List
+from typing import Optional
 import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 from group_center.utils.log.log_level import LogLevel
-from group_center.utils.log import new_logging
+
+# from group_center.utils.log import new_logging
 from group_center.utils.envs import get_a_tmp_dir
 
 # 注册SUCCESS日志级别
 logging.addLevelName(LogLevel.SUCCESS.value, "SUCCESS")
 logging.SUCCESS = LogLevel.SUCCESS.value  # 设置logging模块的SUCCESS常量
+
 
 class LoggingConfig:
     """日志配置类"""
@@ -43,11 +45,11 @@ def _setup_logging(config: Optional[LoggingConfig] = None) -> None:
         config = LoggingConfig()
 
     # 关闭并清除现有处理器
-    logger = new_logging.getLogger()
+    logger = logging.getLogger()
     for handler in logger.handlers:
         try:
             handler.close()
-        except:
+        except Exception:
             pass
     logger.handlers.clear()
 
@@ -74,7 +76,7 @@ def _setup_logging(config: Optional[LoggingConfig] = None) -> None:
     file_handler.setLevel(config.level.value)
 
     # 配置根日志记录器
-    logger = new_logging.getLogger()
+    logger = logging.getLogger()
     logger.setLevel(config.level.value)
     logger.addHandler(console_handler)
     logger.addHandler(file_handler)
@@ -83,6 +85,7 @@ def _setup_logging(config: Optional[LoggingConfig] = None) -> None:
     def success(self, msg, *args, **kwargs):
         if self.isEnabledFor(LogLevel.SUCCESS.value):
             self._log(LogLevel.SUCCESS.value, msg, args, **kwargs)
+
     logging.Logger.success = success
 
 
@@ -96,4 +99,4 @@ def get_logging_backend(config: Optional[LoggingConfig] = None) -> logging.Logge
         logging.Logger: 配置好的日志记录器
     """
     _setup_logging(config)
-    return new_logging.getLogger("group_center")
+    return logging.getLogger("group_center")

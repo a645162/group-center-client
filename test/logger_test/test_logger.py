@@ -1,6 +1,5 @@
 import unittest
 from group_center.utils.log.logger import get_logger, set_print_mode
-from group_center.utils.log.log_level import LogLevel
 from pathlib import Path
 import os
 

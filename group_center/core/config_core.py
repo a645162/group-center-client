@@ -1,4 +1,4 @@
-from typing import Tuple, Optional, List, Type, Dict, Any, Literal
+from typing import Optional, List
 from dataclasses import dataclass
 
 from group_center.utils.envs import (
@@ -76,7 +76,7 @@ def get_env_machine_config() -> Optional[MachineConfig]:
         return MachineConfig(
             url=url, name_full=name_full, name_short=name_short, password=password
         )
-    except ValueError as e:
+    except ValueError:
         return None
 
 

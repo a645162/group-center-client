@@ -1,6 +1,23 @@
+from typing import List
+
 from group_center.user.system_user import SystemUser
-from group_center.utils.linux.linux_system import *
-from group_center.utils.linux.linux_user import *
+from group_center.utils.linux.linux_system import (
+    is_run_on_linux,
+)
+from group_center.utils.linux.linux_user import (
+    check_linux_user_is_exist,
+    get_user_home_directory,
+    create_linux_user,
+    reset_password,
+    delete_linux_user,
+    add_user_to_group,
+    get_user_groups,
+    get_user_groups_list,
+    get_uid,
+    set_uid,
+    get_gid,
+    set_gid,
+)
 
 
 class LinuxUser(SystemUser):

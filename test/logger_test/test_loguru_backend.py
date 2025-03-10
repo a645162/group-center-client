@@ -1,6 +1,5 @@
 import unittest
 from group_center.utils.log.backend_loguru import get_loguru_backend, LoguruConfig
-from group_center.utils.log.log_level import LogLevel
 from pathlib import Path
 import os
 
