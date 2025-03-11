@@ -9,7 +9,7 @@ from group_center.core.config_core import (
     MachineConfig,
     get_env_machine_config,
 )  # 配置管理 / Configuration management
-from group_center.utils.log.logger import get_logger  # 日志模块 / Logging module
+from group_center.utils.log import get_logger  # 日志模块 / Logging module
 
 # 全局配置变量 / Global configuration variables
 GROUP_CENTER_URL: str = ""  # Group Center服务URL / Group Center service URL
@@ -24,16 +24,16 @@ group_center_public_part: Dict[str, str] = {
     "serverNameEng": MACHINE_NAME_SHORT,
 }  # 公共信息部分 / Public information part
 
-logger: Optional[Any] = None  # 日志对象 / Logger object
+LOGGER: Optional[Any] = None  # 日志对象 / Logger object
 
 
 def init_logger() -> None:
     """初始化日志对象
     Initialize logger object
     """
-    global logger
-    if logger is None:
-        logger = get_logger()
+    global LOGGER
+    if LOGGER is None:
+        LOGGER = get_logger()
 
 
 def set_group_center_host_url(host_url: str) -> None:
@@ -179,15 +179,15 @@ def __group_center_login(username: str, password: str) -> bool:
     # Init logger if not set
     init_logger()
 
-    logger.info("[Group Center] Login Start")
+    LOGGER.info("[Group Center] Login Start")
     url: str = group_center_get_url(target_api="/auth/client/auth")
     try:
-        logger.info(f"[Group Center] Auth To: {url}")
+        LOGGER.info(f"[Group Center] Auth To: {url}")
         password_display: str = group_center_encrypt.encrypt_password_to_display(
             password
         )
         password_encoded: str = group_center_encrypt.get_password_hash(password)
-        logger.info(
+        LOGGER.info(
             f"[Group Center] Auth userName:{username} password:{password_display}"
         )
 
@@ -198,7 +198,7 @@ def __group_center_login(username: str, password: str) -> bool:
         )
 
         if response.status_code != 200:
-            logger.error(f"[Group Center] Auth Failed: {response.text}")
+            LOGGER.error(f"[Group Center] Auth Failed: {response.text}")
             return False
 
         response_dict: Dict[str, Any] = json.loads(response.text)
@@ -206,17 +206,17 @@ def __group_center_login(username: str, password: str) -> bool:
             "isAuthenticated" in response_dict.keys()
             and response_dict["isAuthenticated"]
         ):
-            logger.error("[Group Center] Not authorized")
+            LOGGER.error("[Group Center] Not authorized")
             return False
         global access_key
         access_key = response_dict["accessKey"]
-        logger.info(f"[Group Center] Auth Handshake Success: {access_key}")
+        LOGGER.info(f"[Group Center] Auth Handshake Success: {access_key}")
 
     except Exception as e:
-        logger.error(f"[Group Center] Auth Handshake Failed: {e}")
+        LOGGER.error(f"[Group Center] Auth Handshake Failed: {e}")
         return False
 
-    logger.info("[Group Center] Login Finished.")
+    LOGGER.info("[Group Center] Login Finished.")
 
 
 def group_center_login() -> bool:

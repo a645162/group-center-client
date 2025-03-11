@@ -5,7 +5,7 @@ import requests
 from group_center.core import group_center_machine
 from group_center.utils.log.logger import get_logger
 
-logger = get_logger()
+LOGGER = get_logger()
 
 max_retry_times = 5
 
@@ -34,9 +34,9 @@ def get_json_str(target_api: str) -> str:
             if response.status_code == 200:
                 return text
 
-            logger.error("[Group Center]" + text)
+            LOGGER.error("[Group Center]" + text)
         except Exception as e:
-            logger.error("get user config json error" + str(e))
+            LOGGER.error("get user config json error" + str(e))
 
         time.sleep(10)
 

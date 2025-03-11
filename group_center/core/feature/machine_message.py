@@ -11,7 +11,7 @@ from group_center.core import group_center_machine
 from group_center.utils.log.logger import get_logger
 
 
-logger = get_logger()
+LOGGER = get_logger()
 
 
 def send_dict_to_center(data: dict, target: str) -> bool:
@@ -63,18 +63,18 @@ def send_dict_to_center(data: dict, target: str) -> bool:
             "isAuthenticated" in response_dict.keys()
             and response_dict["isAuthenticated"]
         ):
-            logger.error("[Group Center] Not authorized")
+            LOGGER.error("[Group Center] Not authorized")
             group_center_machine.group_center_login()
             return False
 
         if not ("isSucceed" in response_dict.keys() and response_dict["isSucceed"]):
-            logger.error(f"[Group Center] Send {target} Failed: {response.text}")
+            LOGGER.error(f"[Group Center] Send {target} Failed: {response.text}")
             return False
 
-        logger.info(f"[Group Center] Send {target} Success")
+        LOGGER.info(f"[Group Center] Send {target} Success")
         return True
     except Exception as e:
-        logger.error(f"[Group Center] Send {target} Failed: {e}")
+        LOGGER.error(f"[Group Center] Send {target} Failed: {e}")
         return False
 
 
@@ -117,7 +117,7 @@ class GroupCenterWorkThread(threading.Thread):
             except queue.Empty:
                 pass
             except Exception as e:
-                logger.error(f"[GroupCenter] Thread exception: {e}")
+                LOGGER.error(f"[GroupCenter] Thread exception: {e}")
 
 
 work_thread = None
