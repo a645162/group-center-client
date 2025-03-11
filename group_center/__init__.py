@@ -13,7 +13,7 @@
 # {version}
 # """
 
-from config import __version__  # noqa: F401
+from .config import __version__  # noqa: F401
 
 from . import (
     client,  # 客户端模块 / Client module
@@ -24,6 +24,7 @@ from . import (
     user_env,  # 用户环境模块 / User environment module
     user_tools,  # 用户工具模块 / User tools module
     utils,  # 工具集模块 / Utilities module
+    config,  # 配置模块 / Configuration module
 )
 
 __all__ = [
@@ -35,4 +36,5 @@ __all__ = [
     "user_env",  # 用户环境模块 / User environment module
     "user_tools",  # 用户工具模块 / User tools module
     "utils",  # 工具集模块 / Utilities module
+    "config",  # 配置模块 / Configuration module
 ]

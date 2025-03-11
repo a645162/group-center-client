@@ -3,7 +3,8 @@ import subprocess
 import sys
 import os
 
-from config.version import __version__
+from group_center.config.version import __version__
+from group_center.config.global_config import path_dir_config
 
 
 def install_requirements(requirements_path: str) -> None:
@@ -14,6 +15,13 @@ def install_requirements(requirements_path: str) -> None:
     Args:
         requirements_path (str): Path to requirements file / requirements文件路径
     """
+    if not os.path.exists(requirements_path):
+        requirements_path = os.path.join(path_dir_config, requirements_path)
+
+    if not os.path.exists(requirements_path):
+        print(f"Requirements file {requirements_path} not found")
+        sys.exit(1)
+
     try:
         subprocess.run(["pip", "install", "-r", requirements_path], check=True)
     except subprocess.CalledProcessError as e:
@@ -49,13 +57,13 @@ def main() -> None:
         sys.exit(0)
 
     print("Installing base dependencies...")
-    install_requirements("./config/requirements.txt")
+    install_requirements("requirements.txt")
 
     print("Installing development dependencies...")
-    install_requirements("./config/r-dev-requirements.txt")
+    install_requirements("r-dev-requirements.txt")
 
     print("Installing Computer Vision dependencies...")
-    install_requirements("./config/r-cv-requirements.txt")
+    install_requirements("r-cv-requirements.txt")
 
     # Check Python is higher than 3.7
     if not sys.version_info < (3, 7):
@@ -63,7 +71,7 @@ def main() -> None:
 
     if not args.no_gui:
         print("Installing GUI dependencies...")
-        install_requirements("./config/r-gui-requirements.txt")
+        install_requirements("r-gui-requirements.txt")
 
     ret = os.system("pip install -e .")
     if ret != 0:

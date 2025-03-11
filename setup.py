@@ -4,7 +4,7 @@ from pathlib import Path
 
 from setuptools import setup, find_packages
 
-from config.version import __version__
+from group_center import __version__
 
 this_directory: Path = Path(__file__).parent
 with open(this_directory / "README.md", encoding="utf-8") as f:
@@ -29,6 +29,7 @@ setup(
     ),
     python_requires=">=3.6",  # Minimum Python version requirement / 最低Python版本要求
     install_requires=[
+        "typing-extensions",  # Typing extensions / 类型扩展
         "urllib3",  # HTTP client library / HTTP客户端库
         "requests",  # HTTP requests library / HTTP请求库
         "termcolor >= 1.0.0",  # Terminal color formatting / 终端颜色格式化

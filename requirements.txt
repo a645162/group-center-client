@@ -1,4 +1,4 @@
-typing-extensionstyping-extensions
+typing-extensions
 
 urllib3
 requests

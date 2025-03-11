@@ -8,7 +8,10 @@ current_py_path: Final[str] = os.path.abspath(__file__)
 path_dir_config: Final[str] = os.path.dirname(current_py_path)
 
 # 项目根目录路径 / Project root directory path
-path_dir_base: Final[str] = os.path.dirname(path_dir_config)
+package_dir_base: Final[str] = os.path.dirname(path_dir_config)
+
+# 项目根目录路径 / Project root directory path
+path_dir_base: Final[str] = os.path.dirname(package_dir_base)
 
 if __name__ == "__main__":
     print(path_dir_base)

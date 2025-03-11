@@ -1,7 +1,7 @@
 import os
 from typing import Final, List
 
-from config import global_config
+from group_center.config import global_config
 
 # 当前版本号 / Current version number
 __version__: Final[str] = "2.0.0"
