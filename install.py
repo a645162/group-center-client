@@ -2,8 +2,11 @@ import argparse
 import subprocess
 import sys
 import os
+from typing import Final
 
-from config.global_config import path_dir_config
+# from config.global_config import path_dir_config
+
+path_dir_config: Final[str] = "./group_center/config"
 
 
 def install_requirements(requirements_path: str) -> None:
