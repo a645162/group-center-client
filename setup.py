@@ -38,6 +38,7 @@ setup(
         "objprint",  # Object printing utility / 对象打印工具
         "psutil",  # Process and system utilities / 进程和系统工具
         "rich>=13.0.0",  # Rich text and beautiful formatting / 富文本和美化格式化
+        "tqdm",  # Progress bar / 进度条
     ],
     entry_points={
         "console_scripts": [

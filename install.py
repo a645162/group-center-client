@@ -45,6 +45,11 @@ def main() -> None:
         help="Skip installation of GUI dependencies. / 跳过GUI依赖的安装",
         action="store_true",
     )
+    parser.add_argument(
+        "--release",
+        help="Release to PyPI. / 发布到PyPI",
+        action="store_true",
+    )
 
     args = parser.parse_args()
 
@@ -65,10 +70,11 @@ def main() -> None:
         print("Installing GUI dependencies...")
         install_requirements("r-gui-requirements.txt")
 
-    ret = os.system("pip install -e .")
-    if ret != 0:
-        print("Error installing group-center-client")
-        sys.exit(1)
+    if not args.release:
+        ret = os.system("pip install -e .")
+        if ret != 0:
+            print("Error installing group-center-client")
+            sys.exit(1)
 
     print("Installation completed.")
 
