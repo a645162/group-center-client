@@ -3,8 +3,7 @@ import subprocess
 import sys
 import os
 
-from group_center.config.version import __version__
-from group_center.config.global_config import path_dir_config
+from config.global_config import path_dir_config
 
 
 def install_requirements(requirements_path: str) -> None:
@@ -39,22 +38,12 @@ def main() -> None:
     )
 
     parser.add_argument(
-        "-v",
-        "--version",
-        help="Skip installation of GUI dependencies. / 跳过GUI依赖的安装",
-        action="store_true",
-    )
-    parser.add_argument(
         "--no-gui",
         help="Skip installation of GUI dependencies. / 跳过GUI依赖的安装",
         action="store_true",
     )
 
     args = parser.parse_args()
-
-    if args.version:
-        print("group-center-client version:" + str(__version__))
-        sys.exit(0)
 
     print("Installing base dependencies...")
     install_requirements("requirements.txt")

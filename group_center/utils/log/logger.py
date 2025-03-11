@@ -1,9 +1,8 @@
-from typing import Optional, Any, Dict, Union, Type, TypeVar, cast
+from typing import Optional, Any, Dict, Union, Type, TypeVar
 from enum import Enum, auto
 import logging
 
 try:
-    from loguru import logger as loguru_logger
     from group_center.utils.log.backend_loguru import get_loguru_backend, LoguruLogger
 
     LOGURU_AVAILABLE = (
