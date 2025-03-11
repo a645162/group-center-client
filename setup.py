@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from pathlib import Path
-from typing import str
 
 from setuptools import setup, find_packages
 
@@ -47,6 +46,7 @@ setup(
             "group_center_windows_terminal = group_center.client.user.windows_terminal:main",  # Windows terminal integration / Windows终端集成
             "torch_ddp_port = group_center.tools.dl.ddp_port:main",  # Torch DDP port utility / Torch DDP端口工具
             "rtsp_viewer = group_center.tools.rtsp.rtsp_viewer:main",  # RTSP viewer CLI / RTSP查看器CLI
+            "python_cleanup = group_center.tools.user_tools.python_cleanup:main",  # Python cleanup utility / Python清理工具
         ],
     },
 )

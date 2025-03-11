@@ -50,8 +50,12 @@ def main() -> None:
 
     print("Installing base dependencies...")
     install_requirements("./config/requirements.txt")
+
     print("Installing development dependencies...")
     install_requirements("./config/r-dev-requirements.txt")
+
+    print("Installing Computer Vision dependencies...")
+    install_requirements("./config/r-cv-requirements.txt")
 
     # Check Python is higher than 3.7
     if not sys.version_info < (3, 7):

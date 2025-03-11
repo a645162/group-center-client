@@ -19,3 +19,5 @@ from . import (
     global_config,  # 全局配置模块 / Global configuration module
     version,  # 版本管理模块 / Version management module
 )
+
+from .version import __version__  # noqa: F401

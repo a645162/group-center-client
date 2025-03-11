@@ -13,6 +13,4 @@ __all__ = [
     "size_convert",  # 存储单位转换模块 / Size conversion module
 ]
 
-from .size_convert import (
-    SizeUnit,  # 存储单位枚举 / Storage unit enumeration
-)
+from . import size_convert  # 存储单位转换模块 / Size conversion module

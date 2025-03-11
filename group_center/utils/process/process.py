@@ -1,5 +1,4 @@
 import os
-import sys
 from typing import List
 from group_center.utils.process.memory import (
     get_process_memory_usage,

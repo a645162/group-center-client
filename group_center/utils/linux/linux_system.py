@@ -1,5 +1,7 @@
 import os
 import platform
+from typing import Optional
+
 from group_center.utils.command.command import cat_info
 
 

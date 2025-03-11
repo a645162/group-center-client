@@ -20,7 +20,8 @@ dependencies = [
   "tqdm",
 ]
 description = "Group Center Tools"
-dynamic = ["version"]
+# dynamic = ["version"]
+version = "2.0.0"
 license = {text = "GPLv3"}
 readme = "README.md"
 requires-python = ">=3.6"
@@ -29,11 +30,12 @@ urls = {Homepage = "https://github.com/a645162/group-center-client"}
 [tool.setuptools]
 packages = {find = {exclude = ["test"]}}
 
-[tool.setuptools.dynamic]
-version = {attr = "config.version.__version__"}
+# [tool.setuptools.dynamic]
+# version = {attr = "group_center.config.version.__version__"}
 
 [project.scripts]
 group_center_windows_terminal = "group_center.client.user.windows_terminal:main"
+python_cleanup = "group_center.tools.user_tools.python_cleanup:main"
 rtsp_viewer = "group_center.tools.rtsp.rtsp_viewer:main"
 ssh_helper = "group_center.client.machine.ssh_helper:main"
 torch_ddp_port = "group_center.tools.dl.ddp_port:main"

@@ -13,7 +13,7 @@
 # {version}
 # """
 
-__version__ = "1.0.0"
+from config import __version__  # noqa: F401
 
 from . import (
     client,  # 客户端模块 / Client module
