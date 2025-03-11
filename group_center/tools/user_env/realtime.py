@@ -15,8 +15,6 @@ def set_realtime_str(rt_str: str, pid: Optional[int] = None) -> bool:
     """
     try:
         file_path = get_rt_str_path(pid=pid)
-        if not os.path.exists(file_path):
-            return False
 
         rt_str = rt_str.strip()
         with open(file_path, "w", encoding="utf-8") as f:
@@ -45,3 +43,9 @@ def show_realtime_str(pid: Optional[int] = None) -> str:
         return content
     except Exception:
         return ""
+
+
+if __name__ == "__main__":
+    set_realtime_str("Hello, World!")
+    text: str = show_realtime_str()
+    print(text)
