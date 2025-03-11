@@ -7,15 +7,14 @@ import sys
 from pathlib import Path
 
 
-def main():
+def main() -> None:
     """Main function for uninstalling loguru.
     主函数，用于卸载loguru
     """
     try:
         os.system("pip uninstall loguru -y")
 
-        # Remove loguru configuration files
-        # 删除loguru配置文件
+        # Remove loguru configuration files / 删除loguru配置文件
         log_dir = Path("logs")
         if log_dir.exists():
             (log_dir.glob("*")) | {log_dir}

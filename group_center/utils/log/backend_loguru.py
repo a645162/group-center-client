@@ -9,7 +9,8 @@ from group_center.utils.envs import get_a_tmp_dir
 
 
 class LoguruConfig:
-    """Loguru 日志配置类"""
+    """Loguru 日志配置类
+    Loguru logging configuration class"""
 
     def __init__(
         self,
@@ -23,6 +24,17 @@ class LoguruConfig:
         "<level>{message}</level>",
         config_name: Optional[str] = None,
     ):
+        """初始化 Loguru 配置
+        Initialize Loguru configuration
+
+        Args:
+            log_dir: 日志目录 / Log directory
+            retention: 日志保留时间 / Log retention period
+            rotation: 日志轮转条件 / Log rotation condition
+            compression: 日志压缩格式 / Log compression format
+            format_str: 日志格式 / Log format
+            config_name: 配置名称 / Configuration name
+        """
         self.log_dir = log_dir or get_a_tmp_dir()
         self.retention = retention
         self.rotation = rotation
@@ -33,9 +45,10 @@ class LoguruConfig:
 
 def _configure_loguru(config: Optional[LoguruConfig] = None) -> None:
     """配置 Loguru 日志记录器
+    Configure Loguru logger
 
     Args:
-        config: Loguru 配置对象
+        config: Loguru 配置对象 / Loguru configuration object
     """
     if config is None:
         config = LoguruConfig()
@@ -74,12 +87,13 @@ def _configure_loguru(config: Optional[LoguruConfig] = None) -> None:
 
 def get_loguru_backend(config: Optional[LoguruConfig] = None) -> loguru.logger:  # type: ignore
     """获取配置好的 Loguru 日志记录器
+    Get configured Loguru logger
 
     Args:
-        config: Loguru 配置对象
+        config: Loguru 配置对象 / Loguru configuration object
 
     Returns:
-        loguru.Logger: 配置好的日志记录器
+        loguru.Logger: 配置好的日志记录器 / Configured Loguru logger
     """
     _configure_loguru(config)
     return logger

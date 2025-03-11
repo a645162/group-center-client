@@ -12,14 +12,14 @@ class TestLogger(unittest.TestCase):
     测试日志模块的单元测试类 | Unit test class for logger module
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         """设置测试前的初始化操作 | Setup method that runs before each test"""
         self.log_dir = Path("test_logs")  # 创建测试日志目录 / Create test log directory
         self.log_dir.mkdir(
             exist_ok=True
         )  # 创建目录，若已存在则不报错 / Create directory if it doesn't exist
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         """设置测试后的清理操作 | Cleanup method that runs after each test"""
         for f in self.log_dir.glob(
             "*.log"
@@ -27,7 +27,7 @@ class TestLogger(unittest.TestCase):
             os.remove(f)  # 删除日志文件 / Remove log file
         self.log_dir.rmdir()  # 删除日志目录 / Remove log directory
 
-    def test_auto_backend(self):
+    def test_auto_backend(self) -> None:
         """
         测试自动后端切换功能 | Test auto backend switching functionality
         """
@@ -58,7 +58,7 @@ class TestLogger(unittest.TestCase):
             len(log_files) > 0
         )  # 确保至少有一个日志文件存在 / Assert that there is at least one log file
 
-    def test_config_names(self):
+    def test_config_names(self) -> None:
         """
         测试不同配置名称的日志记录器 | Test different config names for logger
         """

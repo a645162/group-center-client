@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 
-def run_tests():
+def run_tests() -> None:
     """Run all tests.
     运行所有测试
     """

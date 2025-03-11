@@ -5,20 +5,20 @@ import os
 
 
 class TestLoguruBackend(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         """Initialize test environment 初始化测试环境"""
         self.log_dir = Path("test_logs")  # Directory for test logs 测试日志目录
         self.log_dir.mkdir(
             exist_ok=True
         )  # Create directory if not exists 如果目录不存在则创建
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         """Clean up test environment 清理测试环境"""
         for f in self.log_dir.glob("*.log"):  # Remove all log files 删除所有日志文件
             os.remove(f)
         self.log_dir.rmdir()  # Remove log directory 删除日志目录
 
-    def test_basic_logging(self):
+    def test_basic_logging(self) -> None:
         """Test basic logging functionality 测试基本日志功能"""
         config = LoguruConfig(
             log_dir=self.log_dir, config_name="test1"
@@ -37,7 +37,7 @@ class TestLoguruBackend(unittest.TestCase):
         print(log_file)
         self.assertTrue(log_file.exists())  # Verify log file exists 验证日志文件存在
 
-    def test_multiple_configs(self):
+    def test_multiple_configs(self) -> None:
         """Test multiple logger configurations 测试多个日志配置"""
         config1 = LoguruConfig(
             log_dir=self.log_dir, config_name="config1"

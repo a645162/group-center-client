@@ -27,6 +27,7 @@ def group_center_set_user_name(new_user_name: str) -> None:
 
 def global_enable_status() -> bool:
     """获取全局消息推送开关状态 (Get global message push enable status)
+
     Returns:
         bool: 消息推送开关状态 (Message push enable status)
     """
@@ -36,6 +37,7 @@ def global_enable_status() -> bool:
 
 def global_user_name_status() -> str:
     """获取全局用户名 (Get global user name)
+
     Returns:
         str: 全局用户名 (Global user name)
     """

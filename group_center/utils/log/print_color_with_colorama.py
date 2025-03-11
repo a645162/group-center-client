@@ -1,7 +1,15 @@
 import colorama
 
 
-def convert_str_to_colorama_color(color: str):
+def convert_str_to_colorama_color(color: str) -> str:
+    """Convert string to colorama color / 将字符串转换为colorama颜色
+
+    Args:
+        color (str): Color name / 颜色名称
+
+    Returns:
+        str: Colorama color code / Colorama颜色代码
+    """
     color = color.upper().strip()
 
     if color == "BLACK":
@@ -24,7 +32,15 @@ def convert_str_to_colorama_color(color: str):
     return colorama.Fore.RESET
 
 
-def convert_str_to_colorama_background_color(color: str):
+def convert_str_to_colorama_background_color(color: str) -> str:
+    """Convert string to colorama background color / 将字符串转换为colorama背景颜色
+
+    Args:
+        color (str): Background color name / 背景颜色名称
+
+    Returns:
+        str: Colorama background color code / Colorama背景颜色代码
+    """
     color = color.upper().strip()
 
     if color == "BLACK":
@@ -47,7 +63,17 @@ def convert_str_to_colorama_background_color(color: str):
     return colorama.Back.RESET
 
 
-def print_color(message, color: str = "", background_color: str = "", end: str = "\n"):
+def print_color(
+    message: str, color: str = "", background_color: str = "", end: str = "\n"
+) -> None:
+    """Print colored message / 打印彩色消息
+
+    Args:
+        message (str): Message to print / 要打印的消息
+        color (str, optional): Text color / 文本颜色. Defaults to "".
+        background_color (str, optional): Background color / 背景颜色. Defaults to "".
+        end (str, optional): End character / 结束字符. Defaults to "\n".
+    """
     colorama.init(autoreset=True)
 
     print(

@@ -13,6 +13,7 @@ def push_message(
     content: str, user_name: str = "", only_first_card_process: bool = True
 ) -> bool:
     """推送消息到通知系统 (Push message to notification system)
+    Push message to notification system
 
     Args:
         content (str): 消息内容 (Message content)

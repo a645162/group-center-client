@@ -12,7 +12,7 @@ def install_requirements(requirements_path: str) -> None:
     从指定文件安装Python依赖
 
     Args:
-        requirements_path (str): Path to requirements file
+        requirements_path (str): Path to requirements file / requirements文件路径
     """
     try:
         subprocess.run(["pip", "install", "-r", requirements_path], check=True)
@@ -27,18 +27,18 @@ def main() -> None:
     安装依赖的主函数
     """
     parser = argparse.ArgumentParser(
-        description="Dependency installation script for group-center-client."
+        description="Dependency installation script for group-center-client. / group-center-client的依赖安装脚本"
     )
 
     parser.add_argument(
         "-v",
         "--version",
-        help="Skip installation of GUI dependencies.",
+        help="Skip installation of GUI dependencies. / 跳过GUI依赖的安装",
         action="store_true",
     )
     parser.add_argument(
         "--no-gui",
-        help="Skip installation of GUI dependencies.",
+        help="Skip installation of GUI dependencies. / 跳过GUI依赖的安装",
         action="store_true",
     )
 

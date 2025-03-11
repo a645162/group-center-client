@@ -9,18 +9,18 @@ class TestLoggingBackend(unittest.TestCase):
     测试日志记录后端的单元测试类 | Unit test class for logging backend
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         """设置测试前的初始化操作 | Setup method that runs before each test"""
         self.log_dir = Path("test_logs")
         self.log_dir.mkdir(exist_ok=True)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         """设置测试后的清理操作 | Cleanup method that runs after each test"""
         for f in self.log_dir.glob("*.log"):
             os.remove(f)
         self.log_dir.rmdir()
 
-    def test_basic_logging(self):
+    def test_basic_logging(self) -> None:
         """
         测试基本的日志记录功能 | Test basic logging functionality
         """
@@ -38,7 +38,7 @@ class TestLoggingBackend(unittest.TestCase):
         print(log_file)
         self.assertTrue(log_file.exists())
 
-    def test_multiple_configs(self):
+    def test_multiple_configs(self) -> None:
         """
         测试多个配置的日志记录器 | Test multiple config loggers
         """

@@ -4,7 +4,8 @@ from typing import Dict, Optional
 
 
 class LogLevel(Enum):
-    """日志级别枚举"""
+    """日志级别枚举
+    Log level enumeration"""
 
     DEBUG = logging.DEBUG  # 10
     INFO = logging.INFO  # 20
@@ -15,12 +16,14 @@ class LogLevel(Enum):
 
     @property
     def level_name(self) -> str:
-        """获取日志级别名称"""
+        """获取日志级别名称
+        Get log level name"""
         return self.name
 
     @property
     def foreground_color(self) -> str:
-        """获取前景色"""
+        """获取前景色
+        Get foreground color"""
         return {
             "DEBUG": "cyan",
             "INFO": "white",
@@ -32,7 +35,8 @@ class LogLevel(Enum):
 
     @property
     def background_color(self) -> str:
-        """获取背景色"""
+        """获取背景色
+        Get background color"""
         return {
             "DEBUG": "",
             "INFO": "",
@@ -44,18 +48,20 @@ class LogLevel(Enum):
 
     @property
     def level_color(self) -> str:
-        """获取级别颜色"""
+        """获取级别颜色
+        Get level color"""
         return self.foreground_color
 
     @classmethod
     def from_str(cls, level_str: str) -> Optional["LogLevel"]:
         """从字符串转换日志级别
+        Convert string to log level
 
         Args:
-            level_str: 日志级别字符串
+            level_str: 日志级别字符串 / Log level string
 
         Returns:
-            日志级别枚举值，如果无效返回None
+            日志级别枚举值，如果无效返回None / Log level enum value, returns None if invalid
         """
         try:
             return cls[level_str.upper()]
@@ -64,7 +70,8 @@ class LogLevel(Enum):
 
 
 class LogColorConfig:
-    """日志颜色配置"""
+    """日志颜色配置
+    Log color configuration"""
 
     def __init__(
         self,
@@ -72,13 +79,22 @@ class LogColorConfig:
         foreground_color: str = "",
         background_color: str = "",
     ):
+        """初始化日志颜色配置
+        Initialize log color configuration
+
+        Args:
+            level_color: 级别颜色 / Level color
+            foreground_color: 前景色 / Foreground color
+            background_color: 背景色 / Background color
+        """
         self.level_color = level_color
         self.foreground_color = foreground_color
         self.background_color = background_color
 
 
 class LogLevelManager:
-    """日志级别管理器"""
+    """日志级别管理器
+    Log level manager"""
 
     _instance = None
     _level_colors: Dict[LogLevel, LogColorConfig] = {
@@ -103,42 +119,46 @@ class LogLevelManager:
     @classmethod
     def set_level(cls, level: LogLevel) -> None:
         """设置当前日志级别
+        Set current log level
 
         Args:
-            level: 要设置的日志级别
+            level: 要设置的日志级别 / Log level to set
         """
         cls._current_level = level
 
     @classmethod
     def get_level(cls) -> LogLevel:
         """获取当前日志级别
+        Get current log level
 
         Returns:
-            当前日志级别
+            当前日志级别 / Current log level
         """
         return cls._current_level
 
     @classmethod
     def get_color_config(cls, level: LogLevel) -> LogColorConfig:
         """获取日志级别对应的颜色配置
+        Get color configuration for log level
 
         Args:
-            level: 日志级别
+            level: 日志级别 / Log level
 
         Returns:
-            日志颜色配置
+            日志颜色配置 / Log color configuration
         """
         return cls._level_colors.get(level, LogColorConfig())
 
     @classmethod
     def to_logging_level(cls, level: LogLevel) -> int:
         """将日志级别转换为logging模块的级别
+        Convert log level to logging module level
 
         Args:
-            level: 日志级别
+            level: 日志级别 / Log level
 
         Returns:
-            logging模块对应的级别值
+            logging模块对应的级别值 / Corresponding logging module level value
         """
         level_map = {
             LogLevel.DEBUG: logging.DEBUG,
@@ -153,8 +173,9 @@ class LogLevelManager:
 
 def get_log_level() -> LogLevel:
     """获取当前日志级别
+    Get current log level
 
     Returns:
-        当前日志级别
+        当前日志级别 / Current log level
     """
     return LogLevelManager.get_level()

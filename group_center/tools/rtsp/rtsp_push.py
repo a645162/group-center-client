@@ -7,6 +7,13 @@ import numpy as np
 
 
 class RtspPush:
+    """RTSP 推流类
+    RTSP Push Class
+
+    用于通过RTSP协议推送视频流
+    Used to push video stream via RTSP protocol
+    """
+
     __rtst_url: str = ""
     __opened: bool = False
 
@@ -32,6 +39,21 @@ class RtspPush:
         fps: float = 30,
         interval: bool = True,
     ):
+        """初始化RTSP推流实例
+        Initialize RTSP push instance
+
+        Args:
+            rtsp_url (str): RTSP服务器地址
+            rtsp_url (str): RTSP server URL
+            width (int, optional): 视频宽度. Defaults to 1920.
+            width (int, optional): Video width. Defaults to 1920.
+            height (int, optional): 视频高度. Defaults to 1080.
+            height (int, optional): Video height. Defaults to 1080.
+            fps (float, optional): 帧率. Defaults to 30.
+            fps (float, optional): Frame rate. Defaults to 30.
+            interval (bool, optional): 是否启用帧间隔控制. Defaults to True.
+            interval (bool, optional): Whether to enable frame interval control. Defaults to True.
+        """
         self.__rtst_url = rtsp_url
 
         self.__command = []
@@ -65,14 +87,35 @@ class RtspPush:
 
     @property
     def is_opened(self) -> bool:
+        """检查推流是否已开启
+        Check if streaming is opened
+
+        Returns:
+            bool: 推流是否已开启
+            bool: Whether streaming is opened
+        """
         return self.__opened
 
     @property
     def rtsp_url(self) -> str:
+        """获取RTSP服务器地址
+        Get RTSP server URL
+
+        Returns:
+            str: RTSP服务器地址
+            str: RTSP server URL
+        """
         return self.__rtst_url
 
     @property
     def width(self) -> int:
+        """获取视频宽度
+        Get video width
+
+        Returns:
+            int: 视频宽度
+            int: Video width
+        """
         return self.__width
 
     @width.setter
@@ -99,6 +142,13 @@ class RtspPush:
 
     @property
     def fps(self) -> float:
+        """获取视频帧率
+        Get video frame rate
+
+        Returns:
+            float: 视频帧率
+            float: Video frame rate
+        """
         return self.__fps
 
     @fps.setter
@@ -110,7 +160,14 @@ class RtspPush:
 
         self.update_command()
 
-    def set_recommend_encoder(self):
+    def set_recommend_encoder(self) -> None:
+        """根据系统硬件自动推荐编码器
+        Automatically recommend encoder based on system hardware
+
+        该方法会检测系统GPU类型并设置相应的编码器
+        This method detects system GPU type and sets corresponding encoder
+        """
+        """Set recommended video encoder based on detected hardware"""
         # Is Linux
         if self.is_linux():
             # Get GPU List
@@ -133,7 +190,13 @@ class RtspPush:
         else:
             self.set_encoder_cpu()
 
-    def set_encoder_cpu(self):
+    def set_encoder_cpu(self) -> None:
+        """设置CPU编码器参数
+        Set CPU encoder parameters
+
+        该方法会设置使用CPU进行视频编码的参数
+        This method sets parameters for CPU video encoding
+        """
         self.__params_encoder = [
             "-c:v",
             "libx264",
@@ -141,15 +204,15 @@ class RtspPush:
             "ultrafast",
         ]
 
-    def set_encoder_gpu_intel(self):
+    def set_encoder_gpu_intel(self) -> None:
+        """设置Intel GPU编码器参数/Set Intel GPU encoder parameters"""
         self.__params_encoder = [
             "-c:v",
             "h264_qsv",
         ]
-
         self.update_command()
 
-    def set_encoder_gpu_nvidia(self):
+    def set_encoder_gpu_nvidia(self) -> None:
         self.__params_encoder = [
             "-c:v",
             "h264_nvenc",
@@ -157,7 +220,7 @@ class RtspPush:
 
         self.update_command()
 
-    def set_encoder_gpu_amd(self):
+    def set_encoder_gpu_amd(self) -> None:
         self.__params_encoder = [
             "-c:v",
             "h264_amf",
@@ -248,7 +311,7 @@ class RtspPush:
 
         return True
 
-    def push_cv2(self, frame):
+    def push_cv2(self, frame: np.ndarray) -> None:
         if not self.__before_push():
             return
 
@@ -265,7 +328,7 @@ class RtspPush:
 
         self.__last_time = time.time()
 
-    def push_pillow(self, image, convert_to_bgr: bool = True):
+    def push_pillow(self, image: Image.Image, convert_to_bgr: bool = True) -> None:
         if not self.__before_push():
             return
 
