@@ -33,8 +33,19 @@ def get_options() -> argparse.Namespace:
     parser.add_argument("--center-name", type=str, default="")
     parser.add_argument("--center-password", type=str, default="")
 
-    parser.add_argument("--add-user-txt", type=str, default="")
+    parser.add_argument(
+        "--add-user-txt",
+        type=str,
+        default="add_user.txt",
+        nargs="?",
+        const="add_user.txt",
+    )
     parser.add_argument("--user-password", type=str, default="")
+    parser.add_argument(
+        "--user-password-file",
+        type=str,
+        help="从文件中读取密码，避免特殊字符问题 / Read password from file to avoid special character issues",
+    )
 
     parser.add_argument("--user-group", type=str, default="")
 
@@ -55,6 +66,14 @@ def get_options() -> argparse.Namespace:
     )
 
     opt = parser.parse_args()
+
+    # 如果指定了密码文件，则从文件中读取密码
+    if opt.user_password_file:
+        try:
+            with open(opt.user_password_file, "r") as f:
+                opt.user_password = f.read().strip()
+        except Exception as e:
+            print(f"无法从文件读取密码: {e}")
 
     return opt
 
@@ -97,15 +116,15 @@ def save_add_user_text(opt: argparse.Namespace, user_info_list: List[UserInfo]) 
     save_path: str = opt.add_user_txt
     password: str = opt.user_password
 
-    if not save_path:
-        save_path = "add_user.txt"
-
     linux_add_user_text = linux_add_user_txt(
         user_info_list=user_info_list, password=password
     )
 
     with open(save_path, "w") as f:
         f.write(linux_add_user_text)
+
+    print("Add user text saved to:", save_path)
+    print(f"Please run 'newusers {save_path}' to add users.")
 
 
 def main() -> None:
