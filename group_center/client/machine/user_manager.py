@@ -36,9 +36,10 @@ def get_options() -> argparse.Namespace:
     parser.add_argument(
         "--add-user-txt",
         type=str,
-        default="add_user.txt",
+        default=None,
         nargs="?",
         const="add_user.txt",
+        help="保存用户添加命令到文本文件 / Save user addition commands to a text file",
     )
     parser.add_argument("--user-password", type=str, default="")
     parser.add_argument(
@@ -142,6 +143,8 @@ def main() -> None:
     user_dict_list = json.loads(user_config_json)
     user_info_list: List[UserInfo] = get_user_info_list(user_dict_list)
 
+    print(f"Total User Count: {len(user_info_list)}")
+
     if opt.year > 0:
         user_info_list = [
             user_info for user_info in user_info_list if user_info.year == opt.year
@@ -155,7 +158,7 @@ def main() -> None:
         have_option = True
         remove_linux_users(user_info_list)
 
-    if opt.add_user_txt:
+    if opt.add_user_txt is not None:
         have_option = True
         save_add_user_text(opt, user_info_list)
 
