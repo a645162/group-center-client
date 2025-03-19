@@ -143,3 +143,41 @@ def get_rt_str_path(pid: Optional[int] = None) -> Path:
         Real-time string file path object
     """
     return PathUtils.get_rt_str_path(pid)
+
+
+def cleanup_unused_rt_files():
+    """清理未使用的实时字符串文件
+    Clean up unused real-time string files
+    """
+
+    # Check is Linux
+    if sys.platform != "linux":
+        return
+
+    tmpfs_path: Optional[Path] = PathUtils.get_tmpfs_path()
+    if tmpfs_path is None:
+        return
+
+    for file in tmpfs_path.glob("nvi_notify_*_rt_str.txt"):
+        if not file.exists():
+            continue
+
+        file_name = file.name
+        import re
+
+        pid = re.findall(r"nvi_notify_(\d+)_rt_str.txt", file_name)[0]
+        if pid.isdigit():
+            pid = int(pid)
+        else:
+            continue
+
+        try:
+            if not os.path.exists(f"/proc/{pid}"):
+                os.remove(file)
+        except Exception as e:
+            print(f"Failed to remove file {file}: {e}")
+            continue
+
+
+if __name__ == "__main__":
+    cleanup_unused_rt_files()
