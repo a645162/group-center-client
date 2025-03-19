@@ -9,7 +9,7 @@ from group_center.core.config_core import (
     MachineConfig,
     get_env_machine_config,
 )  # 配置管理 / Configuration management
-from group_center.utils.log import get_logger  # 日志模块 / Logging module
+from group_center.utils.log.logger import get_logger  # 日志模块 / Logging module
 
 # 全局配置变量 / Global configuration variables
 GROUP_CENTER_URL: str = ""  # Group Center服务URL / Group Center service URL

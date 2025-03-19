@@ -19,9 +19,7 @@ def get_options() -> argparse.Namespace:
     parser.add_argument(
         "-n", "--user-name", help="用户名称 / User name", type=str, default=""
     )
-    parser.add_argument(
-        "-m", "--message", help="消息内容 / Message content", type=str, default=""
-    )
+    parser.add_argument("message", help="消息内容 / Message content", type=str)
     parser.add_argument(
         "-s",
         "--screen",
@@ -48,9 +46,10 @@ def main():
 
     if opt.screen:
         screen_name = ENV_SCREEN_SESSION_NAME()
+        # print("Screen", screen_name)
 
     if screen_name:
-        screen_name = f"[{screen_name}]"
+        screen_name = f"[{screen_name}] "
 
     message = f"{screen_name}{message}"
 

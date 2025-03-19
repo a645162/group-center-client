@@ -23,17 +23,20 @@ Group Center(https://github.com/a645162/group-center) Client for Python
 - [x] User Tools(Python Package)
     - [x] (Python)Push Message To `nvi-notify` finally push to `group-center`
     - [x] (Terminal)Push Message To `nvi-notify` finally push to `group-center`
-- [ ] Machine Tools(Command Line Tools)
+- [x] Machine Tools(Command Line Tools)
     - [x] User Manage Tool
     - [x] SSH Helper
 - [ ] User Tools(Command Line Tools)
 
 ## Command Line Tools
 
-- group_center_machine_user
-- group_center_ssh_helper
-- group_center_user_message
-- group_center_terminal
+- machine_user
+- ssh_helper
+- user_message
+- group_center_windows_terminal
+- torch_ddp_port
+- rtsp_viewer
+- python_cleanup
 
 ## Install
 
@@ -42,7 +45,7 @@ pip install li-group-center -i https://pypi.python.org/simple
 ```
 
 ```bash
-pip install li-group-center==2.0.0 -i https://pypi.python.org/simple
+pip install li-group-center==2.1.0 -i https://pypi.python.org/simple
 ```
 
 ## Upgrade
@@ -58,11 +61,10 @@ pip install --upgrade li-group-center -i https://pypi.python.org/simple
 #### Terminal Command
 
 - `-n,--user-name` to set username.
-- `-m,--message` to set message content.
 - `-s,--screen` to contain screen session name.
 
 ```bash
-group_center_user_message -m "Test Message~"
+user_message "Test Message~"
 ```
 
 #### Python Version
@@ -70,7 +72,7 @@ group_center_user_message -m "Test Message~"
 User use their own account to push message to Group Center.
 
 ```python
-from group_center.user_tools import *
+from group_center.tools.user_tools import *
 
 # Enable Group Center
 group_center_set_is_valid()
@@ -82,7 +84,7 @@ push_message("Test Message~")
 User uses a public account to push a message to Group Center.
 
 ```python
-from group_center.user_tools import *
+from group_center.tools.user_tools import *
 
 # Enable Group Center
 group_center_set_is_valid()
@@ -101,7 +103,7 @@ push_message("Test Message~", "konghaomin")
 ```python
 import argparse
 
-from group_center.user_tools import *
+from group_center.tools.user_tools import *
 
 parser = argparse.ArgumentParser(description="Example of Group Center")
 

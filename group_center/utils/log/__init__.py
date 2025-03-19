@@ -18,6 +18,3 @@ from . import (
     log_level,  # 日志级别管理模块 / Log level management module
     logger,  # 日志记录器模块 / Logger module
 )
-
-from .log_level import *
-from .logger import *
