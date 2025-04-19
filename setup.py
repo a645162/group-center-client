@@ -47,6 +47,7 @@ setup(
             "user_message = group_center.client.user.shell_message:main",  # User message CLI / 用户消息CLI
             "group_center_windows_terminal = group_center.client.user.windows_terminal:main",  # Windows terminal integration / Windows终端集成
             "torch_ddp_port = group_center.tools.dl.ddp_port:main",  # Torch DDP port utility / Torch DDP端口工具
+            "debugpy_port = group_center.tools.dl.debugpy_port:main",  # DebugPy port utility / DebugPy端口工具
             "rtsp_viewer = group_center.tools.rtsp.rtsp_viewer:main",  # RTSP viewer CLI / RTSP查看器CLI
             "python_cleanup = group_center.tools.user_tools.python_cleanup:main",  # Python cleanup utility / Python清理工具
         ],

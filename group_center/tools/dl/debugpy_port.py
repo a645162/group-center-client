@@ -3,15 +3,15 @@ import sys
 from group_center.utils.network.port import check_port
 
 
-def get_torch_distributed_port() -> int:
-    """Get an available port for PyTorch distributed training
-    获取用于PyTorch分布式训练的可用端口
+def get_debugpy_port() -> int:
+    """Get an available port for DebugPy debugging
+    获取用于DebugPy调试的可用端口
 
     Returns:
-        int: An available port number starting from 29500
-        从29500开始的可用端口号
+        int: An available port number starting from 9501
+        从9501开始的可用端口号
     """
-    port = 29500
+    port = 9501
 
     if sys.platform not in ["linux", "win32", "darwin"]:
         return port
@@ -25,7 +25,7 @@ def main():
     """Main function to print the available port
     主函数，打印可用端口
     """
-    print(get_torch_distributed_port())
+    print(get_debugpy_port())
 
 
 if __name__ == "__main__":
