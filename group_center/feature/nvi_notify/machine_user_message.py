@@ -1,7 +1,7 @@
 from group_center.feature.nvi_notify import notify_api
 from group_center.utils.linux.linux_user import get_current_user_name
 
-__all__: list[str] = [
+__all__ = [
     "machine_user_message_via_local_nvi_notify"
 ]  # 导出列表 / Export list
 
