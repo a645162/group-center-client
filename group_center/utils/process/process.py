@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Union
 from group_center.utils.process.memory import (
     get_process_memory_usage,
     get_total_memory_usage,
@@ -79,13 +79,13 @@ def get_chain_of_process(pid: int) -> List[int]:
     return chain
 
 
-def check_is_python_process(pid: int | str) -> bool:
+def check_is_python_process(pid: Union[int, str]) -> bool:
     """
     检查给定进程ID是否属于Python进程
     Check if the given process ID belongs to a Python process.
 
     Args:
-        pid (int | str): 进程ID，可以是整数或字符串 / Process ID, can be integer or string
+        pid (Union[int, str]): 进程ID，可以是整数或字符串 / Process ID, can be integer or string
 
     Returns:
         bool: 如果是Python进程返回True，否则返回False / Returns True if it's a Python process, False otherwise
