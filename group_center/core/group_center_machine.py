@@ -179,6 +179,9 @@ def __group_center_login(username: str, password: str) -> bool:
     # Init logger if not set
     init_logger()
 
+    username = username.strip()
+    password = password.strip()
+
     LOGGER.info("[Group Center] Login Start")
     url: str = group_center_get_url(target_api="/auth/client/auth")
     try:
@@ -186,19 +189,24 @@ def __group_center_login(username: str, password: str) -> bool:
         password_display: str = group_center_encrypt.encrypt_password_to_display(
             password
         )
-        password_encoded: str = group_center_encrypt.get_password_hash(password)
+        password_encoded: str = password
+        password_encoded: str = group_center_encrypt.get_password_hash(password_encoded)
         LOGGER.info(
             f"[Group Center] Auth userName:{username} password:{password_display}"
         )
 
+        params={"userName": username, "password": password_encoded}
+        # print(f"[Group Center] Auth params: {params}")
+
+        # 发送GET请求 / Send GET request
         response: Response = requests.get(
             url=url,
-            params={"userName": username, "password": password_encoded},
+            params=params,
             timeout=10,
         )
 
         if response.status_code != 200:
-            LOGGER.error(f"[Group Center] Auth Failed: {response.text}")
+            LOGGER.error(f"[Group Center] Auth Failed({response.status_code}): {response.text}")
             return False
 
         response_dict: Dict[str, Any] = json.loads(response.text)
