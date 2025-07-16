@@ -20,7 +20,14 @@ def kill_process(pid: int):
 def kill_by_pid(pid: int):
     top_pid = get_top_python_process_pid(pid)
     if top_pid == -1:
-        print("No python process found in chain, skipping.")
+        # 如果父进程链中没有python进程，检查当前pid是否为python进程
+        if check_is_python_process(pid):
+            print("No python process found in parent chain, killing current process.")
+            kill_process(pid)
+        else:
+            print(
+                "No python process found in chain and current process is not python, skipping."
+            )
         return
     kill_process(top_pid)
 
@@ -44,9 +51,13 @@ def main():
     args = parser.parse_args()
 
     if args.pid is not None:
+        print(f"Attempting to kill process with pid: {args.pid}")
         kill_by_pid(args.pid)
     elif args.user is not None:
+        print(f"Attempting to kill processes for user: {args.user}")
         kill_by_user(args.user)
+    else:
+        print("Please specify either --pid or --user argument.")
 
 
 if __name__ == "__main__":
