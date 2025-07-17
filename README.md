@@ -26,17 +26,75 @@ Group Center(https://github.com/a645162/group-center) Client for Python
 - [x] Machine Tools(Command Line Tools)
     - [x] User Manage Tool
     - [x] SSH Helper
-- [ ] User Tools(Command Line Tools)
+- [x] User Tools(Command Line Tools)
+    - [x] pykill - Python进程终止工具
+    - [x] dummy_gpu - 虚拟GPU工具
 
 ## Command Line Tools
 
-- machine_user
-- ssh_helper
-- user_message
-- group_center_windows_terminal
-- torch_ddp_port
-- rtsp_viewer
-- python_cleanup
+### 用户管理工具 (user_manager)
+```bash
+user_manager [options]
+Options:
+  --host GROUP_CENTER_URL          Group Center服务地址
+  --center-name MACHINE_NAME       机器短名称
+  --center-password MACHINE_PASS   机器密码
+  --create-users                  创建用户
+  --remove-users                  删除用户
+  --user-password PASSWORD        用户密码
+  --user-group GROUP_NAME         用户组名
+  --year YEAR                     按年份筛选用户
+```
+
+### SSH管理工具 (ssh_helper)
+```bash
+ssh_helper [options]
+Options:
+  --host GROUP_CENTER_URL          Group Center服务地址
+  --center-name MACHINE_NAME       机器短名称
+  --center-password MACHINE_PASS   机器密码
+  --backup (-b)                   备份模式
+  --restore (-r)                  恢复模式
+  --all (-a)                      所有用户模式(需root权限)
+
+交互模式:
+  1 - 备份当前用户SSH配置
+  2 - 恢复当前用户SSH配置
+  3 - 仅恢复authorized_keys
+  4 - 仅恢复密钥对
+  5 - 备份所有用户(root)
+  6 - 恢复所有用户(root)
+  c - 生成新SSH密钥
+```
+
+### 用户消息工具 (user_message)
+```bash
+user_message "消息内容" [options]
+Options:
+  -n, --user-name USERNAME  指定用户名
+  -s, --screen             包含screen会话名称
+```
+
+### Python进程管理工具 (pykill)
+```bash
+pykill --pid PID           终止指定PID的Python进程及其父进程链中的Python进程
+pykill --user USERNAME     终止指定用户的所有Python进程
+```
+
+### 虚拟GPU任务工具 (dummy_gpu)
+
+使用PyTorch，虚拟出一个GPU任务，占据显存（调试使用）
+
+```bash
+dummy_gpu --size SIZE_MB   占用指定大小的GPU显存(单位MB)
+```
+
+### 其他工具
+- group_center_windows_terminal - Windows终端集成
+- torch_ddp_port - Torch DDP端口工具
+- debugpy_port - DebugPy端口工具  
+- rtsp_viewer - RTSP查看器CLI
+- python_cleanup - Python清理工具
 
 ## Install
 
