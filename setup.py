@@ -50,8 +50,9 @@ setup(
             "debugpy_port = group_center.tools.dl.debugpy_port:main",  # DebugPy port utility / DebugPy端口工具
             "rtsp_viewer = group_center.tools.rtsp.rtsp_viewer:main",  # RTSP viewer CLI / RTSP查看器CLI
             "python_cleanup = group_center.tools.user_tools.python_cleanup:main",  # Python cleanup utility / Python清理工具
-            "pykill = group_center.tools.user_tools.pykill:main",  # 新增pykill命令
-            "dummy_gpu = group_center.tools.user_tools.dummy_gpu:main",  # 新增dummy_gpu命令
+            "pykill = group_center.tools.user_tools.pykill:main",  # pykill命令
+            "dummy_gpu = group_center.tools.user_tools.dummy_gpu:main",
+            "torch_info = group_center.utils.anaconda.torch_info:main",  # torch_info命令
         ],
     },
 )
