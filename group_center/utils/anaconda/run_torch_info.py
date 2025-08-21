@@ -27,7 +27,7 @@ def run_torch_info(python_interpreter: str, function_name: str) -> Optional[str]
         if not os.path.exists(torch_info_path):
             raise FileNotFoundError(f"torch_info.py not found at: {torch_info_path}")
 
-        print(f"Using torch_info.py at: {torch_info_path}")
+        # print(f"Using torch_info.py at: {torch_info_path}")
 
         # 使用指定的Python解释器直接执行文件中的函数
         result = subprocess.run(
