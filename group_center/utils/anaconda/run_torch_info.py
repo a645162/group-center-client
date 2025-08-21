@@ -3,8 +3,8 @@ import sys
 import os
 from typing import Optional
 
-from group_center.utils.anaconda.torch_info import (
-    get_torch_info_utils_py_path)
+from group_center.utils.anaconda.torch_info import get_torch_info_utils_py_path
+
 
 def run_torch_info(python_interpreter: str, function_name: str) -> Optional[str]:
     """
@@ -20,8 +20,8 @@ def run_torch_info(python_interpreter: str, function_name: str) -> Optional[str]
     """
     try:
         # 获取torch_info.py的绝对路径
-        
-        torch_info_path = get_torch_info_utils_py_path
+
+        torch_info_path = get_torch_info_utils_py_path()
         current_dir = os.path.dirname(torch_info_path)
 
         if not os.path.exists(torch_info_path):
