@@ -34,13 +34,19 @@ def send_to_nvi_notify(dict_data: Dict[str, Any], target: str) -> bool:
     Returns:
         bool: 是否发送成功 / Whether the request was successful
     """
-    
-    LOGGER.debug(f"[NVI Notify] 发送数据到 {get_nvi_notify_api_url(target)}: {dict_data}")
-    
+
+    LOGGER.debug(
+        f"[NVI Notify] 发送数据到 {get_nvi_notify_api_url(target)}: {dict_data}"
+    )
+
     response = requests.post(
-        get_nvi_notify_api_url(target), data=dict_data
-    )  # 发送POST请求 / Send POST request
-    
-    LOGGER.debug(f"[NVI Notify] 响应状态码: {response.status_code}, 响应内容: {response.text}")
+        get_nvi_notify_api_url(target),
+        data=dict_data,
+        proxies={"http": None, "https": None},
+    )  # 发送POST请求 / Send POST request，不使用http_proxy
+
+    LOGGER.debug(
+        f"[NVI Notify] 响应状态码: {response.status_code}, 响应内容: {response.text}"
+    )
 
     return response.status_code == 200  # 返回是否成功 / Return whether successful

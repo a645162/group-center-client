@@ -1,7 +1,6 @@
 import unittest
 from io import StringIO
 import sys
-from typing import Any
 from group_center.utils.log.backend_print import get_print_backend
 
 
