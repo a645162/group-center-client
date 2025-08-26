@@ -26,6 +26,12 @@ def get_options() -> argparse.Namespace:
         help="包含屏幕会话名称 / Include screen session name",
         action="store_true",
     )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        help="是否输出详细信息 / Whether to output verbose information",
+        action="store_true",
+    )
 
     opt = parser.parse_args()
 
@@ -54,12 +60,13 @@ def main():
     message = f"{screen_name}{message}"
 
     # 启用 Group Center / Enable Group Center
-    group_center_set_is_valid()
+    group_center_set_is_valid(enable=True)
     group_center_set_user_name(user_name)
 
-    push_message(message)
-
-    print("消息已发送! / Message sent!")
+    if push_message(message):
+        print("消息已发送! / Message sent!")
+    else:
+        print("消息发送失败！ / Message send failed!!!")
 
 
 if __name__ == "__main__":

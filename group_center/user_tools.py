@@ -16,5 +16,7 @@ if __name__ == "__main__":
     now_str: str = now.strftime("%Y-%m-%d %H:%M:%S")  # 格式化时间 / Format time
 
     # 测试消息推送 / Test message push
-    push_message(f"测试消息推送 | Test message push: {now_str}")
-    print("消息推送完毕！ | Message push completed!")
+    if push_message(f"测试消息推送 | Test message push: {now_str}"):
+        print("消息推送完毕！ | Message push completed!")
+    else:
+        print("消息推送失败！ | Message push failed!")

@@ -1,9 +1,11 @@
 from group_center.feature.nvi_notify import notify_api
 from group_center.utils.linux.linux_user import get_current_user_name
 
-__all__ = [
-    "machine_user_message_via_local_nvi_notify"
-]  # 导出列表 / Export list
+from group_center.utils.log.logger import get_logger
+
+LOGGER = get_logger("user_message")
+
+__all__ = ["machine_user_message_via_local_nvi_notify"]  # 导出列表 / Export list
 
 
 def machine_user_message_via_local_nvi_notify(
@@ -39,12 +41,15 @@ def machine_user_message_via_local_nvi_notify(
     }
 
     try:
-        notify_api.send_to_nvi_notify(  # 发送NVI通知 / Send NVI notify
+        LOGGER.debug(f"[via NVI Notify] 发送消息到用户 ({user_name}): {content}")
+        # LOGGER.debug(f"[via NVI Notify] 发送数据: {data_dict}")
+
+        ret = notify_api.send_to_nvi_notify(  # 发送NVI通知 / Send NVI notify
             dict_data=data_dict,
             target="/machine_user_message",  # 目标路径 / Target path
         )
 
-        return True
+        return ret
     except Exception:  # 捕获所有异常 / Catch all exceptions
         # Ignore all errors to avoid program crash.
         # 忽略所有错误以避免程序崩溃

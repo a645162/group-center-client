@@ -34,6 +34,8 @@ def push_message(
     if not user_name:
         user_name = global_user_name_status().strip()
 
+    LOGGER.debug(f"[Group Center] 发送消息到用户 ({user_name}): {content}")
+
     return machine_user_message_via_local_nvi_notify(
         content=content, user_name=user_name
     )

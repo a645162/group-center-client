@@ -24,6 +24,9 @@ def group_center_set_user_name(new_user_name: str) -> None:
     global global_user_name
     global_user_name = new_user_name.strip()
 
+    if not global_user_name:
+        global_user_name = get_current_login_user_name()
+
 
 def global_enable_status() -> bool:
     """获取全局消息推送开关状态 (Get global message push enable status)
@@ -43,3 +46,14 @@ def global_user_name_status() -> str:
     """
     global global_user_name
     return global_user_name
+
+
+def get_current_login_user_name() -> str:
+    """获取当前登录用户名 (Get current login user name)
+
+    Returns:
+        str: 当前登录用户名 (Current login user name)
+    """
+    import os
+
+    return os.getlogin()

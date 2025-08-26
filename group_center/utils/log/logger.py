@@ -1,6 +1,7 @@
 from typing import Optional, Any, Dict, Union, Type, TypeVar
 from enum import Enum, auto
 import logging
+import sys
 
 try:
     from group_center.utils.log.backend_loguru import get_loguru_backend, LoguruLogger
@@ -68,13 +69,23 @@ class LoggerManager:
     _using_custom_logger: bool = (
         False  # 标记是否使用了自定义logger | Flag indicating whether a custom logger is being used
     )
+    _verbose_checked: bool = False  # 标记是否已检查过verbose参数 | Flag indicating whether verbose parameter has been checked
 
     def __new__(cls: Type[T]) -> T:
         """Create singleton instance / 创建单例实例"""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
+            cls._check_verbose_arg()  # 在初始化时检查verbose参数 | Check verbose argument during initialization
             cls._initialize_logger()
         return cls._instance
+
+    @classmethod
+    def _check_verbose_arg(cls: Type[T]) -> None:
+        """检查命令行参数中是否包含--verbose | Check if --verbose is in command line arguments"""
+        if not cls._verbose_checked:
+            if '--verbose' in sys.argv or '-v' in sys.argv:
+                cls._log_level = LogLevel.DEBUG
+            cls._verbose_checked = True
 
     @classmethod
     def _initialize_logger(cls: Type[T]) -> None:
@@ -157,6 +168,9 @@ class LoggerManager:
         Returns:
             LoggerType: 日志记录器实例 | Logger instance
         """
+        # 每次获取logger时都检查verbose参数（支持运行时参数变化）| Check verbose argument each time getting logger (support runtime parameter changes)
+        cls._check_verbose_arg()
+
         # 生成唯一键 | Generate unique key
         key = f"{config_name or 'default'}:{name or 'root'}"
 
