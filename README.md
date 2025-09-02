@@ -183,7 +183,7 @@ pip install li-group-center -i https://pypi.python.org/simple
 ```
 
 ```bash
-pip install li-group-center==2.4.2 -i https://pypi.python.org/simple
+pip install li-group-center==2.4.3 -i https://pypi.python.org/simple
 ```
 
 ## Upgrade
@@ -195,6 +195,8 @@ pip install --upgrade li-group-center -i https://pypi.python.org/simple
 ## Feature(User)
 
 ### Machine User Message
+
+Use Environment variable `NVI_NOTIFY_IGNORE_USER_MSG=1` to ignore all!
 
 #### Terminal Command
 

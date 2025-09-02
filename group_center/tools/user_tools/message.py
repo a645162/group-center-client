@@ -1,3 +1,5 @@
+import os
+
 from group_center.feature.nvi_notify.machine_user_message import (
     machine_user_message_via_local_nvi_notify,
 )
@@ -35,6 +37,11 @@ def push_message(
         user_name = global_user_name_status().strip()
 
     LOGGER.debug(f"[Group Center] 发送消息到用户 ({user_name}): {content}")
+
+    # Check Env "NVI_NOTIFY_IGNORE_USER_MSG"
+    if os.getenv("NVI_NOTIFY_IGNORE_USER_MSG", "0") == "1":
+        LOGGER.debug("[Group Center] 环境变量 NVI_NOTIFY_IGNORE_USER_MSG=1，忽略发送消息")
+        return False
 
     return machine_user_message_via_local_nvi_notify(
         content=content, user_name=user_name
