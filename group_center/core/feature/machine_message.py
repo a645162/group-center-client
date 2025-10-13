@@ -78,7 +78,11 @@ def send_dict_to_center(data: dict, target: str) -> bool:
         return False
 
 
-task_queue: Queue = Queue()
+# 重发队列 - 用于重要消息，失败会重试
+retry_queue: Queue = Queue()
+
+# 无重发队列 - 用于心跳包等不重要消息，失败不重试
+no_retry_queue: Queue = Queue()
 
 
 class GroupCenterWorkThread(threading.Thread):
@@ -103,37 +107,53 @@ class GroupCenterWorkThread(threading.Thread):
         while not self._stop_event.is_set():
             group_center_machine.get_access_key()
 
+            # 优先处理无重发队列（心跳包等）
             try:
-                data, target = task_queue.get(timeout=10)
+                data, target = no_retry_queue.get(timeout=1)
+                send_dict_to_center(data=data, target=target)
+                no_retry_queue.task_done()
+            except queue.Empty:
+                pass
+            except Exception as e:
+                LOGGER.error(f"[GroupCenter] No-retry queue exception: {e}")
+                no_retry_queue.task_done()  # 无重发队列即使失败也标记完成
+
+            # 处理重发队列（重要消息）
+            try:
+                data, target = retry_queue.get(timeout=10)
                 if send_dict_to_center(data=data, target=target):
-                    task_queue.task_done()
+                    retry_queue.task_done()
                 else:
                     # 发送失败，将任务放回队列，以便重试
                     # Send failed, put task back to queue for retry
-                    task_queue.put((data, target))
+                    retry_queue.put((data, target))
                     # 多休息一会儿再重试
                     # Sleep longer before retry
                     time.sleep(20)
             except queue.Empty:
                 pass
             except Exception as e:
-                LOGGER.error(f"[GroupCenter] Thread exception: {e}")
+                LOGGER.error(f"[GroupCenter] Retry queue exception: {e}")
 
 
 work_thread = None
 
 
-def new_message_enqueue(data: dict, target: str):
+def new_message_enqueue(data: dict, target: str, enable_retry: bool = True):
     """将新消息加入队列
     Enqueue new message
 
     Args:
         data (dict): 消息数据 / Message data
         target (str): 目标API路径 / Target API path
+        enable_retry (bool): 是否启用重发机制 / Whether to enable retry mechanism
     """
-    global task_queue, work_thread
+    global retry_queue, no_retry_queue, work_thread
 
-    task_queue.put((data, target))
+    if enable_retry:
+        retry_queue.put((data, target))
+    else:
+        no_retry_queue.put((data, target))
 
     if work_thread is not None and not work_thread.is_alive():
         work_thread = None
@@ -141,3 +161,17 @@ def new_message_enqueue(data: dict, target: str):
     if work_thread is None:
         work_thread = GroupCenterWorkThread()
         work_thread.start()
+
+
+def send_message_directly(data: dict, target: str) -> bool:
+    """直接发送消息（无队列，无重发）
+    Send message directly (no queue, no retry)
+
+    Args:
+        data (dict): 消息数据 / Message data
+        target (str): 目标API路径 / Target API path
+
+    Returns:
+        bool: 是否发送成功 / Whether the send was successful
+    """
+    return send_dict_to_center(data=data, target=target)

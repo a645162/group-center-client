@@ -75,6 +75,10 @@ def test_clear_cached_loggers():
     original_logger = get_logger()
     new_logger = loguru_logger
     set_default_logger(new_logger)
+    
+    # Test Logger
+    original_logger.info("This is the original logger")
+    new_logger.info("This is the new logger")
 
     # 验证缓存更新
     assert get_logger() is new_logger
@@ -134,6 +138,12 @@ def test_set_default_logger_with_named_loggers():
     named_logger = get_logger(name="service")
     config_logger = get_logger(config_name="module")
     both_logger = get_logger(name="component", config_name="special")
+
+    # Use
+    root_logger.info("Root logger")
+    named_logger.info("Named logger")
+    config_logger.info("Config logger")
+    both_logger.info("Both named and config logger")
 
     # 设置新的默认logger
     new_logger = loguru_logger

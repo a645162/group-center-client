@@ -56,6 +56,10 @@ def run_dummy_gpu(size_mb: int):
 
     except KeyboardInterrupt:
         print("\n收到退出信号，清理显存...")
+        
+        # Release GPU memory
+        del dummy_tensor
+        
         if device.type == "cuda":
             torch.cuda.empty_cache()
         print("进程已退出")
