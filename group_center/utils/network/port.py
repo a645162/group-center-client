@@ -1,6 +1,8 @@
 import os
 import sys
 import socket
+import re
+from typing import List
 
 
 def _check_port_windows(port: int) -> bool:
@@ -92,6 +94,85 @@ def check_port(port: int, use_socket_verification=False) -> bool:
     return cmd_port_available
 
 
+def _get_pid_by_port_windows(port: int) -> list[int]:
+    """Windows下获取端口占用的pid"""
+    pids = set()
+    command = f"netstat -ano | findstr :{port}"
+    result = os.popen(command).read()
+    for line in result.splitlines():
+        parts = line.split()
+        if len(parts) >= 5:
+            pid = parts[-1]
+            if pid.isdigit():
+                pids.add(int(pid))
+    return list(pids)
+
+
+def _get_pid_by_port_macos(port: int) -> list[int]:
+    """macOS下获取端口占用的pid"""
+    pids = set()
+    command = f"lsof -i :{port}"
+    result = os.popen(command).read()
+    for line in result.splitlines():
+        if line.startswith("COMMAND"):
+            continue
+        parts = line.split()
+        if len(parts) >= 2 and parts[1].isdigit():
+            pids.add(int(parts[1]))
+    return list(pids)
+
+
+def _get_pid_by_port_linux(port: int) -> list[int]:
+    """Linux下获取端口占用的pid"""
+    pids = set()
+    # ss命令
+    command = f"ss -tulnp"
+    result = os.popen(command).read()
+    for line in result.splitlines():
+        if f":{port} " in line or f":{port}\n" in line or f":{port} " in line:
+            pid_matches = re.findall(r"pid=(\d+)", line)
+            for pid in pid_matches:
+                pids.add(int(pid))
+    # netstat命令兜底
+    if not pids:
+        command = f"netstat -tulnp"
+        result = os.popen(command).read()
+        for line in result.splitlines():
+            if f":{port} " in line or f":{port}\n" in line or f":{port} " in line:
+                pid_matches = re.findall(r"/(\d+)", line)
+                for pid in pid_matches:
+                    pids.add(int(pid))
+    # lsof命令兜底
+    if not pids:
+        command = f"lsof -i :{port}"
+        result = os.popen(command).read()
+        for line in result.splitlines():
+            if line.startswith("COMMAND"):
+                continue
+            parts = line.split()
+            if len(parts) >= 2 and parts[1].isdigit():
+                pids.add(int(parts[1]))
+    return list(pids)
+
+
+def get_pid_by_port(port: int) -> List[int]:
+    """获取占用指定端口的所有进程pid
+    Get all PIDs occupying the specified port
+
+    Args:
+        port (int): 端口号
+
+    Returns:
+        list[int]: 占用该端口的所有pid列表
+    """
+    if sys.platform == "win32":
+        return _get_pid_by_port_windows(port)
+    elif sys.platform == "darwin":
+        return _get_pid_by_port_macos(port)
+    else:
+        return _get_pid_by_port_linux(port)
+
+
 if __name__ == "__main__":
     port_list = [
         80,
@@ -105,3 +186,6 @@ if __name__ == "__main__":
 
     for port in port_list:
         print(f"port {port} is available: {check_port(port)}")
+
+    pid_list: List[int] = get_pid_by_port(8080)
+    print(f"Port 8080 is occupied by PIDs: {pid_list}")

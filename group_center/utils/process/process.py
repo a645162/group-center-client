@@ -168,6 +168,28 @@ def get_child_processes(pid: int, recursive: bool = True) -> List[int]:
         return []
 
 
+def kill_process_list(pid_list: List[int]) -> bool:
+    """
+    批量杀死进程
+    Kill a list of processes by PID.
+
+    Args:
+        pid_list (List[int]): 进程ID列表 / List of process IDs
+    """
+    success = True
+
+    for pid in pid_list:
+        try:
+            p = psutil.Process(pid)
+            p.kill()
+        except Exception as e:
+            # 可根据需要打印或记录错误
+            print(f"Error killing process {pid}: {e}")
+            success = False
+
+    return success
+
+
 if __name__ == "__main__":
     print(get_parent_process_pid(-1))
     print(get_process_name(get_parent_process_pid(-1)))
