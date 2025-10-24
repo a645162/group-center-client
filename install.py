@@ -2,7 +2,11 @@ import argparse
 import subprocess
 import sys
 import os
-from typing import Final
+
+try:
+    from typing import Final
+except ImportError:
+    from typing_extensions import Final
 
 # from config.global_config import path_dir_config
 

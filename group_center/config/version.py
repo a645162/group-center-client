@@ -1,10 +1,15 @@
 import os
-from typing import Final, List
+from typing import List
+
+try:
+    from typing import Final
+except ImportError:
+    from typing_extensions import Final
 
 from group_center.config import global_config
 
 # 当前版本号 / Current version number
-__version__: Final[str] = "2.5.1"
+__version__: Final[str] = "2.5.2"
 
 
 def get_version_path() -> str:

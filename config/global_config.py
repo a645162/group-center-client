@@ -1,5 +1,9 @@
 import os
-from typing import Final
+
+try:
+    from typing import Final
+except ImportError:
+    from typing_extensions import Final
 
 # 当前 Python 文件路径 / Current Python file path
 current_py_path: Final[str] = os.path.abspath(__file__)

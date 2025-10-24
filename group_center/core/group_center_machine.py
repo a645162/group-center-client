@@ -195,7 +195,7 @@ def __group_center_login(username: str, password: str) -> bool:
             f"[Group Center] Auth userName:{username} password:{password_display}"
         )
 
-        params={"userName": username, "password": password_encoded}
+        params = {"userName": username, "password": password_encoded}
         # print(f"[Group Center] Auth params: {params}")
 
         # 发送GET请求 / Send GET request
@@ -206,7 +206,9 @@ def __group_center_login(username: str, password: str) -> bool:
         )
 
         if response.status_code != 200:
-            LOGGER.error(f"[Group Center] Auth Failed({response.status_code}): {response.text}")
+            LOGGER.error(
+                f"[Group Center] Auth Failed({response.status_code}): {response.text}"
+            )
             return False
 
         response_dict: Dict[str, Any] = json.loads(response.text)

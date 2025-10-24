@@ -94,7 +94,7 @@ def check_port(port: int, use_socket_verification=False) -> bool:
     return cmd_port_available
 
 
-def _get_pid_by_port_windows(port: int) -> list[int]:
+def _get_pid_by_port_windows(port: int) -> List[int]:
     """Windows下获取端口占用的pid"""
     pids = set()
     command = f"netstat -ano | findstr :{port}"
@@ -108,7 +108,7 @@ def _get_pid_by_port_windows(port: int) -> list[int]:
     return list(pids)
 
 
-def _get_pid_by_port_macos(port: int) -> list[int]:
+def _get_pid_by_port_macos(port: int) -> List[int]:
     """macOS下获取端口占用的pid"""
     pids = set()
     command = f"lsof -i :{port}"
@@ -122,11 +122,11 @@ def _get_pid_by_port_macos(port: int) -> list[int]:
     return list(pids)
 
 
-def _get_pid_by_port_linux(port: int) -> list[int]:
+def _get_pid_by_port_linux(port: int) -> List[int]:
     """Linux下获取端口占用的pid"""
     pids = set()
     # ss命令
-    command = f"ss -tulnp"
+    command = "ss -tulnp"
     result = os.popen(command).read()
     for line in result.splitlines():
         if f":{port} " in line or f":{port}\n" in line or f":{port} " in line:
@@ -135,7 +135,7 @@ def _get_pid_by_port_linux(port: int) -> list[int]:
                 pids.add(int(pid))
     # netstat命令兜底
     if not pids:
-        command = f"netstat -tulnp"
+        command = "netstat -tulnp"
         result = os.popen(command).read()
         for line in result.splitlines():
             if f":{port} " in line or f":{port}\n" in line or f":{port} " in line:
