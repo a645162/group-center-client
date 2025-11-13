@@ -10,6 +10,80 @@ from typing import List, Dict
 from group_center.utils.anaconda.run_torch_info import run_torch_info
 
 
+def get_directory_size(path: str) -> int:
+    """
+    获取目录的总大小（字节）
+    Get the total size of a directory in bytes
+
+    Args:
+        path (str): 目录路径 | Directory path
+
+    Returns:
+        int: 目录大小（字节）| Directory size in bytes
+    """
+    total_size = 0
+    try:
+        for dirpath, dirnames, filenames in os.walk(path):
+            for filename in filenames:
+                filepath = os.path.join(dirpath, filename)
+                try:
+                    if os.path.exists(filepath) and not os.path.islink(filepath):
+                        total_size += os.path.getsize(filepath)
+                except (OSError, PermissionError):
+                    # 跳过无法访问的文件
+                    continue
+    except (OSError, PermissionError) as e:
+        print(f"Warning: Cannot access directory {path}: {e}")
+    return total_size
+
+
+def format_size(size_bytes: int) -> str:
+    """
+    将字节数格式化为人类可读的字符串
+    Format bytes to human-readable string
+
+    Args:
+        size_bytes (int): 字节数 | Size in bytes
+
+    Returns:
+        str: 格式化后的大小字符串 | Formatted size string
+    """
+    for unit in ["B", "KB", "MB", "GB", "TB"]:
+        if size_bytes < 1024.0:
+            return f"{size_bytes:.2f} {unit}"
+        size_bytes /= 1024.0
+    return f"{size_bytes:.2f} PB"
+
+
+def get_python_version(python_executable: str) -> str:
+    """
+    获取Python版本号
+    Get Python version
+
+    Args:
+        python_executable (str): Python可执行文件路径 | Path to Python executable
+
+    Returns:
+        str: Python版本号 | Python version string
+    """
+    try:
+        result = subprocess.run(
+            [python_executable, "--version"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=5,
+        )
+        # Python版本信息可能在stdout或stderr中
+        version_output = result.stdout or result.stderr
+        if version_output:
+            # 输出格式通常是 "Python 3.8.10"
+            return version_output.strip().replace("Python ", "")
+    except Exception as e:
+        print(f"Warning: Cannot get Python version for {python_executable}: {e}")
+    return "N/A"
+
+
 def get_conda_environments() -> List[Dict[str, str]]:
     """
     获取所有conda环境及其Python可执行路径
@@ -108,11 +182,15 @@ def export_to_csv(
     """
     try:
         with open(output_path, "w", newline="", encoding="utf-8") as csvfile:
-            # 把 user 提到最前面
+            # 把 user 提到最前面，添加 size_bytes、size_formatted、environment_path_absolute 和 python_version
             fieldnames = [
                 "user",
                 "environment_name",
                 "environment_path",
+                "environment_path_absolute",
+                "python_version",
+                "size_bytes",
+                "size_formatted",
                 "python_executable",
                 "torch_version",
                 "cuda_version",
@@ -163,18 +241,35 @@ def process_single_environment(env: Dict[str, str]) -> Dict[str, str]:
     except Exception:
         user = ""
 
+    # 获取目录大小
+    print(f"  [{env['name']}] 正在计算目录大小...")
+    size_bytes = get_directory_size(env["path"])
+    size_formatted = format_size(size_bytes)
+
+    # 获取Python版本
+    python_version = get_python_version(env["python_executable"])
+
+    # 获取环境目录绝对路径
+    env_path_absolute = os.path.abspath(env["path"])
+
     # 合并环境信息和torch信息，去掉 cuda_available 和 available_devices
     env_complete_info = {
         "environment_name": env["name"],
         "environment_path": env["path"],
+        "environment_path_absolute": env_path_absolute,
         "python_executable": env["python_executable"],
+        "python_version": python_version,
         "user": user,
+        "size_bytes": size_bytes,
+        "size_formatted": size_formatted,
         **torch_info,
     }
 
     # 打印当前环境的信息（不再打印已移除的字段）
+    print(f"  [{env['name']}] Python版本: {python_version}")
     print(f"  [{env['name']}] Torch版本: {torch_info.get('torch_version', 'N/A')}")
     print(f"  [{env['name']}] CUDA版本: {torch_info.get('cuda_version', 'N/A')}")
+    print(f"  [{env['name']}] 目录大小: {size_formatted} ({size_bytes} bytes)")
     if user:
         print(f"  [{env['name']}] 用户: {user}")
 
@@ -221,6 +316,30 @@ def main():
                 print(f"进度: {completed_count}/{len(environments)} 完成")
             except Exception as exc:
                 print(f"环境 {env['name']} 处理失败: {exc}")
+
+    # 按大小排序（降序），然后按用户分组
+    # 先按 size_bytes 降序排序，这样相同用户的环境在组内也是按大小排序的
+    all_env_info.sort(key=lambda x: x.get("size_bytes", 0), reverse=True)
+
+    # 按用户分组（保持大小排序）
+    user_groups = {}
+    for env_info in all_env_info:
+        user = env_info.get("user", "")
+        if user not in user_groups:
+            user_groups[user] = []
+        user_groups[user].append(env_info)
+
+    # 重新组织：先输出有用户名的，按用户名字母顺序，用户内保持大小顺序
+    sorted_env_info = []
+    for user in sorted(user_groups.keys()):
+        if user:  # 有用户名的
+            sorted_env_info.extend(user_groups[user])
+
+    # 最后添加没有用户名的
+    if "" in user_groups:
+        sorted_env_info.extend(user_groups[""])
+
+    all_env_info = sorted_env_info
 
     # 根据原始脚本文件名生成输出文件名：原始文件名_YYYYMMDD_HHMMSS.csv
     original_name = "conda_torch_environments"

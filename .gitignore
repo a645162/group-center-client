@@ -1,5 +1,7 @@
 /env.txt
 
+*.csv
+
 tmp/
 output/
 
