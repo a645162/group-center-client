@@ -9,7 +9,7 @@ except ImportError:
 from group_center.config import global_config
 
 # 当前版本号 / Current version number
-__version__: Final[str] = "2.6.0"
+__version__: Final[str] = "2.6.1"
 
 
 def get_version_path() -> str:

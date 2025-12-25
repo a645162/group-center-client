@@ -54,6 +54,7 @@ setup(
             "dummy_gpu = group_center.tools.user_tools.dummy_gpu:main",
             "torch_info = group_center.utils.anaconda.torch_info:main",  # torch_info命令
             "list_conda_torch = group_center.utils.anaconda.list_conda_torch:main",  # list_conda_torch命令
+            "conda_env_clean = group_center.tools.conda.env_clean:main",  # Conda environment cleanup tool / Conda环境清理工具
         ],
     },
 )
